@@ -1,14 +1,8 @@
-
 *.goa
-
 *.obo
-
 ppi-data/VirHostNet_January_2017.txt
-
 ppi-data/phisto_Jan19_2017.csv
-
 ppi-data/hpidb2_March14_ 2017_mitab.txt
-
-ppi-data/hpidb2_March14_ 2017_mitab_plus.txt
-
+ppi-data/hpidb2_March14_2017_mitab_plus.txt
 taxid-data/taxdump/
+\.idea/
