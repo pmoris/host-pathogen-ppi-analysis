@@ -5,7 +5,7 @@ $ mkdir taxdump
 $ tar -xzvf taxdump.tar.gz -C taxdump/
 $ rm taxdump.tar.gz
 ```
-The [retrieve_taxids.py script](./retrieve_taxids.py) was called using the following options in order to extract all the child taxids of the Herpesviridae (10292): 
+The [retrieve_taxids.py script](../ppi_scripts/retrieve_taxids.py) was called using the following arguments in order to extract all the child taxids of the Herpesviridae (10292): 
 ```shell 
 $ python3 retrieve_taxids.py taxdump 10292
 ``` 

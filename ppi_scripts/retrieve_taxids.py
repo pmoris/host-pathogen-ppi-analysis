@@ -163,7 +163,7 @@ if __name__ == "__main__":
             if len(sys.argv) > 3:
                 out_path = sys.argv[4]
             else:
-                out_path = 'child_taxids_of_' + str(taxid) + '.txt'
+                out_path = '../taxid_data/child_taxids_of_' + str(taxid) + '.txt'
             print('Saving output as',out_path)
             save_children(children, out_path)
         except IndexError:
