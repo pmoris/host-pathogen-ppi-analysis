@@ -2,7 +2,8 @@
 *.obo
 ppi_data/VirHostNet_January_2017.txt
 ppi_data/phisto_Jan19_2017.csv
-ppi_data/hpidb2_March14_ 2017_mitab.txt
+ppi_data/hpidb2_March14_2017_mitab.txt
 ppi_data/hpidb2_March14_2017_mitab_plus.txt
 taxid_data/taxdump/
 \.idea/
+ppi_scripts/__pycache__/
