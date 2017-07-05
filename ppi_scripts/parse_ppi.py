@@ -227,7 +227,6 @@ def create_mapping_files(interaction_dataframe, from_id, description, savepath, 
 
     with urllib.request.urlopen(request) as response:
         mapping = response.read()
-        print(mapping)
 
     Path(savepath).parent.mkdir(parents=True, exist_ok=True)
     Path(savepath).write_bytes(mapping)
@@ -287,8 +286,8 @@ def map2uniprot(interaction_dataframe, filepath=r'../ppi_data/mappings/', column
                     # print(entrez2uniprot_array[mask])
 
             for col in columns:
-                mapping_selection = (interaction_dataframe[col].str.contains(i[0])) | \
-                                    (interaction_dataframe[col].str.contains('entrez'))
+                mapping_selection = (interaction_dataframe[col].str.contains(i[1])) | \
+                                    (interaction_dataframe[col].str.contains(i[1]))
 
                 interaction_dataframe.loc[mapping_selection, col] = interaction_dataframe.loc[
                     mapping_selection, col].apply(lambda x: tuple(mapping_dict[x.split(':')[1]]) if x in mapping_dict
@@ -381,6 +380,37 @@ def concat_interaction_datasets(list_of_datasets):
     return df_concat
 
 
+def annotate_GO(interaction_dataframe, gaf_dict):
+        """ Adds Gene Ontology terms to interaction dataset.
+
+        Creates separate columns with Gene Ontology terms for both interaction partner in the interaction DataFrame.
+        Note that the UniProt AC's need to be formatted to remove potential PTM labels, e.g. P04295-PRO_0000115940.
+
+        Parameters
+        ----------
+        interaction_dataframe : DataFrame
+            The pandas DataFrame containing the protein-protein interactions to be labelled.
+
+        gaf_dict : dictionary
+            A dictionary mapping UniProt AC's to Gene Ontology terms.
+
+        Returns
+        -------
+        None
+            Modifies the interaction dataframe in-place by adding Gene Ontology columns.
+        """
+        # interaction_dataframe['xref_A_GO'] = interaction_dataframe['xref_A'].apply(lambda x:
+        #                                                                            gaf_dict.get(x.split(':')[1]))
+        # interaction_dataframe['xref_B_GO'] = interaction_dataframe['xref_B'].apply(lambda x:
+        #                                                                            gaf_dict.get(x.split(':')[1]))
+        interaction_dataframe['xref_A_GO'] = interaction_dataframe['xref_A'].str.extract('^.*:(\w*)-?',
+                                                                                         expand=False).apply(lambda x:
+                                                                                        gaf_dict.get(x))
+        interaction_dataframe['xref_B_GO'] = interaction_dataframe['xref_B'].str.extract('^.*:(\w*)-?',
+                                                                                         expand=False).apply(lambda x:
+                                                                                        gaf_dict.get(x))
+
+
 if __name__ == '__main__':
     # Read in PPI datasets
     df_virhost = read_mitab_virhost(r'../ppi_data/VirHostNet_January_2017.txt')
@@ -390,12 +420,12 @@ if __name__ == '__main__':
     df_phisto = read_mitab_phisto(r'../ppi_data/phisto_Jan19_2017.csv',
                                   r'../ppi_data/mi.obo')
 
-    # TODO: no intact-EBI mapping?
-    # Map entrez gene id's to uniprot ac's
-    map2uniprot(df_hpidb2)
-
     # Concatenate the different sources
     df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto])
+
+    # TODO: no intact-EBI mapping?
+    # Map entrez gene id's to uniprot ac's
+    map2uniprot(df_concat)
 
     # Size of each data source
     print('\nData source sizes:\n')
@@ -413,6 +443,11 @@ if __name__ == '__main__':
     print('\nNumber of unique interactions per data set\n')
     print(df_concat.groupby('origin')['xref_partners_sorted'].nunique())
 
+    # Check non-uniprot AC's
+    print('\nNumber of interactions without UniProt AC\n')
+    print(df_concat.loc[(~df_concat.xref_A.str.contains('uniprot')) |
+                        (~df_concat.xref_B.str.contains('uniprot'))].groupby('origin').size())
+
     # Label interactions as being within or between species.
     annotate_inter_intra(df_concat)
 
@@ -421,6 +456,7 @@ if __name__ == '__main__':
     df_concat_dedup = df_concat_dedup.reset_index(drop=True)
 
     # Retrieve only Herpesviridae (taxid:10292), see retrieve_taxids.py script to generate child taxids
+    #TODO: import from retrieve_Taxids and create on the spot
     with Path(r'../taxid_data/child_taxids_of_10292.txt').open() as taxid_file:
         herpes_taxids = [str('taxid:' + line.split('|')[0]) for line in taxid_file]
 
@@ -430,15 +466,19 @@ if __name__ == '__main__':
                                     df_concat_dedup.taxid_B.isin(herpes_taxids)]
     df_herpes = df_herpes.reset_index(drop=True)
 
+    # Check how many non-uniprot interactions are left
+    print('\nNumber of non-UniProt AC interactions for Herpes interactions\n')
+    print(df_herpes.loc[(~df_herpes.xref_A.str.contains('uniprot')) |
+                        (~df_herpes.xref_B.str.contains('uniprot'))].groupby('origin').size())
+
+    # Filter on uniprot AC's
+    df_herpes = df_herpes.loc[(df_herpes.xref_A.str.contains('uniprot')) & (df_herpes.xref_B.str.contains('uniprot'))]
+    df_herpes = df_herpes.reset_index(drop=True)
+
     # TODO: when subsetting duplicates, also check taxid_A
     # e.g. "Human herpesvirus 1 STRAIN KOS","10306","A1Z0Q5","GD_HHV1K ","Q15223","NECT1_HUMAN ","fluorescence-activated cell sorting","12011057"
     # "Human herpesvirus 1","10298","A1Z0Q5","GD_HHV1K ","Q15223","NECT1_HUMAN ","fluorescence-activated cell sorting","12011057"
     # TODO: differs in pathogen strain! Others differ in their pubmed id
-
-    # Create gene ontology dictionaries
-    obo_dict = obo_tools.importOBO('../go_data/go-basic.obo')
-    protein_set = set(df_herpes.xref_A.append(df_herpes.xref_B, ignore_index=True).str.split(':').str[1].unique())
-    gafDict = gaf_parser.importGAF('../go_data/gene_association_9606_10292.goa', protein_set)
 
     # Print some information about the interactions
     print('\nNumber of inter versus intra interactions:\n')
@@ -448,10 +488,88 @@ if __name__ == '__main__':
     print('\nNumber of human-human interactions\n')
     print(df_herpes.loc[(df_herpes['inter-intra'] == 'intra-species') &
                         (df_herpes['taxid_A'].str.contains('9606'))].shape)
-    print('\nNumber of interactions without uniprot AC\n')
-    print(df_herpes.loc[(~df_herpes.xref_A.str.contains('uniprot')) | (~df_herpes.xref_B.str.contains('uniprot'))].shape)
+    print('\nNumber of interactions without UniProt AC\n')
+    print(df_herpes.loc[(~df_herpes.xref_A.str.contains('uniprot')) |
+                        (~df_herpes.xref_B.str.contains('uniprot'))].shape)
+
+    # Check which hosts are present
+    print('\nNumber of interactions per host\n')
+    all_taxids = df_herpes['taxid_A'].append(df_herpes['taxid_B']).unique()
+    host_taxids = np.setdiff1d(all_taxids, herpes_taxids)
+    import retrieve_taxids
+    taxid_names_path = Path(r'../taxid_data/taxdump/names.dmp')
+    name2taxid, taxid2name = retrieve_taxids.parse_taxid_names(str(taxid_names_path))
+    for i in host_taxids:
+        taxid = int(i.split(':')[1])
+        count = df_herpes['xref_partners_sorted'].loc[(df_herpes['taxid_A'] == i) | (df_herpes['taxid_B'] == i)].shape
+        print(taxid, taxid2name[taxid], count)
 
     # Count missing values across columns
     print('\nMissing values in each column:\n')
     print(df_herpes.isnull().sum(axis=0))
+
+    # Create Gene Ontology dictionaries
+    #TODO: create quickGO query using host list + herpesviridae
+    obo_dict = obo_tools.importOBO('../go_data/go-basic.obo')
+    # protein_set = set(df_herpes.xref_A.append(df_herpes.xref_B, ignore_index=True).str.split(':').str[1].unique())
+    protein_set = set(df_herpes.xref_A.append(df_herpes.xref_B, ignore_index=True).str.extract('^.*:(\w*)-?',
+                                                                                         expand=False).unique())
+    gaf_dict = gaf_parser.importGAF('../go_data/gene_association_hosts_10292.goa', protein_set)
+
+    # Number of proteins without GO annotation
+    #TODO: PTM processing id's e.g. P04295-PRO_0000115940
+    print('\nNumber of proteins without GO annotation\n')
+    not_annotated = [i for i in protein_set if i not in gaf_dict]
+    print(len(not_annotated))
+
+    # Add GO annotations
+    annotate_GO(df_herpes, gaf_dict)
+
+    # Move all host partners in xref_B to xref_A (only an issue for VirHostNet)
+
+    # https://stackoverflow.com/questions/25792619/what-is-correct-syntax-to-swap-column-values-for-selected-rows-in-a-pandas-data
+
+    print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_A.values)
+    print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_B.values)
+
+    print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_A').size())
+    print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_B').size())
+
+    print(df_herpes.groupby('taxid_A').size())
+    print(df_herpes.groupby('taxid_B').size())
+
+    host_position_mask = df_herpes['taxid_B'] == 'taxid:9606'
+    # lambdafunc = lambda x: pd.Series(x['xref_B'],
+    #                                  x['xref_A'])
+    # df_herpes.loc[host_position_mask, ['xref_A', 'xref_B']] = df_herpes.loc[host_position_mask].apply(lambdafunc, axis=0)
+    df_herpes.loc[host_position_mask, ['xref_A', 'xref_B']] = df_herpes.loc[host_position_mask,
+                                                                            ['xref_B', 'xref_A']].values
+
+    print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_A.values)
+    print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_B.values)
+
+    print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_A').size())
+    print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_B').size())
+
+    # Add virus/host labels to GO
+    def add_origin_to_GO_labels(go_set, taxid):
+        if taxid == 'taxid:9606':
+            label = 'human-'
+        else:
+            label = 'viral-'
+
+        labeled_list = []
+        for i in go_set:
+            labeled_list.append(label+i)
+        return ','.join(labeled_list)
+
+    lambdafunc = lambda x: pd.Series(add_origin_to_GO_labels(x['xref_A_GO'], x['taxid_A']),
+                                     add_origin_to_GO_labels(x['xref_B_GO'], x['taxid_B']))
+    # df_herpes.loc[['xref_A_GO', 'xref_B_GO']] = df_herpes.apply(lambdafunc)
+
+
+    # Save to transaction database
+    df_output = df_herpes.loc[:, ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
+    df_output.to_csv(r'ppi_go_transactions.csv', sep='\t', index=False)
+
 
