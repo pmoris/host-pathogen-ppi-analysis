@@ -14,7 +14,7 @@ pd.set_option('display.max_columns', None)
 
 from pathlib import Path
 
-sys.path.insert(0, '../go-enrichment-tool')
+# sys.path.insert(0, '../go-enrichment-tool')
 from go_enrichment_tool import obo_tools
 from go_enrichment_tool import gaf_parser
 
