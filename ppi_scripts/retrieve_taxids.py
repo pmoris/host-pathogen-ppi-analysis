@@ -39,9 +39,9 @@ def parse_taxid_names(file_path):
             # if lines_processed % 100000 == 0:
             #     print('processing line', str(lines_processed))
             entries = [entry.strip() for entry in line.split('|')]
-            name2taxid[entries[1]] = int(entries[0])
+            name2taxid[entries[1]] = entries[0]
             if 'scientific name' in line:
-                taxid2name[int(entries[0])] = entries[1]
+                taxid2name[entries[0]] = entries[1]
 
     return name2taxid, taxid2name
 
@@ -57,8 +57,8 @@ def parse_taxid_nodes(file_path):
             # if lines_processed % 100000 == 0:
             #     print('processing line', str(lines_processed))
             entries = [entry.strip() for entry in line.split('|')]
-            taxid2parent[int(entries[0])] = int(entries[1])
-            taxid2rank[int(entries[0])] = entries[2]
+            taxid2parent[entries[0]] = entries[1]
+            taxid2rank[entries[0]] = entries[2]
 
     return taxid2parent, taxid2rank
 
@@ -158,7 +158,7 @@ if __name__ == "__main__":
         taxid2parent, taxid2rank = parse_taxid_nodes(str(nodes))
         parent2child = create_parent2child_dict(taxid2parent)
         try:
-            taxid = int(sys.argv[2])
+            taxid = sys.argv[2]
             children = get_children(taxid, parent2child)
             if len(sys.argv) > 3:
                 out_path = sys.argv[4]
@@ -168,8 +168,8 @@ if __name__ == "__main__":
             save_children(children, out_path)
         except IndexError:
             print('No taxid was provided.')
-        except ValueError:
-            print('Taxids should be provided as integers')
+        # except ValueError:
+        #     print('Taxids should be provided as integers')
         except LookupError:
             print('Taxid was not found.')
 
