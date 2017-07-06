@@ -498,7 +498,7 @@ if __name__ == '__main__':
                                   r'../ppi_data/mi.obo')
 
     # Concatenate the different sources
-    df_concat = concat_interaction_datasets([df_hpidb2, df_virhost])
+    df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto])
 
     # TODO: no intact-EBI mapping?
     # Map entrez gene id's to uniprot ac's
@@ -540,7 +540,10 @@ if __name__ == '__main__':
     annotate_inter_intra(df_concat)
 
     # Remove duplicate interaction pairs (including different detection methods and publications)
-    df_concat_dedup = df_concat.drop_duplicates(subset=['xref_partners_sorted'])
+    # https://stackoverflow.com/a/41650846
+    # https://stackoverflow.com/questions/33042777/
+    # Note that this will likely result in the first dataset (e.g. hpidb2) having priority over the others.
+    df_concat_dedup = df_concat.drop_duplicates(subset=['xref_partners_sorted', 'taxid_B', 'taxid_A'], keep='first')
     df_concat_dedup = df_concat_dedup.reset_index(drop=True)
 
     # Retrieve only Herpesviridae (taxid:10292), see retrieve_taxids.py script to generate child taxids
@@ -651,7 +654,7 @@ if __name__ == '__main__':
     # Save to transaction database
     # TODO: create a separate transaction base per virus type + only inter?
     df_output = df_herpes.loc[:, ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
-    df_herpes.to_csv(r'ppi_go_transactions.csv', sep='\t', index=False)
+    df_output.to_csv(r'ppi_go_transactions.csv', sep='\t', index=False)
 
 
 
@@ -661,6 +664,10 @@ if __name__ == '__main__':
     print('\n\n\n\n\n\n\n\n\n\n\n')
     for virus in np.sort(df_herpes['taxid_A'].unique()):
         print(taxid2name[virus.split(':')[1]])
+
+        #TODO: column A contains some viruses due to intra-viral interactions. check if column A is being used to select
+        # hosts at any point...
+        #TODO: also: filter on inter?
 
     print(sorted([taxid2name[i.split(':')[1]] for i in np.sort(np.setdiff1d(all_taxids, host_taxids))]))
 
@@ -676,6 +683,120 @@ if __name__ == '__main__':
     print('uniprotkb:Q91LX9' in df_concat_dedup.values)
     print('uniprotkb:Q91LX9' in df_herpes.values)
 
+    print(df_herpes.groupby('origin').size())
+    df_herpes['pathogen_type'] = df_herpes['taxid_B'].apply(lambda x: taxid2name[x.split(':')[1]])
+    print(df_herpes.groupby('pathogen_type').size())
+    #TODO: filtering happened purely on parterXpartner, but the same interaction might appear for multiple strains..
+    #TODO: solution, add taxid_A AND taxid_B as subset for finding duplicates .
+
+    bovine_h1 = ['79889', '10323', '31518', '10324']
+
+    '''
+pd.Series(np.sort(df_herpes['pathogen_type'].unique())).apply(lambda x: [x, name2taxid[x]])
+0                   [Ateline gammaherpesvirus 3, 85618]
+1                    [Bovine alphaherpesvirus 1, 10320]
+2                    [Bovine gammaherpesvirus 4, 10385]
+3                  [Bovine herpesvirus type 1.1, 79889]
+4     [Bovine herpesvirus type 1.1 (strain Cooper), ...
+5     [Bovine herpesvirus type 1.1 (strain Jura), 31...
+6     [Bovine herpesvirus type 1.1 (strain P8-2), 10...
+7     [Elephantid herpesvirus 1 (isolate Kiba), 654902]
+8              [Epstein-barr virus strain ag876, 82830]
+9                     [Equid alphaherpesvirus 1, 10326]
+10       [Equid herpesvirus type 2 strain 86/87, 82831]
+11     [Equine herpesvirus type 1 (strain AB4P), 31520]
+12    [Equine herpesvirus type 1 (strain Kentucky A)...
+13                   [Gallid alphaherpesvirus 2, 10390]
+14    [Herpes simplex virus (type 1 / strain 17), 10...
+15    [Herpes simplex virus (type 1 / strain F), 10304]
+16    [Herpes simplex virus (type 1 / strain Patton)...
+17             [Herpesvirus saimiri (strain 11), 10383]
+18            [Herpesvirus saimiri (strain 488), 10384]
+19                    [Human alphaherpesvirus 1, 10298]
+20                    [Human alphaherpesvirus 2, 10310]
+21                    [Human alphaherpesvirus 3, 10335]
+22                     [Human betaherpesvirus 5, 10359]
+23                    [Human gammaherpesvirus 4, 10376]
+24                    [Human gammaherpesvirus 8, 37296]
+25              [Human herpesvirus 1 strain KOS, 10306]
+26              [Human herpesvirus 2 strain 333, 10313]
+27             [Human herpesvirus 2 strain HG52, 10315]
+28            [Human herpesvirus 3 strain Dumas, 10338]
+29     [Human herpesvirus 3 strain Oka vaccine, 341980]
+30            [Human herpesvirus 4 strain B95-8, 10377]
+31            [Human herpesvirus 5 strain AD169, 10360]
+32          [Human herpesvirus 5 strain Merlin, 295027]
+33            [Human herpesvirus 5 strain Towne, 10363]
+34             [Human herpesvirus 6 (strain GS), 10369]
+35    [Human herpesvirus 6 (strain Uganda-1102), 10370]
+36              [Human herpesvirus 6 strain Z29, 36351]
+37            [Human herpesvirus 8 strain GK18, 868565]
+38                 [Human herpesvirus 8 type M, 435895]
+39    [Marek's disease herpesvirus type 1 strain MD5...
+40                     [Murid betaherpesvirus 1, 10366]
+41                    [Murid gammaherpesvirus 4, 33708]
+42        [Murine cytomegalovirus (strain K181), 69156]
+43       [Murine cytomegalovirus (strain Smith), 10367]
+44                 [Papiine gammaherpesvirus 1, 106332]
+45                     [Suid alphaherpesvirus 1, 10345]
+46    [Suid herpesvirus 1 (strain Indiana-Funkhauser...
+    
+    
+    
+    pathogen_type
+Ateline gammaherpesvirus 3                                    1
+Bovine alphaherpesvirus 1                                    13
+Bovine gammaherpesvirus 4                                     1
+Bovine herpesvirus type 1.1                                   6
+Bovine herpesvirus type 1.1 (strain Cooper)                   6
+Bovine herpesvirus type 1.1 (strain Jura)                     5
+Bovine herpesvirus type 1.1 (strain P8-2)                     3
+Elephantid herpesvirus 1 (isolate Kiba)                       1
+Epstein-barr virus strain ag876                            2160
+Equid alphaherpesvirus 1                                      8
+Equid herpesvirus type 2 strain 86/87                         4
+Equine herpesvirus type 1 (strain AB4P)                       2
+Equine herpesvirus type 1 (strain Kentucky A)                 6
+Gallid alphaherpesvirus 2                                     4
+Herpes simplex virus (type 1 / strain 17)                   925
+Herpes simplex virus (type 1 / strain F)                      4
+Herpes simplex virus (type 1 / strain Patton)                 1
+Herpesvirus saimiri (strain 11)                               5
+Herpesvirus saimiri (strain 488)                              4
+Human alphaherpesvirus 1                                     34
+Human alphaherpesvirus 2                                      3
+Human alphaherpesvirus 3                                    133
+Human betaherpesvirus 5                                       6
+Human gammaherpesvirus 4                                    318
+Human gammaherpesvirus 8                                    235
+Human herpesvirus 1 strain KOS                                1
+Human herpesvirus 2 strain 333                                8
+Human herpesvirus 2 strain HG52                              14
+Human herpesvirus 3 strain Dumas                              4
+Human herpesvirus 3 strain Oka vaccine                       48
+Human herpesvirus 4 strain B95-8                           2420
+Human herpesvirus 5 strain AD169                             64
+Human herpesvirus 5 strain Merlin                           117
+Human herpesvirus 5 strain Towne                             21
+Human herpesvirus 6 (strain GS)                               1
+Human herpesvirus 6 (strain Uganda-1102)                      2
+Human herpesvirus 6 strain Z29                                3
+Human herpesvirus 8 strain GK18                             369
+Human herpesvirus 8 type M                                  281
+Marek's disease herpesvirus type 1 strain MD5                17
+Murid betaherpesvirus 1                                     330
+Murid gammaherpesvirus 4                                    432
+Murine cytomegalovirus (strain K181)                         34
+Murine cytomegalovirus (strain Smith)                         3
+Papiine gammaherpesvirus 1                                    4
+Suid alphaherpesvirus 1                                      59
+Suid herpesvirus 1 (strain Indiana-Funkhauser / Becker)       4
+dtype: int64
+(8124, 35)
+    
+    '''
+
+    print(df_herpes.shape)
     print(df_herpes.groupby('origin').size())
 
 '''
