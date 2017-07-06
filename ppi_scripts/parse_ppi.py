@@ -118,6 +118,7 @@ def read_mitab_phisto(mitab_filepath, mi_filepath):
     df.publication = df.publication.map(lambda x: 'pubmed:' + str(x))
     df.xref_A = df.xref_A.map(lambda x: 'uniprotkb:' + str(x))
     df.xref_B = df.xref_B.map(lambda x: 'uniprotkb:' + str(x))
+    df.taxid_B = df.taxid_B.map(lambda x: 'taxid:' + str(x))
     # Add Human taxid_A column
     df['taxid_A'] = 'taxid:9606'
     # name dataframe
@@ -260,6 +261,8 @@ def map2uniprot(interaction_dataframe, filepath=r'../ppi_data/mappings/', column
 
     """
     #TODO: automatically retrieve descriptions and identifiers from file.
+    # bash one-liner to retrieve data sources
+    # cut -f1 hpidb2_March14_2017_mitab.txt | sed -r 's/(^.*):.*/\1/g' | sort -u
     for i in [['P_ENTREZGENEID', 'entrez'], ['EMBL_ID', 'embl'], ['ENSEMBLGENOME_ID', 'ensemblgenomes'],
               ['P_REFSEQ_AC', 'refseq']]:
         # Define filepath
@@ -355,7 +358,9 @@ def annotate_inter_intra(interaction_dataframe):
 def concat_interaction_datasets(list_of_datasets):
     """Concatenates a list of DataFrames containing molecular interaction information.
 
-    Given a list of pandas DataFrames that conform to the PSI-MITAB format, concatenate them
+    Given a list of pandas DataFrames that conform to the PSI-MITAB format and concatenate them.
+
+    NOTE: THE ORDER IN WHICH THE DATASETS ARE COMBINED DETERMINES THE ORDER IN WHICH DUPLICATES WILL BE RETAINED.
 
     #and remove duplicated
     #interaction pairs. Duplicates are defined by a tuple of the "xref" entries (unique identifiers for the interactors).
@@ -447,7 +452,7 @@ def annotate_GO(interaction_dataframe, gaf_dict):
 
 
 def add_label_to_GO(go_set, taxid):
-    """Adds host/virus labels to GO terms.
+    """Adds host/virus labels to GO terms and returns string representation.
 
     Should be called via an apply function that calls it for both partners' GO set and taxids
     for each interaction in a dataset.
@@ -493,7 +498,7 @@ if __name__ == '__main__':
                                   r'../ppi_data/mi.obo')
 
     # Concatenate the different sources
-    df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto])
+    df_concat = concat_interaction_datasets([df_hpidb2, df_virhost])
 
     # TODO: no intact-EBI mapping?
     # Map entrez gene id's to uniprot ac's
@@ -523,6 +528,8 @@ if __name__ == '__main__':
     print(df_concat.duplicated(subset=['xref_partners_sorted']).shape)
     print('\nNumber of unique interactions per data set\n')
     print(df_concat.groupby('origin')['xref_partners_sorted'].nunique())
+
+    #TODO: bash script to check overlap: comm <(cut -f3 -d, phisto_Jan19_2017.csv | sed 's/"//g' | sort -u ) <(cut -f2 hpidb2_March14_2017_mitab.txt | sed s/uniprotkb://g | sort -u)
 
     # Check non-uniprot AC's
     print('\nNumber of interactions without UniProt AC\n')
@@ -638,15 +645,16 @@ if __name__ == '__main__':
                                            add_label_to_GO(x['xref_B_GO'], x['taxid_B'])])
     df_herpes[['xref_A_GO', 'xref_B_GO']] = df_herpes.apply(lambda_go_label, axis=1)
 
-    print(df_herpes.head())
-
     # TODO: map GO to fixed level
 
 
     # Save to transaction database
     # TODO: create a separate transaction base per virus type + only inter?
     df_output = df_herpes.loc[:, ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
-    df_output.to_csv(r'ppi_go_transactions.csv', sep='\t', index=False)
+    df_herpes.to_csv(r'ppi_go_transactions.csv', sep='\t', index=False)
+
+
+
 
     for virus in np.sort(df_herpes['taxid_B'].unique()):
         print(taxid2name[virus.split(':')[1]])
@@ -654,10 +662,21 @@ if __name__ == '__main__':
     for virus in np.sort(df_herpes['taxid_A'].unique()):
         print(taxid2name[virus.split(':')[1]])
 
-    print('settings',list(np.setdiff1d(all_taxids, host_taxids)))
+    print(sorted([taxid2name[i.split(':')[1]] for i in np.sort(np.setdiff1d(all_taxids, host_taxids))]))
 
-    for i in np.sort(np.setdiff1d(all_taxids, host_taxids)):
-        print(taxid2name[i.split(':')[1]])
+    print(df_herpes.groupby('taxid_B').size())
+
+    print('\n\n\n\n\n\nn\n\n\n\n\nn\n')
+    print(np.setdiff1d(df_hpidb2['xref_A'].unique(), df_phisto['xref_A'].unique()).size)
+    print('\n\n\n\n\n\nn\n\n\n\n\nn\n')
+    print(np.setdiff1d(df_hpidb2['xref_B'].unique(), df_phisto['xref_B'].unique()).size)
+
+    print('uniprotkb:Q91LX9' in df_phisto.values)
+    print('uniprotkb:Q91LX9' in df_concat.values)
+    print('uniprotkb:Q91LX9' in df_concat_dedup.values)
+    print('uniprotkb:Q91LX9' in df_herpes.values)
+
+    print(df_herpes.groupby('origin').size())
 
 '''
 df_herpes.loc[df_herpes['origin'] == 'VirHostNet2', 'xref_A'].apply(lambda x: x.split(':')[1])
@@ -665,3 +684,5 @@ versus
 df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].apply(lambda x: x['xref_A'].split(':')[1], axis=1)
 
 '''
+
+#TODO: use mask objects for more general subsetting? http://growthintel.com/exploratory-data-analysis-in-pandas/
