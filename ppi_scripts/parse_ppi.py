@@ -169,6 +169,8 @@ def phisto_load_mi_ontology(filepath):
 def create_mapping_files(interaction_dataframe, from_id, description, savepath, columns):
     """ Create mapping files between uniprot AC's and other identifiers.
 
+    Queries the UniProt mapping service to retrieve mappings for all non-UniProt identifiers found in the dataset.
+
     Parameters
     ----------
     interaction_dataframe : DataFrame
@@ -380,6 +382,39 @@ def concat_interaction_datasets(list_of_datasets):
     return df_concat
 
 
+def reorder_pathogen_host_entries(interaction_dataframe, host_list = ['taxid:9606']):
+    ''' Moves all pathogen entries to B columns and host entries to A columns.
+
+    Selects all interaction entries where host entries occur in B columns instead of A
+    and swaps the A and B columns.
+
+    Parameters
+    ----------
+    interaction_dataframe : DataFrame
+        The pandas DataFrame containing the protein-protein interactions that need to be sorted.
+    host_list : list
+        List of host taxid's to look for in the B column.
+        (Default value is ['taxid:9606'], e.g. human.
+
+    Returns
+    -------
+    None
+        Modifies the interaction DataFrame inplace.
+
+    '''
+
+    host_position_mask = interaction_dataframe['taxid_B'].isin(host_list)
+    # Note: HPIDB2 always has hosts as partner A and PHISTO has human/pathogen labeled too.
+    column_names = ['xref', 'taxid', 'aliases', 'alt_identifiers']
+    columns_to_swap = [name + label for name in column_names for label in ['_A','_B']]
+    columns_after_swap = [name + label for name in column_names for label in ['_B', '_A']]
+    interaction_dataframe.loc[host_position_mask, columns_to_swap] = interaction_dataframe.loc[host_position_mask,
+                                                                                               columns_after_swap].values
+    # Slower alternative
+    # lambdafunc = lambda x: pd.Series([x['xref_B'],x['xref_A']])
+    # df_herpes.loc[host_position_mask, ['xref_A', 'xref_B']] = df_herpes.loc[host_position_mask].apply(lambdafunc, axis=1)
+
+
 def annotate_GO(interaction_dataframe, gaf_dict):
         """ Adds Gene Ontology terms to interaction dataset.
 
@@ -409,6 +444,7 @@ def annotate_GO(interaction_dataframe, gaf_dict):
         interaction_dataframe['xref_B_GO'] = interaction_dataframe['xref_B'].str.extract('^.*:(\w*)-?',
                                                                                          expand=False).apply(lambda x:
                                                                                         gaf_dict.get(x, np.NaN))
+
 
 def add_label_to_GO(go_set, taxid):
     """Adds host/virus labels to GO terms.
@@ -502,6 +538,9 @@ if __name__ == '__main__':
 
     # Retrieve only Herpesviridae (taxid:10292), see retrieve_taxids.py script to generate child taxids
     #TODO: import from retrieve_Taxids and create on the spot
+    #TODO: then combine this code into a function to subset a given dataframe for a given taxid and its children
+    #TODO: and a host list or default to all hosts
+    #TODO: note that this filtering will generally result in intra-host interactions being omitted, while retaining intra-viral ones
     with Path(r'../taxid_data/child_taxids_of_10292.txt').open() as taxid_file:
         herpes_taxids = [str('taxid:' + line.split('|')[0]) for line in taxid_file]
 
@@ -540,18 +579,19 @@ if __name__ == '__main__':
     # Check which hosts are present
     print('\nNumber of interactions per host\n')
     all_taxids = df_herpes['taxid_A'].append(df_herpes['taxid_B']).unique()
-    host_taxids = np.setdiff1d(all_taxids, herpes_taxids)
+    host_taxids = list(np.setdiff1d(all_taxids, herpes_taxids))
     import retrieve_taxids
     taxid_names_path = Path(r'../taxid_data/taxdump/names.dmp')
     name2taxid, taxid2name = retrieve_taxids.parse_taxid_names(str(taxid_names_path))
     for i in host_taxids:
-        taxid = int(i.split(':')[1])
+        taxid = i.split(':')[1]
         count = df_herpes['xref_partners_sorted'].loc[(df_herpes['taxid_A'] == i) | (df_herpes['taxid_B'] == i)].shape
         print(taxid, taxid2name[taxid], count)
 
     # Move all host partners in xref_B to xref_A (only an issue for VirHostNet)
     # Note, also move ALL other associated labels...
     #TODO: currently only swaps taxid and xref, nothing else.
+    reorder_pathogen_host_entries(df_herpes, host_taxids)
     '''
     # https://stackoverflow.com/questions/25792619/what-is-correct-syntax-to-swap-column-values-for-selected-rows-in-a-pandas-data
 
@@ -564,13 +604,6 @@ if __name__ == '__main__':
     # print(df_herpes.groupby('taxid_A').size())
     # print(df_herpes.groupby('taxid_B').size())
     '''
-    host_position_mask = df_herpes['taxid_B'] == 'taxid:9606'
-    # lambdafunc = lambda x: pd.Series(x['xref_B'],
-    #                                  x['xref_A'])
-    # df_herpes.loc[host_position_mask, ['xref_A', 'xref_B']] = df_herpes.loc[host_position_mask].apply(lambdafunc, axis=0)
-    df_herpes.loc[host_position_mask, ['xref_A', 'xref_B', 'taxid_A', 'taxid_B']] = df_herpes.loc[host_position_mask,
-                                                                            ['xref_B', 'xref_A',
-                                                                             'taxid_B', 'taxid_A']].values
 
     print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_A.values)
     print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_B.values)
@@ -607,10 +640,24 @@ if __name__ == '__main__':
 
     print(df_herpes.head())
 
+    # TODO: map GO to fixed level
+
+
     # Save to transaction database
+    # TODO: create a separate transaction base per virus type + only inter?
     df_output = df_herpes.loc[:, ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
     df_output.to_csv(r'ppi_go_transactions.csv', sep='\t', index=False)
 
+    for virus in np.sort(df_herpes['taxid_B'].unique()):
+        print(taxid2name[virus.split(':')[1]])
+    print('\n\n\n\n\n\n\n\n\n\n\n')
+    for virus in np.sort(df_herpes['taxid_A'].unique()):
+        print(taxid2name[virus.split(':')[1]])
+
+    print('settings',list(np.setdiff1d(all_taxids, host_taxids)))
+
+    for i in np.sort(np.setdiff1d(all_taxids, host_taxids)):
+        print(taxid2name[i.split(':')[1]])
 
 '''
 df_herpes.loc[df_herpes['origin'] == 'VirHostNet2', 'xref_A'].apply(lambda x: x.split(':')[1])
