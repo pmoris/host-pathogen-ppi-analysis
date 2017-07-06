@@ -405,10 +405,46 @@ def annotate_GO(interaction_dataframe, gaf_dict):
         #                                                                            gaf_dict.get(x.split(':')[1]))
         interaction_dataframe['xref_A_GO'] = interaction_dataframe['xref_A'].str.extract('^.*:(\w*)-?',
                                                                                          expand=False).apply(lambda x:
-                                                                                        gaf_dict.get(x))
+                                                                                        gaf_dict.get(x, np.NaN))
         interaction_dataframe['xref_B_GO'] = interaction_dataframe['xref_B'].str.extract('^.*:(\w*)-?',
                                                                                          expand=False).apply(lambda x:
-                                                                                        gaf_dict.get(x))
+                                                                                        gaf_dict.get(x, np.NaN))
+
+def add_label_to_GO(go_set, taxid):
+    """Adds host/virus labels to GO terms.
+
+    Should be called via an apply function that calls it for both partners' GO set and taxids
+    for each interaction in a dataset.
+    Note: currently all hosts are labelled identically.
+
+
+    Parameters
+    ----------
+    go_set : set
+        The set of GO terms associated with a specific protein partner, stored in the xref_A/B_GO columns after
+        running the annotate_GO() function on an interaction dataframe.
+    taxid : string
+        The taxid of the protein partners, stored in the taxid_A/B columns of the interaction dataframe.
+        E.g. taxid:9606
+
+    Returns
+    -------
+    string
+        A string of labeled GO terms separated by commas.
+
+    """
+    if pd.isnull(go_set):
+        return go_set
+    else:
+        if taxid in host_taxids:
+            label = 'host-'
+        else:
+            label = 'virus-'
+
+        labeled_list = []
+        for i in go_set:
+            labeled_list.append(label+i)
+        return ','.join(labeled_list)
 
 
 if __name__ == '__main__':
@@ -435,6 +471,15 @@ if __name__ == '__main__':
     # df_concat['xref_partners_sorted'] = list(zip(df_concat.xref_A, df_concat.xref_B))
     xref_partners_sorted_array = np.sort(np.stack((df_concat.xref_A, df_concat.xref_B), axis=1), axis=1)
     df_concat['xref_partners_sorted'] = list(map(tuple, xref_partners_sorted_array))
+    df_concat['xref_partners_sorted'] = pd.Series(map(tuple, xref_partners_sorted_array))
+    # slower alternative, returns series of lists
+    # f_concat.apply(lambda x: sorted(x[['xref_A', 'xref_B']]), axis=1)
+    # other options
+    # https://stackoverflow.com/questions/40187874/python-pandas-two-columns-with-same-values-alphabetically-sorted-and-stored
+    # use df[['col1','col2']].values to get array and use np.sort
+    # or add .tolist() to get list and use sorted(i) for i in list
+    # or sort in-place df.values.sort(axis=1)
+    # pandas.DataFrame.sort_values
 
     # Count duplicates
     # TODO: check if duplicates from one data source differ in detection method, publication or something else
@@ -504,6 +549,36 @@ if __name__ == '__main__':
         count = df_herpes['xref_partners_sorted'].loc[(df_herpes['taxid_A'] == i) | (df_herpes['taxid_B'] == i)].shape
         print(taxid, taxid2name[taxid], count)
 
+    # Move all host partners in xref_B to xref_A (only an issue for VirHostNet)
+    # Note, also move ALL other associated labels...
+    #TODO: currently only swaps taxid and xref, nothing else.
+    '''
+    # https://stackoverflow.com/questions/25792619/what-is-correct-syntax-to-swap-column-values-for-selected-rows-in-a-pandas-data
+
+    # print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_A.values)
+    # print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_B.values)
+    #
+    # print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_A').size())
+    # print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_B').size())
+    #
+    # print(df_herpes.groupby('taxid_A').size())
+    # print(df_herpes.groupby('taxid_B').size())
+    '''
+    host_position_mask = df_herpes['taxid_B'] == 'taxid:9606'
+    # lambdafunc = lambda x: pd.Series(x['xref_B'],
+    #                                  x['xref_A'])
+    # df_herpes.loc[host_position_mask, ['xref_A', 'xref_B']] = df_herpes.loc[host_position_mask].apply(lambdafunc, axis=0)
+    df_herpes.loc[host_position_mask, ['xref_A', 'xref_B', 'taxid_A', 'taxid_B']] = df_herpes.loc[host_position_mask,
+                                                                            ['xref_B', 'xref_A',
+                                                                             'taxid_B', 'taxid_A']].values
+
+    print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_A.values)
+    print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_B.values)
+
+    print('\n\n\n\n\nvirhosttaxidssizesgrouped\n\n\n\n')
+    print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_A').size())
+    print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_B').size())
+
     # Count missing values across columns
     print('\nMissing values in each column:\n')
     print(df_herpes.isnull().sum(axis=0))
@@ -525,51 +600,21 @@ if __name__ == '__main__':
     # Add GO annotations
     annotate_GO(df_herpes, gaf_dict)
 
-    # Move all host partners in xref_B to xref_A (only an issue for VirHostNet)
-
-    # https://stackoverflow.com/questions/25792619/what-is-correct-syntax-to-swap-column-values-for-selected-rows-in-a-pandas-data
-
-    print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_A.values)
-    print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_B.values)
-
-    print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_A').size())
-    print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_B').size())
-
-    print(df_herpes.groupby('taxid_A').size())
-    print(df_herpes.groupby('taxid_B').size())
-
-    host_position_mask = df_herpes['taxid_B'] == 'taxid:9606'
-    # lambdafunc = lambda x: pd.Series(x['xref_B'],
-    #                                  x['xref_A'])
-    # df_herpes.loc[host_position_mask, ['xref_A', 'xref_B']] = df_herpes.loc[host_position_mask].apply(lambdafunc, axis=0)
-    df_herpes.loc[host_position_mask, ['xref_A', 'xref_B']] = df_herpes.loc[host_position_mask,
-                                                                            ['xref_B', 'xref_A']].values
-
-    print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_A.values)
-    print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_B.values)
-
-    print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_A').size())
-    print(df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].groupby('taxid_B').size())
-
     # Add virus/host labels to GO
-    def add_origin_to_GO_labels(go_set, taxid):
-        if taxid == 'taxid:9606':
-            label = 'human-'
-        else:
-            label = 'viral-'
+    lambda_go_label = lambda x: pd.Series([add_label_to_GO(x['xref_A_GO'], x['taxid_A']),
+                                           add_label_to_GO(x['xref_B_GO'], x['taxid_B'])])
+    df_herpes[['xref_A_GO', 'xref_B_GO']] = df_herpes.apply(lambda_go_label, axis=1)
 
-        labeled_list = []
-        for i in go_set:
-            labeled_list.append(label+i)
-        return ','.join(labeled_list)
-
-    lambdafunc = lambda x: pd.Series(add_origin_to_GO_labels(x['xref_A_GO'], x['taxid_A']),
-                                     add_origin_to_GO_labels(x['xref_B_GO'], x['taxid_B']))
-    # df_herpes.loc[['xref_A_GO', 'xref_B_GO']] = df_herpes.apply(lambdafunc)
-
+    print(df_herpes.head())
 
     # Save to transaction database
     df_output = df_herpes.loc[:, ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
     df_output.to_csv(r'ppi_go_transactions.csv', sep='\t', index=False)
 
 
+'''
+df_herpes.loc[df_herpes['origin'] == 'VirHostNet2', 'xref_A'].apply(lambda x: x.split(':')[1])
+versus
+df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].apply(lambda x: x['xref_A'].split(':')[1], axis=1)
+
+'''
