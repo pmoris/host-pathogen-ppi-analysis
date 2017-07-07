@@ -62,6 +62,10 @@ def parse_taxid_nodes(file_path):
 
     return taxid2parent, taxid2rank
 
+def name_search(partial_name, name2taxid):
+    return [taxid for key, taxid in name2taxid.items() if partial_name.lower() in key.lower()]
+
+
 def find_rank(species, rank):
     return find_rank_recursive(name2taxid[species], rank)
 def find_rank_recursive(taxid, rank):
