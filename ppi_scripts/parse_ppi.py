@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
 
 """
-Module to parse protein-protein interaction datasets in mitab format.
+Module to parse protein-protein interaction datasets in mitab format and convert them into transaction datasets.
 """
 
-import os
-import sys
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-pd.set_option('display.max_columns', None)
-
-from pathlib import Path
-
-# sys.path.insert(0, '../go-enrichment-tool')
-from go_enrichment_tool import obo_tools
 from go_enrichment_tool import gaf_parser
+from go_enrichment_tool import obo_tools
+import retrieve_taxids
 
+# for interaction console
+# import sys
+# sys.path.insert(0, '../go-enrichment-tool')
+# sys.path.append("/media/pieter/DATA/Wetenschap/Doctoraat/host-pathogen-project/host-pathogen-ppi-fim/ppi_scripts/go_enrichment_tool")
+# sys.path.append("/media/pieter/DATA/Wetenschap/Doctoraat/host-pathogen-project/host-pathogen-ppi-fim/ppi_scripts")
+
+pd.set_option('display.max_columns', None)
+pd.options.display.max_colwidth = 200
 
 def read_mitab_hpidb2(filepath):
     """Read HPIDB2 data set into pandas DataFrame.
@@ -195,7 +198,7 @@ def create_mapping_files(interaction_dataframe, from_id, description, savepath, 
         Writes mapping files to data directory.
 
     """
-    # create space-separated Entrez gene string
+    # create space-separated id string
     ids = pd.Series()
     for col in columns:
         to_map = interaction_dataframe[col][interaction_dataframe[col].str.contains(description)]
@@ -268,6 +271,7 @@ def map2uniprot(interaction_dataframe, filepath=r'../ppi_data/mappings/', column
         # Define filepath
         path = filepath + i[1] + r'2uniprot.txt'
         # Re-run this if data set changes...
+        #TODO: add options to force re-run
         if not Path(path).is_file():
             create_mapping_files(interaction_dataframe, i[0], i[1], path, columns)
         # Read in file as array
@@ -277,11 +281,11 @@ def map2uniprot(interaction_dataframe, filepath=r'../ppi_data/mappings/', column
                                       for line in mapping if '\treviewed' in line])
             # Store mapping into dictionary where non-uniprot keys map to lists of uniprot AC's.
             mapping_dict = {}
-            for i in mapping_array:
-                if not i[0] in mapping_dict:
-                    mapping_dict[i[0]] = [i[1]]
+            for j in mapping_array:
+                if not j[0] in mapping_dict:
+                    mapping_dict[j[0]] = [j[1]]
                 else:
-                    mapping_dict[i[0]].append(i[1])
+                    mapping_dict[j[0]].append(j[1])
 
                     # print(len(entrez2uniprot_array)) # 526
                     # print(np.unique(entrez2uniprot_array[:, 0], return_index=True)) # 510
@@ -500,19 +504,29 @@ if __name__ == '__main__':
     # Concatenate the different sources
     df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto])
 
-    # TODO: no intact-EBI mapping?
     # Map entrez gene id's to uniprot ac's
     map2uniprot(df_concat)
+    # TODO: no intact-EBI mapping...
 
+
+
+    ##############
+    ## PRINTOUT ##
+    ##############
     # Size of each data source
     print('\nData source sizes:\n')
     print(df_concat.groupby('origin').size())
 
+
+
     # Add unique identifier for interaction pairs
-    # df_concat['xref_partners_sorted'] = list(zip(df_concat.xref_A, df_concat.xref_B))
     xref_partners_sorted_array = np.sort(np.stack((df_concat.xref_A, df_concat.xref_B), axis=1), axis=1)
     df_concat['xref_partners_sorted'] = list(map(tuple, xref_partners_sorted_array))
     df_concat['xref_partners_sorted'] = pd.Series(map(tuple, xref_partners_sorted_array))
+
+    # sorting the following does not work:
+    # df_concat['xref_partners_sorted'] = list(zip(df_concat.xref_A, df_concat.xref_B))
+
     # slower alternative, returns series of lists
     # f_concat.apply(lambda x: sorted(x[['xref_A', 'xref_B']]), axis=1)
     # other options
@@ -522,6 +536,11 @@ if __name__ == '__main__':
     # or sort in-place df.values.sort(axis=1)
     # pandas.DataFrame.sort_values
 
+
+
+    ##############
+    ## PRINTOUT ##
+    ##############
     # Count duplicates
     # TODO: check if duplicates from one data source differ in detection method, publication or something else
     print('\nNumber of duplicated interactions\n')
@@ -536,15 +555,25 @@ if __name__ == '__main__':
     print(df_concat.loc[(~df_concat.xref_A.str.contains('uniprot')) |
                         (~df_concat.xref_B.str.contains('uniprot'))].groupby('origin').size())
 
+
+
     # Label interactions as being within or between species.
     annotate_inter_intra(df_concat)
+    # TODO: filter on inter-species interactions?
 
     # Remove duplicate interaction pairs (including different detection methods and publications)
     # https://stackoverflow.com/a/41650846
     # https://stackoverflow.com/questions/33042777/
-    # Note that this will likely result in the first dataset (e.g. hpidb2) having priority over the others.
+    # Note that this will result in the first dataset (e.g. hpidb2) having priority over the others.
     df_concat_dedup = df_concat.drop_duplicates(subset=['xref_partners_sorted', 'taxid_B', 'taxid_A'], keep='first')
     df_concat_dedup = df_concat_dedup.reset_index(drop=True)
+    # When subsetting duplicates, also check taxid_A and taxid_B
+    # e.g. "Human herpesvirus 1 STRAIN KOS","10306","A1Z0Q5","GD_HHV1K ","Q15223","NECT1_HUMAN ","fluorescence-activated cell sorting","12011057"
+    # "Human herpesvirus 1","10298","A1Z0Q5","GD_HHV1K ","Q15223","NECT1_HUMAN ","fluorescence-activated cell sorting","12011057"
+    # These differ in pathogen strain, but it's the same interaction.
+    # Will come into play when comparing groups and different groups have same interaction
+    # Which is not the case here, since both are human herpesvirus 1 strains
+    # Similar issue for pubmed ID, method, etc.
 
     # Retrieve only Herpesviridae (taxid:10292), see retrieve_taxids.py script to generate child taxids
     #TODO: import from retrieve_Taxids and create on the spot
@@ -560,20 +589,27 @@ if __name__ == '__main__':
                                     df_concat_dedup.taxid_B.isin(herpes_taxids)]
     df_herpes = df_herpes.reset_index(drop=True)
 
+
+
+    ##############
+    ## PRINTOUT ##
+    ##############
     # Check how many non-uniprot interactions are left
     print('\nNumber of non-UniProt AC interactions for Herpes interactions\n')
     print(df_herpes.loc[(~df_herpes.xref_A.str.contains('uniprot')) |
                         (~df_herpes.xref_B.str.contains('uniprot'))].groupby('origin').size())
 
-    # Filter on uniprot AC's
+
+
+    # Filter on UniProt AC's due to GO mapping being UniProt-based
     df_herpes = df_herpes.loc[(df_herpes.xref_A.str.contains('uniprot')) & (df_herpes.xref_B.str.contains('uniprot'))]
     df_herpes = df_herpes.reset_index(drop=True)
 
-    # TODO: when subsetting duplicates, also check taxid_A
-    # e.g. "Human herpesvirus 1 STRAIN KOS","10306","A1Z0Q5","GD_HHV1K ","Q15223","NECT1_HUMAN ","fluorescence-activated cell sorting","12011057"
-    # "Human herpesvirus 1","10298","A1Z0Q5","GD_HHV1K ","Q15223","NECT1_HUMAN ","fluorescence-activated cell sorting","12011057"
-    # TODO: differs in pathogen strain! Others differ in their pubmed id
 
+
+    ##############
+    ## PRINTOUT ##
+    ##############
     # Print some information about the interactions
     print('\nNumber of inter versus intra interactions:\n')
     print(df_herpes.groupby(['inter-intra', 'origin']).size())
@@ -586,11 +622,13 @@ if __name__ == '__main__':
     print(df_herpes.loc[(~df_herpes.xref_A.str.contains('uniprot')) |
                         (~df_herpes.xref_B.str.contains('uniprot'))].shape)
 
+
+
+
     # Check which hosts are present
     print('\nNumber of interactions per host\n')
     all_taxids = df_herpes['taxid_A'].append(df_herpes['taxid_B']).unique()
     host_taxids = list(np.setdiff1d(all_taxids, herpes_taxids))
-    import retrieve_taxids
     taxid_names_path = Path(r'../taxid_data/taxdump/names.dmp')
     name2taxid, taxid2name = retrieve_taxids.parse_taxid_names(str(taxid_names_path))
     for i in host_taxids:
@@ -598,10 +636,23 @@ if __name__ == '__main__':
         count = df_herpes['xref_partners_sorted'].loc[(df_herpes['taxid_A'] == i) | (df_herpes['taxid_B'] == i)].shape
         print(taxid, taxid2name[taxid], count)
 
+
+
+
+    # Create taxid dictionaries
+    taxid_nodes_path = Path(r'../taxid_data/taxdump/nodes.dmp')
+    taxid2parent, taxid2rank = retrieve_taxids.parse_taxid_nodes(str(taxid_nodes_path))
+    parent2child = retrieve_taxids.create_parent2child_dict(taxid2parent)
+
     # Move all host partners in xref_B to xref_A (only an issue for VirHostNet)
     # Note, also move ALL other associated labels...
-    #TODO: currently only swaps taxid and xref, nothing else.
     reorder_pathogen_host_entries(df_herpes, host_taxids)
+
+
+
+    ##############
+    ## PRINTOUT ##
+    ##############
     '''
     # https://stackoverflow.com/questions/25792619/what-is-correct-syntax-to-swap-column-values-for-selected-rows-in-a-pandas-data
 
@@ -626,19 +677,29 @@ if __name__ == '__main__':
     print('\nMissing values in each column:\n')
     print(df_herpes.isnull().sum(axis=0))
 
+
+
     # Create Gene Ontology dictionaries
     #TODO: create quickGO query using host list + herpesviridae
     obo_dict = obo_tools.importOBO('../go_data/go-basic.obo')
     # protein_set = set(df_herpes.xref_A.append(df_herpes.xref_B, ignore_index=True).str.split(':').str[1].unique())
+    # Needs special extract pattern because of PTM processing id's e.g. P04295-PRO_0000115940
     protein_set = set(df_herpes.xref_A.append(df_herpes.xref_B, ignore_index=True).str.extract('^.*:(\w*)-?',
                                                                                          expand=False).unique())
     gaf_dict = gaf_parser.importGAF('../go_data/gene_association_hosts_10292.goa', protein_set)
 
+
+
+    ##############
+    ## PRINTOUT ##
+    ##############
     # Number of proteins without GO annotation
-    #TODO: PTM processing id's e.g. P04295-PRO_0000115940
     print('\nNumber of proteins without GO annotation\n')
     not_annotated = [i for i in protein_set if i not in gaf_dict]
     print(len(not_annotated))
+
+
+
 
     # Add GO annotations
     annotate_GO(df_herpes, gaf_dict)
@@ -648,17 +709,70 @@ if __name__ == '__main__':
                                            add_label_to_GO(x['xref_B_GO'], x['taxid_B'])])
     df_herpes[['xref_A_GO', 'xref_B_GO']] = df_herpes.apply(lambda_go_label, axis=1)
 
+    # Map pathogen id to higher label
+    pathogen_group_dict = {'bovine_ah1': '10320', 'bovine_hv1': '79889', 'epstein_barr': '10376', 'equid_av1': '10326',
+                           'equid_gv2': '12657', 'gallid_av2': '10390', 'human_hsv1': '10298', 'saimiri_gv2': '10381',
+                           'human_av2': '10310', 'human_av3': '10335', 'human_bv5': '10359', 'human_gv8': '37296',
+                           'human_bv6A': '32603', 'human_bv6B': '32604', 'murid_bv1': '10366', 'murid_gv4': '33708',
+                           'papiine_gv1': '106332', 'suid_av1': '10345'}
+
+    for i, j in pathogen_group_dict.items():
+        pathogen_group_dict[i] = [j] + retrieve_taxids.get_children(j, parent2child)
+
+    # # ateline_gh3 = ['85618']
+    # pathogen_group_dict['bovine_ah1'] = ['10320'] + retrieve_taxids.get_children('10320',parent2child)
+    # # bovine_gh4 = ['10385'].extend(retrieve_taxids.get_children('10385',parent2child))
+    # pathogen_group_dict['bovine_hv1'] = ['79889'] + retrieve_taxids.get_children('79889', parent2child)
+    # # Eleph_hv1 = ['654902'] # actual parent taxa = 146015
+    # pathogen_group_dict['epstein_barr'] = ['10376'] + retrieve_taxids.get_children('10376',parent2child)  # or human gammaherpesvirus 4
+    # pathogen_group_dict['equid_av1'] = ['10326'] + retrieve_taxids.get_children('10326', parent2child)  # or equine hv1
+    # pathogen_group_dict['equid_gv2'] = ['12657'] + retrieve_taxids.get_children('12657', parent2child)  # or equine hv2
+    # pathogen_group_dict['gallid_av2'] = ['10390'] + retrieve_taxids.get_children('10390', parent2child)
+    # pathogen_group_dict['human_hsv1'] = ['10298'] + retrieve_taxids.get_children('10298', parent2child)  # or human av1
+    # pathogen_group_dict['saimiri_gv2'] = ['10381'] + retrieve_taxids.get_children('10381',parent2child)  # or herpesvirus saimiri
+    # pathogen_group_dict['human_av2'] = ['10310'] + retrieve_taxids.get_children('10310', parent2child)
+    # pathogen_group_dict['human_av3'] = ['10335'] + retrieve_taxids.get_children('10335',parent2child)  # or varicella-zoster
+    # pathogen_group_dict['human_bv5'] = ['10359'] + retrieve_taxids.get_children('10359',parent2child)  # or human cytomegalovirus
+    # pathogen_group_dict['human_gv8'] = ['37296'] + retrieve_taxids.get_children('37296',parent2child)  # also contains ape viruses?
+    # pathogen_group_dict['human_bv6A'] = ['32603'] + retrieve_taxids.get_children('32603', parent2child)
+    # pathogen_group_dict['human_bv6B'] = ['32604'] + retrieve_taxids.get_children('32604', parent2child)
+    # pathogen_group_dict['murid_bv1'] = ['10366'] + retrieve_taxids.get_children('10366', parent2child)
+    # pathogen_group_dict['murid_gv4'] = ['33708'] + retrieve_taxids.get_children('33708',parent2child)  # or murine hv 68
+    # pathogen_group_dict['papiine_gv1'] = ['106332'] + retrieve_taxids.get_children('106332', parent2child)
+    # pathogen_group_dict['suid_av1'] = ['10345'] + retrieve_taxids.get_children('10345',parent2child)  # or pseudorabies virus
+
+    def pathogen_group_mapper(taxid, pathogen_group_dict):
+        for pathogen_group, taxids in pathogen_group_dict.items():
+            if taxid in taxids:
+                return pathogen_group
+        return np.NaN
+    # lambda_pathogen_mapper = lambda x: [pathogen_group for pathogen_group, taxids in pathogen_group_dict.items()
+    #                                     if taxid in taxids]
+
+    df_herpes['pathogen_groups'] = df_herpes.apply(lambda x: pathogen_group_mapper(x['taxid_B'].split(':')[1],
+                                                                                   pathogen_group_dict), axis=1)
+
     # TODO: map GO to fixed level
 
 
     # Save to transaction database
     # TODO: create a separate transaction base per virus type + only inter?
     df_output = df_herpes.loc[:, ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
-    df_output.to_csv(r'ppi_go_transactions.csv', sep='\t', index=False)
+    df_output.reset_index(drop=True)
+    df_output.to_csv(r'../transaction_datasets/ppi_go_transactions.csv', sep='\t', index=False)
 
+    # Separated datasets
+    for i in df_herpes['pathogen_groups'].dropna().unique():
+        df_output_grouped = df_herpes.loc[df_herpes['pathogen_groups'] == i,
+                                          ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
+        df_output_grouped.reset_index(drop=True)
+        df_output_grouped.to_csv(r'../transaction_datasets/' + str(i) + '.csv', sep='\t', index=False)
 
+    print(df_herpes.groupby('pathogen_groups').size())
 
-
+    ##############
+    ## PRINTOUT ##
+    ##############
     for virus in np.sort(df_herpes['taxid_B'].unique()):
         print(taxid2name[virus.split(':')[1]])
     print('\n\n\n\n\n\n\n\n\n\n\n')
@@ -669,14 +783,17 @@ if __name__ == '__main__':
         # hosts at any point...
         #TODO: also: filter on inter?
 
+
+    print('\n\n\n\n\n\nWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAn\n\n\n\n\nn\n')
+
     print(sorted([taxid2name[i.split(':')[1]] for i in np.sort(np.setdiff1d(all_taxids, host_taxids))]))
 
     print(df_herpes.groupby('taxid_B').size())
 
     print('\n\n\n\n\n\nn\n\n\n\n\nn\n')
-    print(np.setdiff1d(df_hpidb2['xref_A'].unique(), df_phisto['xref_A'].unique()).size)
+    print(np.setdiff1d(df_phisto['xref_A'].unique(), df_hpidb2['xref_A'].unique()).size)
     print('\n\n\n\n\n\nn\n\n\n\n\nn\n')
-    print(np.setdiff1d(df_hpidb2['xref_B'].unique(), df_phisto['xref_B'].unique()).size)
+    print(np.setdiff1d(df_phisto['xref_B'].unique(), df_hpidb2['xref_B'].unique()).size)
 
     print('uniprotkb:Q91LX9' in df_phisto.values)
     print('uniprotkb:Q91LX9' in df_concat.values)
@@ -686,60 +803,73 @@ if __name__ == '__main__':
     print(df_herpes.groupby('origin').size())
     df_herpes['pathogen_type'] = df_herpes['taxid_B'].apply(lambda x: taxid2name[x.split(':')[1]])
     print(df_herpes.groupby('pathogen_type').size())
-    #TODO: filtering happened purely on parterXpartner, but the same interaction might appear for multiple strains..
-    #TODO: solution, add taxid_A AND taxid_B as subset for finding duplicates .
 
-    bovine_h1 = ['79889', '10323', '31518', '10324']
+
+    print(pd.Series(np.sort(df_herpes['pathogen_type'].unique())).apply(lambda x: [x, name2taxid[x]]))
+
+
+#TODO: subset intra interactions, uniquify taxid_A versus B and group by them. check for cross-species
+#TODO: ie A != B
 
     '''
 pd.Series(np.sort(df_herpes['pathogen_type'].unique())).apply(lambda x: [x, name2taxid[x]])
-0                   [Ateline gammaherpesvirus 3, 85618]
-1                    [Bovine alphaherpesvirus 1, 10320]
-2                    [Bovine gammaherpesvirus 4, 10385]
-3                  [Bovine herpesvirus type 1.1, 79889]
-4     [Bovine herpesvirus type 1.1 (strain Cooper), ...
-5     [Bovine herpesvirus type 1.1 (strain Jura), 31...
-6     [Bovine herpesvirus type 1.1 (strain P8-2), 10...
-7     [Elephantid herpesvirus 1 (isolate Kiba), 654902]
-8              [Epstein-barr virus strain ag876, 82830]
-9                     [Equid alphaherpesvirus 1, 10326]
-10       [Equid herpesvirus type 2 strain 86/87, 82831]
-11     [Equine herpesvirus type 1 (strain AB4P), 31520]
-12    [Equine herpesvirus type 1 (strain Kentucky A)...
-13                   [Gallid alphaherpesvirus 2, 10390]
-14    [Herpes simplex virus (type 1 / strain 17), 10...
-15    [Herpes simplex virus (type 1 / strain F), 10304]
-16    [Herpes simplex virus (type 1 / strain Patton)...
-17             [Herpesvirus saimiri (strain 11), 10383]
-18            [Herpesvirus saimiri (strain 488), 10384]
-19                    [Human alphaherpesvirus 1, 10298]
-20                    [Human alphaherpesvirus 2, 10310]
-21                    [Human alphaherpesvirus 3, 10335]
-22                     [Human betaherpesvirus 5, 10359]
-23                    [Human gammaherpesvirus 4, 10376]
-24                    [Human gammaherpesvirus 8, 37296]
-25              [Human herpesvirus 1 strain KOS, 10306]
-26              [Human herpesvirus 2 strain 333, 10313]
-27             [Human herpesvirus 2 strain HG52, 10315]
-28            [Human herpesvirus 3 strain Dumas, 10338]
-29     [Human herpesvirus 3 strain Oka vaccine, 341980]
-30            [Human herpesvirus 4 strain B95-8, 10377]
-31            [Human herpesvirus 5 strain AD169, 10360]
-32          [Human herpesvirus 5 strain Merlin, 295027]
-33            [Human herpesvirus 5 strain Towne, 10363]
-34             [Human herpesvirus 6 (strain GS), 10369]
-35    [Human herpesvirus 6 (strain Uganda-1102), 10370]
-36              [Human herpesvirus 6 strain Z29, 36351]
-37            [Human herpesvirus 8 strain GK18, 868565]
-38                 [Human herpesvirus 8 type M, 435895]
-39    [Marek's disease herpesvirus type 1 strain MD5...
-40                     [Murid betaherpesvirus 1, 10366]
-41                    [Murid gammaherpesvirus 4, 33708]
-42        [Murine cytomegalovirus (strain K181), 69156]
-43       [Murine cytomegalovirus (strain Smith), 10367]
-44                 [Papiine gammaherpesvirus 1, 106332]
-45                     [Suid alphaherpesvirus 1, 10345]
-46    [Suid herpesvirus 1 (strain Indiana-Funkhauser...
+0                                  [Ateline gammaherpesvirus 3, 85618]
+1                                   [Bovine alphaherpesvirus 1, 10320]
+2                                   [Bovine gammaherpesvirus 4, 10385]
+3                                 [Bovine herpesvirus type 1.1, 79889]
+4                 [Bovine herpesvirus type 1.1 (strain Cooper), 10323]
+5                   [Bovine herpesvirus type 1.1 (strain Jura), 31518]
+6                   [Bovine herpesvirus type 1.1 (strain P8-2), 10324]
+7                    [Elephantid herpesvirus 1 (isolate Kiba), 654902]
+8                             [Epstein-barr virus strain ag876, 82830]
+9                                    [Equid alphaherpesvirus 1, 10326]
+10                      [Equid herpesvirus type 2 strain 86/87, 82831]
+11                    [Equine herpesvirus type 1 (strain AB4P), 31520]
+12              [Equine herpesvirus type 1 (strain Kentucky A), 10329]
+13                                  [Gallid alphaherpesvirus 2, 10390]
+14                  [Herpes simplex virus (type 1 / strain 17), 10299]
+15                   [Herpes simplex virus (type 1 / strain F), 10304]
+16              [Herpes simplex virus (type 1 / strain Patton), 10308]
+17                            [Herpesvirus saimiri (strain 11), 10383]
+18                           [Herpesvirus saimiri (strain 488), 10384]
+19                                   [Human alphaherpesvirus 1, 10298]
+20                                   [Human alphaherpesvirus 2, 10310]
+21                                   [Human alphaherpesvirus 3, 10335]
+22                                    [Human betaherpesvirus 5, 10359]
+23                                   [Human gammaherpesvirus 4, 10376]
+24                                   [Human gammaherpesvirus 8, 37296]
+25                             [Human herpesvirus 1 strain KOS, 10306]
+26                             [Human herpesvirus 2 strain 333, 10313]
+27                            [Human herpesvirus 2 strain HG52, 10315]
+28                           [Human herpesvirus 3 strain Dumas, 10338]
+29                    [Human herpesvirus 3 strain Oka vaccine, 341980]
+30                           [Human herpesvirus 4 strain B95-8, 10377]
+31                           [Human herpesvirus 5 strain AD169, 10360]
+32                         [Human herpesvirus 5 strain Merlin, 295027]
+33                           [Human herpesvirus 5 strain Towne, 10363]
+
+34                            [Human herpesvirus 6 (strain GS), 10369]
+35                   [Human herpesvirus 6 (strain Uganda-1102), 10370]
+36                             [Human herpesvirus 6 strain Z29, 36351]
+
+37                           [Human herpesvirus 8 strain GK18, 868565]
+38                                [Human herpesvirus 8 type M, 435895]
+
+39              [Marek's disease herpesvirus type 1 strain MD5, 10389]
+
+40                                    [Murid betaherpesvirus 1, 10366]
+
+41                                   [Murid gammaherpesvirus 4, 33708]
+
+42                       [Murine cytomegalovirus (strain K181), 69156]
+43                      [Murine cytomegalovirus (strain Smith), 10367]
+
+44                                [Papiine gammaherpesvirus 1, 106332]
+
+45                                    [Suid alphaherpesvirus 1, 10345]
+46    [Suid herpesvirus 1 (strain Indiana-Funkhauser / Becker), 31523]
+dtype: object
+(8124, 35)
     
     
     
