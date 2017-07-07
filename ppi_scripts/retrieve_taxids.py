@@ -99,7 +99,7 @@ def find_lca_group(taxid_list):
 
 def create_parent2child_dict(taxid2parent_dict):
     parent2child = {}
-    for taxid, parent in taxid2parent.items():
+    for taxid, parent in taxid2parent_dict.items():
         if parent not in parent2child.keys():
             parent2child[parent] = []
         parent2child[parent].append(taxid)
