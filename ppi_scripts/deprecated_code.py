@@ -36,6 +36,30 @@ s = read_mitab(r'/media/pieter/DATA/Wetenschap/Doctoraat/host-pathogen-project/h
 '''
 
 
+# Equivalent to label_host_pathogen_origin() functoin that loops through
+# column-taxid zip and redefines a new lambda function each time.
+
+ def label_row_via_apply(row, pathogen_set, GO_columns, taxid_columns):
+    labelled_columns = pd.Series()
+    for i, j in zip(GO_columns, taxid_columns):
+        labelled_columns = labelled_columns.append(pd.Series(label_term(row[i], row[j], pathogen_set)))
+    return labelled_columns
+
+def label_host_pathogen_origin(interaction_dataframe, pathogen_set, GO_columns=list(('xref_A_GO', 'xref_B_GO')),
+                               taxid_columns=list(('taxid_A', 'taxid_B'))):
+    interaction_dataframe[GO_columns] = interaction_dataframe.apply(label_row_via_apply,
+                                                                    args=(pathogen_set, GO_columns, taxid_columns),
+                                                                    axis=1)
+
+    # original code
+    '''
+    lambda_go_label = lambda x: pd.Series([label_GO_term(x['xref_A_GO'], x['taxid_A'], host_taxids),
+                                           label_GO_term(x['xref_B_GO'], x['taxid_B'], host_taxids)])
+
+    df_herpes[['xref_A_GO', 'xref_B_GO']] = df_herpes.apply(lambda_go_label, axis=1)
+    '''
+
+
 
     # # Check number of within and between interactions
     # def check_intra_species_interactions(interaction_dataframe):

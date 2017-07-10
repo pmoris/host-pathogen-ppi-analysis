@@ -22,6 +22,7 @@ import retrieve_taxids
 pd.set_option('display.max_columns', None)
 pd.options.display.max_colwidth = 200
 
+
 def read_mitab_hpidb2(filepath):
     """Read HPIDB2 data set into pandas DataFrame.
 
@@ -154,7 +155,7 @@ def phisto_load_mi_ontology(filepath):
             if line.startswith('[Term]'):
                 is_mi_term = True
             else:
-                if is_mi_term == True:
+                if is_mi_term:
                     if line.startswith('id:'):
                         # Careful, id itself contains a colon as well, so split on ':\s'
                         mi_id = line.split(': ')[1].strip()
@@ -238,7 +239,7 @@ def create_mapping_files(interaction_dataframe, from_id, description, savepath, 
     Path(savepath).write_bytes(mapping)
 
 
-def map2uniprot(interaction_dataframe, filepath=r'../ppi_data/mappings/', columns=['xref_A', 'xref_B']):
+def map2uniprot(interaction_dataframe, filepath=r'../ppi_data/mappings/', columns=list(('xref_A', 'xref_B'))):
     """ Remap identifiers to UniProt AC's.
 
     Replaces non-UniProt AC's for the specified columns of a pandas DataFrame.
@@ -263,7 +264,7 @@ def map2uniprot(interaction_dataframe, filepath=r'../ppi_data/mappings/', column
         Modifies the supplied DataFrame in-place.
 
     """
-    #TODO: automatically retrieve descriptions and identifiers from file.
+    # TODO: automatically retrieve descriptions and identifiers from file.
     # bash one-liner to retrieve data sources
     # cut -f1 hpidb2_March14_2017_mitab.txt | sed -r 's/(^.*):.*/\1/g' | sort -u
     for i in [['P_ENTREZGENEID', 'entrez'], ['EMBL_ID', 'embl'], ['ENSEMBLGENOME_ID', 'ensemblgenomes'],
@@ -271,7 +272,7 @@ def map2uniprot(interaction_dataframe, filepath=r'../ppi_data/mappings/', column
         # Define filepath
         path = filepath + i[1] + r'2uniprot.txt'
         # Re-run this if data set changes...
-        #TODO: add options to force re-run
+        # TODO: add options to force re-run
         if not Path(path).is_file():
             create_mapping_files(interaction_dataframe, i[0], i[1], path, columns)
         # Read in file as array
@@ -298,9 +299,12 @@ def map2uniprot(interaction_dataframe, filepath=r'../ppi_data/mappings/', column
                 mapping_selection = (interaction_dataframe[col].str.contains(i[1])) | \
                                     (interaction_dataframe[col].str.contains(i[1]))
 
-                interaction_dataframe.loc[mapping_selection, col] = interaction_dataframe.loc[
-                    mapping_selection, col].apply(lambda x: tuple(mapping_dict[x.split(':')[1]]) if x in mapping_dict
-                                                                                                 else x)
+                interaction_dataframe.loc[mapping_selection,
+                                          col] = interaction_dataframe.loc[mapping_selection,
+                                                                           col].apply(lambda x:
+                                                                                      tuple(mapping_dict[x.split(':')[
+                                                                                          1]]) if x in mapping_dict
+                                                                                      else x)
 
             '''
             # cat <(cut -f1 hpidb2_March14_2017_mitab.txt) <(cut -f2 hpidb2_March14_2017_mitab.txt) | grep entrez | sort -u |
@@ -366,10 +370,10 @@ def concat_interaction_datasets(list_of_datasets):
 
     NOTE: THE ORDER IN WHICH THE DATASETS ARE COMBINED DETERMINES THE ORDER IN WHICH DUPLICATES WILL BE RETAINED.
 
-    #and remove duplicated
-    #interaction pairs. Duplicates are defined by a tuple of the "xref" entries (unique identifiers for the interactors).
-    #Note that this will also omit duplicated pairs originating from different sources or found by other detection
-    methods.
+    # and remove duplicated interaction pairs.
+    # Duplicates are defined by a tuple of the "xref" entries (unique identifiers for the interactors).
+    # Note that this will also omit duplicated pairs originating from different sources or found by other detection
+    # methods.
 
     Parameters
     ----------
@@ -391,11 +395,13 @@ def concat_interaction_datasets(list_of_datasets):
     return df_concat
 
 
-def reorder_pathogen_host_entries(interaction_dataframe, host_list = ['taxid:9606']):
+def reorder_pathogen_host_entries(interaction_dataframe, host_list=list(('taxid:9606'))):
     ''' Moves all pathogen entries to B columns and host entries to A columns.
 
     Selects all interaction entries where host entries occur in B columns instead of A
     and swaps the A and B columns.
+
+    https://stackoverflow.com/questions/25792619/what-is-correct-syntax-to-swap-column-values-for-selected-rows-in-a-pandas-data
 
     Parameters
     ----------
@@ -403,7 +409,7 @@ def reorder_pathogen_host_entries(interaction_dataframe, host_list = ['taxid:960
         The pandas DataFrame containing the protein-protein interactions that need to be sorted.
     host_list : list
         List of host taxid's to look for in the B column.
-        (Default value is ['taxid:9606'], e.g. human.
+        (Default value is ['taxid:9606'], e.g. human.)
 
     Returns
     -------
@@ -415,17 +421,17 @@ def reorder_pathogen_host_entries(interaction_dataframe, host_list = ['taxid:960
     host_position_mask = interaction_dataframe['taxid_B'].isin(host_list)
     # Note: HPIDB2 always has hosts as partner A and PHISTO has human/pathogen labeled too.
     column_names = ['xref', 'taxid', 'aliases', 'alt_identifiers']
-    columns_to_swap = [name + label for name in column_names for label in ['_A','_B']]
+    columns_to_swap = [name + label for name in column_names for label in ['_A', '_B']]
     columns_after_swap = [name + label for name in column_names for label in ['_B', '_A']]
-    interaction_dataframe.loc[host_position_mask, columns_to_swap] = interaction_dataframe.loc[host_position_mask,
-                                                                                               columns_after_swap].values
+    interaction_dataframe.loc[host_position_mask,columns_to_swap] = interaction_dataframe.loc[host_position_mask,
+                                                                                              columns_after_swap].values
     # Slower alternative
     # lambdafunc = lambda x: pd.Series([x['xref_B'],x['xref_A']])
     # df_herpes.loc[host_position_mask, ['xref_A', 'xref_B']] = df_herpes.loc[host_position_mask].apply(lambdafunc, axis=1)
 
 
 def annotate_GO(interaction_dataframe, gaf_dict):
-        """ Adds Gene Ontology terms to interaction dataset.
+    """ Adds Gene Ontology terms to interaction dataset.
 
         Creates separate columns with Gene Ontology terms for both interaction partner in the interaction DataFrame.
         Note that the UniProt AC's need to be formatted to remove potential PTM labels, e.g. P04295-PRO_0000115940.
@@ -443,19 +449,50 @@ def annotate_GO(interaction_dataframe, gaf_dict):
         None
             Modifies the interaction dataframe in-place by adding Gene Ontology columns.
         """
-        # interaction_dataframe['xref_A_GO'] = interaction_dataframe['xref_A'].apply(lambda x:
-        #                                                                            gaf_dict.get(x.split(':')[1]))
-        # interaction_dataframe['xref_B_GO'] = interaction_dataframe['xref_B'].apply(lambda x:
-        #                                                                            gaf_dict.get(x.split(':')[1]))
-        interaction_dataframe['xref_A_GO'] = interaction_dataframe['xref_A'].str.extract('^.*:(\w*)-?',
-                                                                                         expand=False).apply(lambda x:
-                                                                                        gaf_dict.get(x, np.NaN))
-        interaction_dataframe['xref_B_GO'] = interaction_dataframe['xref_B'].str.extract('^.*:(\w*)-?',
-                                                                                         expand=False).apply(lambda x:
-                                                                                        gaf_dict.get(x, np.NaN))
+    # interaction_dataframe['xref_A_GO'] = interaction_dataframe['xref_A'].apply(lambda x:
+    #                                                                            gaf_dict.get(x.split(':')[1]))
+    # interaction_dataframe['xref_B_GO'] = interaction_dataframe['xref_B'].apply(lambda x:
+    #                                                                            gaf_dict.get(x.split(':')[1]))
+    interaction_dataframe['xref_A_GO'] = interaction_dataframe['xref_A'].str.extract('^.*:(\w*)-?', expand=False).apply(
+        lambda x: gaf_dict.get(x, np.NaN))
+    interaction_dataframe['xref_B_GO'] = interaction_dataframe['xref_B'].str.extract('^.*:(\w*)-?', expand=False).apply(
+        lambda x: gaf_dict.get(x, np.NaN))
 
 
-def add_label_to_GO(go_set, taxid):
+def label_host_pathogen(interaction_dataframe, pathogen_set, columns=list(('xref_A_GO', 'xref_B_GO')),
+                               taxid_columns=list(('taxid_A', 'taxid_B'))):
+    ''' Adds virus/host label to selected columns in DataFrame.
+
+    The columns and taxid lists should of equal length and ordered in the same manner. E.g. for each position
+    in the columns list, the corresponding position in the taxid list should repeat the associated taxid column.
+
+    Parameters
+    ----------
+    interaction_dataframe : DataFrame
+        Pandas DataFrame that should be modified.
+    pathogen_set : set
+        A set of pathogen taxids of the format "taxid:#####".
+    columns : list
+        A list of columns whose entries should be labelled.
+        (Default = ['xref_A_GO', 'xref_B_GO'])
+    taxid_columns : list
+        A list of taxid columns corresponding to the order of the columns parameter.
+        (Default = ['taxid_A', 'taxid_B']
+    Returns
+    -------
+    None
+        Modifies the pandas DataFrame inplace.
+
+    '''
+    if not len(columns) == len(taxid_columns):
+        raise ValueError("Lists of columns to label should match taxid columns.")
+
+    else:
+        for col, taxid in zip(columns, taxid_columns):
+            lambda_label = lambda x: label_term(x[col], x[taxid], pathogen_set)
+            interaction_dataframe[col] = interaction_dataframe.apply(lambda_label, axis=1)
+
+def label_term(label_set, taxid, pathogen_set):
     """Adds host/virus labels to GO terms and returns string representation.
 
     Should be called via an apply function that calls it for both partners' GO set and taxids
@@ -465,11 +502,11 @@ def add_label_to_GO(go_set, taxid):
 
     Parameters
     ----------
-    go_set : set
+    label_set : set
         The set of GO terms associated with a specific protein partner, stored in the xref_A/B_GO columns after
-        running the annotate_GO() function on an interaction dataframe.
+        running the annotate_GO() function on an interaction DataFrame.
     taxid : string
-        The taxid of the protein partners, stored in the taxid_A/B columns of the interaction dataframe.
+        The taxid of the protein partners, stored in the taxid_A/B columns of the interaction DataFrame.
         E.g. taxid:9606
 
     Returns
@@ -478,17 +515,17 @@ def add_label_to_GO(go_set, taxid):
         A string of labeled GO terms separated by commas.
 
     """
-    if pd.isnull(go_set):
-        return go_set
+    if pd.isnull(label_set):
+        return label_set
     else:
-        if taxid in host_taxids:
-            label = 'host-'
-        else:
+        if taxid in pathogen_set:
             label = 'virus-'
+        else:
+            label = 'host-'
 
         labeled_list = []
-        for i in go_set:
-            labeled_list.append(label+i)
+        for i in label_set:
+            labeled_list.append(label + i)
         return ','.join(labeled_list)
 
 
@@ -516,8 +553,6 @@ if __name__ == '__main__':
     # Size of each data source
     print('\nData source sizes:\n')
     print(df_concat.groupby('origin').size())
-
-
 
     # Add unique identifier for interaction pairs
     xref_partners_sorted_array = np.sort(np.stack((df_concat.xref_A, df_concat.xref_B), axis=1), axis=1)
@@ -548,14 +583,12 @@ if __name__ == '__main__':
     print('\nNumber of unique interactions per data set\n')
     print(df_concat.groupby('origin')['xref_partners_sorted'].nunique())
 
-    #TODO: bash script to check overlap: comm <(cut -f3 -d, phisto_Jan19_2017.csv | sed 's/"//g' | sort -u ) <(cut -f2 hpidb2_March14_2017_mitab.txt | sed s/uniprotkb://g | sort -u)
+    # TODO: bash script to check overlap: comm <(cut -f3 -d, phisto_Jan19_2017.csv | sed 's/"//g' | sort -u ) <(cut -f2 hpidb2_March14_2017_mitab.txt | sed s/uniprotkb://g | sort -u)
 
     # Check non-uniprot AC's
     print('\nNumber of interactions without UniProt AC\n')
     print(df_concat.loc[(~df_concat.xref_A.str.contains('uniprot')) |
                         (~df_concat.xref_B.str.contains('uniprot'))].groupby('origin').size())
-
-
 
     # Label interactions as being within or between species.
     annotate_inter_intra(df_concat)
@@ -575,11 +608,12 @@ if __name__ == '__main__':
     # Which is not the case here, since both are human herpesvirus 1 strains
     # Similar issue for pubmed ID, method, etc.
 
-    # Retrieve only Herpesviridae (taxid:10292), see retrieve_taxids.py script to generate child taxids
-    #TODO: import from retrieve_Taxids and create on the spot
-    #TODO: then combine this code into a function to subset a given dataframe for a given taxid and its children
-    #TODO: and a host list or default to all hosts
-    #TODO: note that this filtering will generally result in intra-host interactions being omitted, while retaining intra-viral ones
+    # Retrieve Herpesviridae (taxid:10292) list, see retrieve_taxids.py script to generate child taxids
+    # TODO: import from retrieve_Taxids and create on the spot
+    # TODO: then combine this code into a function to subset a given dataframe for a given taxid and its children
+    # TODO: and a host list or default to all hosts
+    # TODO: note that this filtering will generally result in intra-host interactions being omitted,
+    # TODO: while retaining intra-viral ones
     with Path(r'../taxid_data/child_taxids_of_10292.txt').open() as taxid_file:
         herpes_taxids = [str('taxid:' + line.split('|')[0]) for line in taxid_file]
 
@@ -589,8 +623,6 @@ if __name__ == '__main__':
                                     df_concat_dedup.taxid_B.isin(herpes_taxids)]
     df_herpes = df_herpes.reset_index(drop=True)
 
-
-
     ##############
     ## PRINTOUT ##
     ##############
@@ -599,13 +631,9 @@ if __name__ == '__main__':
     print(df_herpes.loc[(~df_herpes.xref_A.str.contains('uniprot')) |
                         (~df_herpes.xref_B.str.contains('uniprot'))].groupby('origin').size())
 
-
-
     # Filter on UniProt AC's due to GO mapping being UniProt-based
     df_herpes = df_herpes.loc[(df_herpes.xref_A.str.contains('uniprot')) & (df_herpes.xref_B.str.contains('uniprot'))]
     df_herpes = df_herpes.reset_index(drop=True)
-
-
 
     ##############
     ## PRINTOUT ##
@@ -624,20 +652,18 @@ if __name__ == '__main__':
 
 
 
-
     # Check which hosts are present
     print('\nNumber of interactions per host\n')
     all_taxids = df_herpes['taxid_A'].append(df_herpes['taxid_B']).unique()
     host_taxids = list(np.setdiff1d(all_taxids, herpes_taxids))
     taxid_names_path = Path(r'../taxid_data/taxdump/names.dmp')
+
     name2taxid, taxid2name = retrieve_taxids.parse_taxid_names(str(taxid_names_path))
+
     for i in host_taxids:
         taxid = i.split(':')[1]
         count = df_herpes['xref_partners_sorted'].loc[(df_herpes['taxid_A'] == i) | (df_herpes['taxid_B'] == i)].shape
         print(taxid, taxid2name[taxid], count)
-
-
-
 
     # Create taxid dictionaries
     taxid_nodes_path = Path(r'../taxid_data/taxdump/nodes.dmp')
@@ -648,14 +674,10 @@ if __name__ == '__main__':
     # Note, also move ALL other associated labels...
     reorder_pathogen_host_entries(df_herpes, host_taxids)
 
-
-
     ##############
     ## PRINTOUT ##
     ##############
     '''
-    # https://stackoverflow.com/questions/25792619/what-is-correct-syntax-to-swap-column-values-for-selected-rows-in-a-pandas-data
-
     # print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_A.values)
     # print('taxid:9606' in df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].taxid_B.values)
     #
@@ -677,18 +699,14 @@ if __name__ == '__main__':
     print('\nMissing values in each column:\n')
     print(df_herpes.isnull().sum(axis=0))
 
-
-
     # Create Gene Ontology dictionaries
-    #TODO: create quickGO query using host list + herpesviridae
+    # TODO: create quickGO query using host list + herpesviridae
     obo_dict = obo_tools.importOBO('../go_data/go-basic.obo')
     # protein_set = set(df_herpes.xref_A.append(df_herpes.xref_B, ignore_index=True).str.split(':').str[1].unique())
     # Needs special extract pattern because of PTM processing id's e.g. P04295-PRO_0000115940
     protein_set = set(df_herpes.xref_A.append(df_herpes.xref_B, ignore_index=True).str.extract('^.*:(\w*)-?',
-                                                                                         expand=False).unique())
+                                                                                               expand=False).unique())
     gaf_dict = gaf_parser.importGAF('../go_data/gene_association_hosts_10292.goa', protein_set)
-
-
 
     ##############
     ## PRINTOUT ##
@@ -698,16 +716,13 @@ if __name__ == '__main__':
     not_annotated = [i for i in protein_set if i not in gaf_dict]
     print(len(not_annotated))
 
-
-
-
     # Add GO annotations
     annotate_GO(df_herpes, gaf_dict)
 
     # Add virus/host labels to GO
-    lambda_go_label = lambda x: pd.Series([add_label_to_GO(x['xref_A_GO'], x['taxid_A']),
-                                           add_label_to_GO(x['xref_B_GO'], x['taxid_B'])])
-    df_herpes[['xref_A_GO', 'xref_B_GO']] = df_herpes.apply(lambda_go_label, axis=1)
+    label_host_pathogen(df_herpes, herpes_taxids)
+
+
 
     # Map pathogen id to higher label
     pathogen_group_dict = {'bovine_ah1': '10320', 'bovine_hv1': '79889', 'epstein_barr': '10376', 'equid_av1': '10326',
@@ -718,6 +733,7 @@ if __name__ == '__main__':
 
     for i, j in pathogen_group_dict.items():
         pathogen_group_dict[i] = [j] + retrieve_taxids.get_children(j, parent2child)
+
 
     # # ateline_gh3 = ['85618']
     # pathogen_group_dict['bovine_ah1'] = ['10320'] + retrieve_taxids.get_children('10320',parent2child)
@@ -746,6 +762,8 @@ if __name__ == '__main__':
             if taxid in taxids:
                 return pathogen_group
         return np.NaN
+
+
     # lambda_pathogen_mapper = lambda x: [pathogen_group for pathogen_group, taxids in pathogen_group_dict.items()
     #                                     if taxid in taxids]
 
@@ -779,10 +797,9 @@ if __name__ == '__main__':
     for virus in np.sort(df_herpes['taxid_A'].unique()):
         print(taxid2name[virus.split(':')[1]])
 
-        #TODO: column A contains some viruses due to intra-viral interactions. check if column A is being used to select
+        # TODO: column A contains some viruses due to intra-viral interactions. check if column A is being used to select
         # hosts at any point...
-        #TODO: also: filter on inter?
-
+        # TODO: also: filter on inter?
 
     print('\n\n\n\n\n\nWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAn\n\n\n\n\nn\n')
 
@@ -804,12 +821,10 @@ if __name__ == '__main__':
     df_herpes['pathogen_type'] = df_herpes['taxid_B'].apply(lambda x: taxid2name[x.split(':')[1]])
     print(df_herpes.groupby('pathogen_type').size())
 
-
     print(pd.Series(np.sort(df_herpes['pathogen_type'].unique())).apply(lambda x: [x, name2taxid[x]]))
 
-
-#TODO: subset intra interactions, uniquify taxid_A versus B and group by them. check for cross-species
-#TODO: ie A != B
+    # TODO: subset intra interactions, uniquify taxid_A versus B and group by them. check for cross-species
+    # TODO: ie A != B
 
     '''
 pd.Series(np.sort(df_herpes['pathogen_type'].unique())).apply(lambda x: [x, name2taxid[x]])
@@ -936,4 +951,4 @@ df_herpes.loc[df_herpes['origin'] == 'VirHostNet2'].apply(lambda x: x['xref_A'].
 
 '''
 
-#TODO: use mask objects for more general subsetting? http://growthintel.com/exploratory-data-analysis-in-pandas/
+# TODO: use mask objects for more general subsetting? http://growthintel.com/exploratory-data-analysis-in-pandas/
