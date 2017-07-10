@@ -398,8 +398,8 @@ def concat_interaction_datasets(list_of_datasets):
 def reorder_pathogen_host_entries(interaction_dataframe, host_list=list(('taxid:9606'))):
     ''' Moves all pathogen entries to B columns and host entries to A columns.
 
-    Selects all interaction entries where host entries occur in B columns instead of A
-    and swaps the A and B columns.
+    Selects all interaction entries where host entries occur in B columns instead of A and swaps the A and B columns.
+    Or vice versa, where pathogen occurs in column A.
 
     https://stackoverflow.com/questions/25792619/what-is-correct-syntax-to-swap-column-values-for-selected-rows-in-a-pandas-data
 
@@ -656,8 +656,8 @@ if __name__ == '__main__':
     print('\nNumber of interactions per host\n')
     all_taxids = df_herpes['taxid_A'].append(df_herpes['taxid_B']).unique()
     host_taxids = list(np.setdiff1d(all_taxids, herpes_taxids))
-    taxid_names_path = Path(r'../taxid_data/taxdump/names.dmp')
 
+    taxid_names_path = Path(r'../taxid_data/taxdump/names.dmp')
     name2taxid, taxid2name = retrieve_taxids.parse_taxid_names(str(taxid_names_path))
 
     for i in host_taxids:
@@ -774,17 +774,30 @@ if __name__ == '__main__':
 
 
     # Save to transaction database
+    # Note: Pathlib functionality is broken in Pandas 0.20
+    output_directory = Path(r'../transaction_datasets/')
+    output_directory.mkdir(exist_ok=True)
+
     # TODO: create a separate transaction base per virus type + only inter?
     df_output = df_herpes.loc[:, ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
     df_output.reset_index(drop=True)
-    df_output.to_csv(r'../transaction_datasets/ppi_go_transactions.csv', sep='\t', index=False)
+    df_output.to_csv(str(output_directory) + r'/ppi_go_transactions.csv', sep=',', index=False)
 
     # Separated datasets
     for i in df_herpes['pathogen_groups'].dropna().unique():
         df_output_grouped = df_herpes.loc[df_herpes['pathogen_groups'] == i,
                                           ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
         df_output_grouped.reset_index(drop=True)
-        df_output_grouped.to_csv(r'../transaction_datasets/' + str(i) + '.csv', sep='\t', index=False)
+        df_output_grouped.to_csv(str(output_directory) + r'/' + str(i) + '.csv', sep=',', index=False)
+
+
+
+
+
+
+
+
+
 
     print(df_herpes.groupby('pathogen_groups').size())
 
@@ -940,9 +953,6 @@ dtype: int64
 (8124, 35)
     
     '''
-
-    print(df_herpes.shape)
-    print(df_herpes.groupby('origin').size())
 
 '''
 df_herpes.loc[df_herpes['origin'] == 'VirHostNet2', 'xref_A'].apply(lambda x: x.split(':')[1])
