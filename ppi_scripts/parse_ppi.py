@@ -288,6 +288,7 @@ def map2uniprot(interaction_dataframe, filepath=r'../ppi_data/mappings/', column
                     mapping_dict[j[0]] = [j[1]]
                 else:
                     mapping_dict[j[0]].append(j[1])
+                #TODO: not needed, always 1 to 1 mapping?
 
                     # print(len(entrez2uniprot_array)) # 526
                     # print(np.unique(entrez2uniprot_array[:, 0], return_index=True)) # 510
@@ -489,9 +490,9 @@ def label_host_pathogen(interaction_dataframe, pathogen_set, columns=list(('xref
 
 
 def label_term(label_set, taxid, pathogen_set):
-    """Adds host/virus labels to GO terms and returns string representation.
+    """Adds host/virus labels to terms and returns string representation.
 
-    Should be called via an apply function that calls it for both partners' GO set and taxids
+    Should be called via an apply function that calls it for both partners' term sets (e.g. GO terms) and taxids
     for each interaction in a dataset.
     Note: currently all hosts are labelled identically.
 
@@ -499,8 +500,8 @@ def label_term(label_set, taxid, pathogen_set):
     Parameters
     ----------
     label_set : set
-        The set of GO terms associated with a specific protein partner, stored in the xref_A/B_GO columns after
-        running the annotate_GO() function on an interaction DataFrame.
+        The set of terms associated with a specific protein partner, e.g. those stored in the xref_A/B_GO
+        columns after running the annotate_GO() function on an interaction DataFrame.
     taxid : string
         The taxid of the protein partners, stored in the taxid_A/B columns of the interaction DataFrame.
         E.g. taxid:9606
@@ -508,7 +509,7 @@ def label_term(label_set, taxid, pathogen_set):
     Returns
     -------
     string
-        A string of labeled GO terms separated by commas.
+        A string of labeled terms separated by commas.
 
     """
     if pd.isnull(label_set):
@@ -710,6 +711,40 @@ if __name__ == '__main__':
 
     print('/nNumber of interactions for each pathogen grouping/n')
     print(df_herpes.groupby('pathogen_groups').size())
+
+    unique_ac = set(pd.unique(df_concat['xref_B'].str.extract('^.*:(\w*)-?',
+                                                              expand=False).append(
+        df_concat['xref_A'].str.extract('^.*:(\w*)-?',
+                                        expand=False))))
+
+
+    def create_uniprot2interpro_dict(uniprot_ac_list, filepath=r'../domain-motif/protein2ipr_filtered.txt'):
+        import collections
+        uniprot2interpro = collections.defaultdict(set)
+
+        mapping_file = Path(filepath)
+        # uniprot2interpro = {}
+        with mapping_file.open() as mapping:
+            for line in mapping:
+                split_line = line.split('\t')
+                if split_line[0] in uniprot_ac_list:
+                    # uniprot2interpro[split_line[0]] = split_line[1]
+                    uniprot2interpro[split_line[0]].add(split_line[1])
+        return uniprot2interpro
+
+    uniprot2interpro = create_uniprot2interpro_dict(unique_ac)
+
+
+    def annotate_interpro(interaction_dataframe, xref_columns=list(('xref_A', 'xref_B'))):
+        interaction_dataframe['interpro_A'] = interaction_dataframe.apply(lambda x: uniprot2interpro.get(x['xref_A'].split(':')[1], np.nan), axis=1)
+        interaction_dataframe['interpro_B'] = interaction_dataframe.apply(lambda x: uniprot2interpro.get(x['xref_B'].split(':')[1], np.nan), axis=1)
+
+
+    annotate_interpro(df_herpes)
+    label_host_pathogen(df_herpes, herpes_taxids, columns=['interpro_A', 'interpro_B'],
+                        taxid_columns=['taxid_A', 'taxid_B'])
+
+
     #
     # # Retrieve interpro domains
     # def annotate_interpro(interaction_dataframe, xref_columns=list(('xref_A', 'xref_B'))):
@@ -796,7 +831,24 @@ if __name__ == '__main__':
     combined_GO_labels.rename('GO', inplace=True)
     df_herpes = df_herpes.join(combined_GO_labels)
 
-    df_output = df_herpes[['xref_partners_sorted', 'GO']]
+
+
+
+    has_GO_mask = df_herpes[['interpro_A', 'interpro_B']].notnull().all(axis=1)
+    combined_interpro_labels = df_herpes.loc[has_GO_mask, 'interpro_A'] + ',' + df_herpes.loc[has_GO_mask, 'interpro_B']
+    # updates NaN in called Series/DF with values from argument Series/DF
+    combined_interpro_labels = combined_interpro_labels.combine_first(df_herpes['interpro_A'])
+    combined_interpro_labels = combined_interpro_labels.combine_first(df_herpes['interpro_B'])
+
+    # join into dataframe
+    combined_interpro_labels.rename('interpro', inplace=True)
+    df_herpes = df_herpes.join(combined_interpro_labels)
+
+
+
+
+
+    df_output = df_herpes[['xref_partners_sorted', 'GO', 'interpro']]
     df_output.reset_index(drop=True)
     df_output.to_csv(str(output_directory) + r'/ppi_go_transactions.csv', sep=',', index=False)
     # NOTE: run sed -i 's/"//g' to remove double quotes and treat GO column as separate items.
@@ -805,6 +857,6 @@ if __name__ == '__main__':
     # for i in df_herpes['pathogen_groups'].dropna().unique():
     for i in pd.unique(df_herpes['pathogen_groups'].dropna()):
         df_output_grouped = df_herpes.loc[df_herpes['pathogen_groups'] == i,
-                                          ['xref_partners_sorted', 'GO']]
+                                          ['xref_partners_sorted', 'GO', 'interpro']]
         df_output_grouped.reset_index(drop=True)
         df_output_grouped.to_csv(str(output_directory) + r'/' + str(i) + '.csv', sep=',', index=False)
