@@ -19,3 +19,7 @@ go_enrichment_tool/go_enrichment_script\.py
 go_enrichment_tool/genelist_importer\.py
 
 go_enrichment_tool/obo_tools\.py
+
+domain-motif/
+
+MiningPatterns1.0/
