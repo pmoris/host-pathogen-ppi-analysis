@@ -189,7 +189,7 @@ def create_mapping_files(interaction_dataframe, from_id, description, savepath, 
         E.g. entrez, ensemblgenomes, etc.
     savepath : string
         Filepath where to write the mapping files. (The default, defined by map2uniprot(), is a mapping directory in
-        the ppi_data directory in the parent directory relative to where the script is called..
+        the ppi_data directory in the parent directory relative to where the script is called.)
     columns : list
         The names of the columns containing the identifiers that need to be remapped.
         (The defaults, defined by map2uniprot, are xref_A and xref_B).
@@ -203,7 +203,7 @@ def create_mapping_files(interaction_dataframe, from_id, description, savepath, 
     # create space-separated id string
     ids = pd.Series()
     for col in columns:
-        to_map = interaction_dataframe[col][interaction_dataframe[col].str.contains(description)]
+        to_map = interaction_dataframe.loc[interaction_dataframe[col].str.contains(description), col]
         ids = ids.append(to_map)
     ids = ids.reset_index(drop=True)
     ids = ids.str.split(':').str[1].unique()
@@ -425,6 +425,7 @@ def reorder_pathogen_host_entries(interaction_dataframe, host_list=list('taxid:9
     interaction_dataframe.loc[host_position_mask, columns_to_swap] = interaction_dataframe.loc[host_position_mask,
                                                                                               columns_after_swap].values
 
+
 def annotate_GO(interaction_dataframe, gaf_dict):
     """ Adds Gene Ontology terms to interaction dataset.
 
@@ -569,7 +570,9 @@ if __name__ == '__main__':
 
     # Add unique identifier for interaction pairs
     xref_partners_sorted_array = np.sort(np.stack((df_concat.xref_A, df_concat.xref_B), axis=1), axis=1)
-    df_concat['xref_partners_sorted'] = pd.Series(map(tuple, xref_partners_sorted_array))
+    # df_concat['xref_partners_sorted'] = pd.Series(map(tuple, xref_partners_sorted_array))
+    xref_partners_df = pd.DataFrame(xref_partners_sorted_array, columns=['A', 'B'])
+    df_concat['xref_partners_sorted'] = xref_partners_df['A'] + '%' + xref_partners_df['B']
     # TODO: change into string separated by | (?) rather than tuple.
 
     # Label interactions as being within or between species.
@@ -707,18 +710,101 @@ if __name__ == '__main__':
 
     print('/nNumber of interactions for each pathogen grouping/n')
     print(df_herpes.groupby('pathogen_groups').size())
+    #
+    # # Retrieve interpro domains
+    # def annotate_interpro(interaction_dataframe, xref_columns=list(('xref_A', 'xref_B'))):
+    #     entry_A = xref_columns[0]
+    #     entry_B = xref_columns[1]
+    #     entry_A_interpro = entry_A + '_interpro'
+    #     entry_B_interpro = entry_B + '_interpro'
+    #
+    #     # https://stackoverflow.com/questions/26977076/pandas-unique-values-multiple-columns
+    #
+    #     unique_ids = pd.Series(pd.unique(interaction_dataframe[[entry_A, entry_B]].values.ravel()))
+    #     unique_ids_split = '"' + unique_ids.str.split(':').str[1] + '"'
+    #     unique_ids_str = unique_ids_split.str.cat(sep=' ')
+    #
+    #     def joinit(iterable, delimiter):
+    #         it = iter(iterable)
+    #         yield next(it)
+    #         for x in it:
+    #             yield delimiter
+    #             yield x
+    #
+    #     unique_ids_split_extra = joinit(list(unique_ids_split), 'OR')
+    #     unique_ids_split_extra_str = ' '.join(unique_ids_split_extra)
+    #
+    #     import urllib.request;
+    #     urllib.parse
+    #
+    #     url = 'http://www.uniprot.org/uniprot/'
+    #
+    #     params = {
+    #         'format': 'tab',
+    #         'query': unique_ids_split_extra_str,
+    #         'columns' : 'id,database(interpro)'
+    #     }
+    #
+    #     data = urllib.parse.urlencode(params)
+    #     data = data.encode('ascii')
+    #
+    #     request = urllib.request.Request(url, data)
+    #
+    #     contact = "pieter.moris@uantwerpen.be"
+    #     request.add_header('User-Agent', 'Python %s' % contact)
+    #
+    #     with urllib.request.urlopen(request) as response:
+    #         mapping = response.read()
+    #
+    #     Path(savepath).parent.mkdir(parents=True, exist_ok=True)
+    #     Path(savepath).write_bytes(mapping)
+    #
+    #
+    #
+    #
+    #
+    #     interaction_dataframe[entry_A].str.extract('^.*:(\w*)-?', expand=False)
+    #     # interaction_dataframe[entry_A_interpro] =
+    #
+    #
+    #     interaction_dataframe['xref_A_interpro'] = interaction_dataframe['xref_A'].str.extract('^.*:(\w*)-?',
+    #                                                                                      expand=False).apply(
+    #         lambda x: gaf_dict.get(x, np.NaN))
+    #     interaction_dataframe['xref_B_GO'] = interaction_dataframe['xref_B'].str.extract('^.*:(\w*)-?',
+    #                                                                                      expand=False).apply(
+    #         lambda x: gaf_dict.get(x, np.NaN))
+
 
     # Save to transaction database
     # Note: Pathlib functionality is broken in Pandas 0.20
     output_directory = Path(r'../transaction_datasets/')
     output_directory.mkdir(exist_ok=True)
-    df_output = df_herpes.loc[:, ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
+
+    # WRONG: nan values in either column will result in nan in combined column...
+    # combined_GO_labels_old = df_herpes['xref_A_GO'] + ',' + df_herpes['xref_B_GO']
+    # compare combined_GO_labels[[8061, 8062, 8122,8123]] with combined_GO_labels_old[[8061, 8062, 8122,8123]]
+    # and df_herpes.loc[[8061, 8062, 8122,8123],['xref_A_GO','xref_B_GO']]
+
+
+    has_GO_mask = df_herpes[['xref_A_GO', 'xref_B_GO']].notnull().all(axis=1)
+    combined_GO_labels = df_herpes.loc[has_GO_mask, 'xref_A_GO'] + ',' + df_herpes.loc[has_GO_mask, 'xref_B_GO']
+    # updates NaN in called Series/DF with values from argument Series/DF
+    combined_GO_labels = combined_GO_labels.combine_first(df_herpes['xref_A_GO'])
+    combined_GO_labels = combined_GO_labels.combine_first(df_herpes['xref_B_GO'])
+
+    # join into dataframe
+    combined_GO_labels.rename('GO', inplace=True)
+    df_herpes = df_herpes.join(combined_GO_labels)
+
+    df_output = df_herpes[['xref_partners_sorted', 'GO']]
     df_output.reset_index(drop=True)
     df_output.to_csv(str(output_directory) + r'/ppi_go_transactions.csv', sep=',', index=False)
+    # NOTE: run sed -i 's/"//g' to remove double quotes and treat GO column as separate items.
 
     # Save to separate transaction datasets for each pathogen group
-    for i in df_herpes['pathogen_groups'].dropna().unique():
+    # for i in df_herpes['pathogen_groups'].dropna().unique():
+    for i in pd.unique(df_herpes['pathogen_groups'].dropna()):
         df_output_grouped = df_herpes.loc[df_herpes['pathogen_groups'] == i,
-                                          ['xref_partners_sorted', 'xref_A_GO', 'xref_B_GO']]
+                                          ['xref_partners_sorted', 'GO']]
         df_output_grouped.reset_index(drop=True)
         df_output_grouped.to_csv(str(output_directory) + r'/' + str(i) + '.csv', sep=',', index=False)
