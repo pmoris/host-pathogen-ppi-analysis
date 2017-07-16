@@ -17,6 +17,9 @@ from pathlib import Path
 import re
 import sys
 
+sys.path.insert(0, r'/media/pieter/DATA/Wetenschap/Doctoraat/host-pathogen-project/host-pathogen-ppi-fim/ppi_scripts/go_tools')
+
+
 from go_tools import obo_tools
 
 try:
@@ -28,7 +31,7 @@ try:
 except IndexError:
     print('No output file was defined.')
 
-go_dict = obo_tools.importOBO(r'../go_data/go-basic.obo')
+go_dict = obo_tools.importOBO(r'/media/pieter/DATA/Wetenschap/Doctoraat/host-pathogen-project/host-pathogen-ppi-fim/go_data/go.obo')
 
 def grab_name(match):
     # l = element.split('@')
@@ -48,6 +51,7 @@ with input_file.open() as f:
         for line in f:
             substituted = regex.sub(grab_name, line)
             substituted = regex_hv.sub(lambda x: x.group(1).upper() + '-', substituted)
+            substituted = substituted.strip('\n')
             print(substituted)
-            o.write(substituted)
+            o.write(substituted + '\t' + str(len(substituted)) + '\n')
 
