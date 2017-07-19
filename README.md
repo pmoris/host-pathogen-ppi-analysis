@@ -1,9 +1,11 @@
-host-pathogen-ppi-fim
+# host-pathogen-ppi-fim
 
-Generate transaction datasets for protein-protein interaction pairs using their gene ontology and other (orthogonal) data sources.
+Python scripts to create transaction datasets of protein-protein interaction (PPI) pairs using their gene ontology and other (orthogonal) data sources as the input for frequent item set mining.
+
+The data directories contain information on where the PPI datasets and annotations were obtained.
 
 ---
 # Dependencies
 - pandas
 - numpy
-- GO enrichment tools https://github.com/pmoris/gene-enrichment-tools (The scripts expect to find a directory named "go_enrichment_tool" containing the modules.)
+- GO tools https://github.com/pmoris/go-tools (The scripts expect to find a directory named "go_tools" containing these modules.)
