@@ -1,0 +1,845 @@
+10293|Alphaherpesvirinae
+10357|Betaherpesvirinae
+10374|Gammaherpesvirinae
+35251|unclassified Herpesviridae
+47417|unassigned Herpesviridae
+1034794|environmental samples
+10294|Simplexvirus
+10319|Varicellovirus
+35247|unclassified Alphaherpesvirinae
+180252|Mardivirus
+180255|Iltovirus
+702735|unassigned Alphaherpesvirinae
+1232637|Scutavirus
+10295|Bovine alphaherpesvirus 2
+10298|Human alphaherpesvirus 1
+10310|Human alphaherpesvirus 2
+10317|Cercopithecine alphaherpesvirus 2
+10325|Macacine alphaherpesvirus 1
+10353|Saimiriine alphaherpesvirus 1
+35243|Ateline alphaherpesvirus 1
+83440|Macropodid alphaherpesvirus 2
+137443|Macropodid alphaherpesvirus 1
+340907|Papiine alphaherpesvirus 2
+342410|unclassified Simplexvirus
+481315|Leporid alphaherpesvirus 4
+2003507|Panine alphaherpesvirus 3
+10296|Bovine herpesvirus type 2 (strain BMV)
+10297|Bovine herpesvirus type 2 (strain BHM-1)
+10299|Herpes simplex virus (type 1 / strain 17)
+10300|Herpes simplex virus (type 1 / strain A44)
+10301|Herpes simplex virus (type 1 / strain Angelotti)
+10302|Herpes simplex virus (type 1 / strain CL101)
+10303|Herpes simplex virus (type 1 / strain HFEM)
+10304|Herpes simplex virus (type 1 / strain F)
+10305|Herpes simplex virus (type 1 / strain HZT)
+10306|Human herpesvirus 1 strain KOS
+10307|Herpes simplex virus (type 1 / strain MP)
+10308|Herpes simplex virus (type 1 / strain Patton)
+10309|Herpes simplex virus (type 1 / strain SC16)
+36345|Herpes simplex virus 1 strain R-15
+36346|Herpes simplex virus (type 1 / strain R19)
+37106|Herpes simplex virus (type 1 / strain CVG-2)
+37107|Herpes simplex virus (type 1 / strain MGH-10)
+744249|Human herpesvirus 1 strain H129
+946522|Herpes simplex virus (type 1 /strain RH2)
+10312|Human herpesvirus 2 strain 186
+10313|Human herpesvirus 2 strain 333
+10314|Human herpesvirus 2 strain G
+10315|Human herpesvirus 2 strain HG52
+10316|Human herpesvirus 2 strain SA8
+103921|Human herpesvirus 2 strain B4327UR
+213997|Human herpesvirus 2 strain SN03
+213998|Human herpesvirus 2 strain SS01
+213999|Human herpesvirus 2 strain ST04
+1177628|Human herpesvirus 2 strain SD90
+260965|Cercopithecine herpesvirus 1 (strain E2490)
+126283|Herpes simplex virus unknown type
+570421|Bat simplexvirus 1
+570422|Eidolon dupraenum simplexvirus 1
+570423|Eidolon helvum simplexvirus 1
+570424|Lonchophylla thomasi simplexvirus 1
+570425|Pteropus lylei simplexvirus 1
+1042528|Recombinant Human herpesvirus 03/10478
+1343901|Fruit bat alphaherpesvirus 1
+332937|Chimpanzee herpesvirus strain 105640
+10320|Bovine alphaherpesvirus 1
+10326|Equid alphaherpesvirus 1
+10331|Equid alphaherpesvirus 4
+10334|Felid alphaherpesvirus 1
+10335|Human alphaherpesvirus 3
+10345|Suid alphaherpesvirus 1
+35244|Bovine alphaherpesvirus 5
+35246|Cercopithecine alphaherpesvirus 9
+39637|Equid alphaherpesvirus 8
+39944|Caprine alphaherpesvirus 1
+47418|Phocid alphaherpesvirus 1
+55744|Equid alphaherpesvirus 9
+79891|Cervid alphaherpesvirus 1
+80341|Equid alphaherpesvirus 3
+170325|Canid alphaherpesvirus 1
+202910|Bubaline alphaherpesvirus 1
+342940|unclassified Varicellovirus
+365327|Cervid alphaherpesvirus 2
+10322|Bovine herpesvirus type 1 strain 6660
+79889|Bovine herpesvirus type 1.1
+79890|Bovine herpesvirus type 1.2
+10323|Bovine herpesvirus type 1.1 (strain Cooper)
+10324|Bovine herpesvirus type 1.1 (strain P8-2)
+31517|Bovine herpesvirus type 1.1 (strain 34)
+31518|Bovine herpesvirus type 1.1 (strain Jura)
+10321|Bovine herpesvirus type 1.2 strain Q3932
+31519|Bovine herpesvirus type 1.2 strain K22
+45407|Bovine herpesvirus type 1.2 strain st
+1548190|Bovine herpesvirus type 1.2 strain B589
+1548191|Bovine herpesvirus type 1.2 strain SM023
+1548192|Bovine herpesvirus type 1.2 strain SP1777
+10327|Equine herpesvirus type 1 (isolate HSV25A)
+10328|Equine herpesvirus type 1 (strain AB1)
+10329|Equine herpesvirus type 1 (strain Kentucky A)
+10330|Equine herpesvirus type 1 (strain Kentucky D)
+31520|Equine herpesvirus type 1 (strain AB4P)
+48410|Equine herpesvirus sp.
+310273|Equine herpesvirus 1 (strain V592)
+310537|Equine herpesvirus 1 (strain HH1)
+10333|Equine herpesvirus type 4 (strain 1942)
+10338|Human herpesvirus 3 strain Dumas
+154633|Human herpesvirus 3 VZV-32
+341980|Human herpesvirus 3 strain Oka vaccine
+10346|Suid herpesvirus 1 (strain Becker)
+10349|Suid herpesvirus 1 (strain NIA-3)
+10350|Suid herpesvirus 1 (strain Rice)
+31522|Suid herpesvirus 1 (strain Indiana S)
+31523|Suid herpesvirus 1 (strain Indiana-Funkhauser / Becker)
+33703|Suid herpesvirus 1 strain Kaplan
+101947|Pseudorabies virus Ea
+167786|Suid herpesvirus 1 (strain TNL)
+1006205|Suid herpesvirus 1 strain Bartha
+36350|Bovine herpesvirus 5 strain N569
+171005|Buffalo herpesvirus 1
+263683|Bovine herpesvirus 5 strain TX89
+36348|Cercopithecine herpesvirus 9 (strain DHV)
+364634|Elk herpesvirus
+467028|Elk herpesvirus 1
+862244|Equine herpesvirus Gazella/6755/NLD/2009
+79892|Rangiferine herpesvirus 1
+107323|Bottlenose dolphin herpesvirus
+172930|Gerrhosaurid herpesvirus 1
+172931|Gerrhosaurid herpesvirus 2
+172932|Gerrhosaurid herpesvirus 3
+285986|Vulture herpesvirus
+291829|Tursiops truncatus alphaherpesvirus 1
+360198|Tursiops truncatus alphaherpesvirus 2
+360199|Tursiops truncatus alphaherpesvirus 3
+527213|Lacerta viridis herpesvirus 1
+540567|Rock hyrax herpesvirus HDZ 2007
+576892|Fregata magnificens herpesvirus
+655486|False killer whale alphaherpesvirus
+655487|Melon-headed whale alphaherpesvirus
+656191|Tortoise Herpesvirus 4
+672018|Delphinid herpesvirus 2
+672019|Delphinid herpesvirus 8
+690691|Common buzzard alphaherpesvirus
+768113|Striped dolphin herpesvirus
+1232896|Lagenorhynchus alphaherpesvirus 1
+1282341|Macropodid herpesvirus 4
+1434720|Beluga whale alphaherpesvirus 1
+1481141|Cetacean alphaherpesvirus Sc_ENoAt
+1485966|Dolphin herpesvirus V3528
+1495287|Emydid herpesvirus 1
+1582275|Terrapene herpesvirus 2
+1638619|Sulid herpesvirus 1
+1746170|Helodermatid herpesvirus 1
+1758211|Balaenoptera physalus alphaherpesvirus
+1758212|Ziphius cavirostris alphaherpesvirus 2
+1758214|Delphinus delphis alphaherpesvirus
+1758215|Grampus griseus alphaherpesvirus
+1758216|Stenella coeruleoalba alphaherpesvirus 1
+1758217|Stenella coeruleoalba alphaherpesvirus 2
+1758218|Ziphius cavirostris alphaherpesvirus 1
+1770252|Penguin herpesvirus 2
+1809459|Phocoena phocoena herpesvirus type 3
+1809460|Phocoena phocoena herpesvirus type 2
+1982743|Delphinapterus leucas alphaherpesvirus
+1982744|Beluga whale alphaherpesvirus
+318419|Atlantic bottlenose dolphin alphaherpesvirus
+10390|Gallid alphaherpesvirus 2
+35250|Gallid alphaherpesvirus 3
+37108|Meleagrid alphaherpesvirus 1
+93386|Columbid alphaherpesvirus 1
+104388|Anatid alphaherpesvirus 1
+1098912|unclassified Mardivirus
+10387|Marek's disease herpesvirus type 1 strain BC-1
+10388|Marek's disease herpesvirus strain GA
+10389|Marek's disease herpesvirus type 1 strain MD5
+10391|Gallid herpesvirus 2 strain FC126
+10392|Gallid herpesvirus 2 strain H2
+31527|Marek's disease herpesvirus (strain MD11/75C/R2)
+33707|Marek's disease herpesvirus (strain RB-1b)
+47302|Marek's disease gammaherpesvirus MKT-1
+1123959|Gallid herpesvirus 2 strain 814
+1392386|Tasmanian devil herpesvirus 1
+36353|Marek's disease virus serotype 2 MDV2
+1098913|Phasianid herpesvirus 1
+1510155|Falconid herpesvirus 1
+1890678|Spheniscid herpesvirus 2
+10386|Gallid alphaherpesvirus 1
+50294|Psittacid alphaherpesvirus 1
+342941|unclassified Iltovirus
+10343|Infectious laryngotracheitis virus (strain SA-2)
+10344|Infectious laryngotracheitis virus (strain Thorne V882)
+31521|Infectious laryngotracheitis virus (strain 632)
+670426|Psittacid herpesvirus 1 Amazon parrot/1997
+199702|Passerid herpesvirus 1
+690285|Gaviid herpesvirus 1
+1643444|Phoenicopterid herpesvirus 1
+702738|Chelonid alphaherpesvirus 6
+203820|lung-eye-trachea disease-associated herpesvirus
+702736|Chelonid alphaherpesvirus 5
+1561225|unclassified Scutavirus
+70170|Green turtle herpesvirus
+70171|Loggerhead turtle herpesvirus
+77836|Olive ridley turtle herpesvirus
+90959|Caretta caretta herpesvirus
+90960|Chelonia mydas herpesvirus
+179532|Fibropapillomatosis associated Chelonia mydas herpesvirus
+256817|Fibropapilloma-associated turtle herpesvirus
+70564|Hawaiian green turtle herpesvirus
+70565|Florida green turtle herpesvirus
+1561226|Testudinid herpesvirus 3
+10358|Cytomegalovirus
+10365|Muromegalovirus
+35248|unclassified Betaherpesvirinae
+40272|Roseolovirus
+548689|Proboscivirus
+686603|unassigned Betaherpesvirinae
+10359|Human betaherpesvirus 5
+47929|Macacine betaherpesvirus 3
+50290|Aotine betaherpesvirus 1
+50292|Cercopithecine betaherpesvirus 5
+188763|Panine betaherpesvirus 2
+342596|unclassified Cytomegalovirus
+1125844|Cebine betaherpesvirus 1
+1535247|Saimiriine betaherpesvirus 4
+10360|Human herpesvirus 5 strain AD169
+10361|Human herpesvirus 5 strain Colburn
+10362|Human herpesvirus 5 strain Eisenhardt
+10363|Human herpesvirus 5 strain Towne
+69162|Human herpesvirus 5 (strain 1042)
+69163|Human herpesvirus 5 (strain 2387)
+69164|Human herpesvirus 5 (strain 4654)
+69165|Human herpesvirus 5 (strain 5040)
+69166|Human herpesvirus 5 (strain 5035)
+69167|Human herpesvirus 5 (strain 5160)
+69168|Human herpesvirus 5 (strain 5508)
+69169|Human herpesvirus 5 strain PT
+73483|Human herpesvirus 5 (strain 119)
+295027|Human herpesvirus 5 strain Merlin
+311339|Human herpesvirus 5 strain Toledo
+103930|Rhesus cytomegalovirus strain 68-1
+944969|Cynomolgus macaque cytomegalovirus strain Ottawa
+1690255|Cynomolgus macaque cytomegalovirus strain Mauritius
+36452|Stealth virus 1
+172584|Vervet cytomegalovirus CSG
+1654930|Mandrillus leucophaeus cytomegalovirus
+1667587|Papio ursinus cytomegalovirus
+10364|Simian cytomegalovirus
+120505|Baboon cytomegalovirus
+134392|Saimiriine herpesvirus 3
+144209|Mandrillus cytomegalovirus
+203137|Colobus badius cytomegalovirus 1
+203138|Pongo pygmaeus cytomegalovirus 1
+203139|Colobus guereza cytomegalovirus 1
+205912|unidentified cytomegalovirus
+230456|Phacochoerus africanus cytomegalovirus 1
+291823|Cercocebus agilis cytomegalovirus 1
+308703|Macaca fascicularis cytomegalovirus 1
+308706|Cercopithecus cephus cytomegalovirus 1
+308707|Crocidura russula cytomegalovirus 1
+431616|Apodemus flavicollis cytomegalovirus 1
+431617|Apodemus flavicollis cytomegalovirus 2
+431619|Apodemus sylvaticus cytomegalovirus 1
+431620|Arvicola terrestris cytomegalovirus 1
+431621|Bandicota indica cytomegalovirus 1
+431622|Bandicota indica cytomegalovirus 2
+431623|Bandicota indica cytomegalovirus 3
+431624|Bandicota indica cytomegalovirus 4
+431626|Microtus agrestis cytomegalovirus 1
+431627|Microtus arvalis cytomegalovirus 1
+431629|Ondatra zibethicus cytomegalovirus 1
+431630|Rattus exulans cytomegalovirus 1
+431631|Rattus rattus cytomegalovirus 1
+431632|Rattus tiomanicus cytomegalovirus 1
+456489|Mus cervicolor cytomegalovirus 1
+456831|Myodes glareolus cytomegalovirus 1
+456833|Apodemus flavicollis cytomegalovirus 3
+643649|Squirrel monkey cytomegalovirus 1
+643650|Aotine herpesvirus 2
+660661|Gorilla gorilla cytomegalovirus 1.1
+660662|Gorilla gorilla cytomegalovirus 2.1
+660663|Gorilla gorilla cytomegalovirus 2.2
+660664|Pan troglodytes cytomegalovirus 1.1
+660665|Pan troglodytes cytomegalovirus 1.2
+660666|Pan troglodytes cytomegalovirus 2.1
+660667|Pan troglodytes cytomegalovirus 2.2
+660668|Pan troglodytes cytomegalovirus 2.3
+660669|Pongo pygmaeus cytomegalovirus 1.2
+752241|Mus musculus cytomegalovirus 2
+931926|Cytomegalovirus Eptesicus fuscus/IT/USA/2009
+1136452|Cytomegalovirus Baboon/eye/CII-163(a)
+1136453|Cytomegalovirus Baboon/optic nerve/CII-163
+1136454|Cytomegalovirus Baboon/spinal nerve/CII-028
+1136455|Cytomegalovirus Baboon/trachea/CII-163
+1136456|Cytomegalovirus Guenon/muscle/BM-002
+1379307|Colobus polykomos cytomegalovirus 1
+1379308|Piliocolobus badius cytomegalovirus 2
+1379309|Piliocolobus badius cytomegalovirus 1
+1379684|Piliocolobus badius cytomegalovirus 3
+1869107|Cercopithecus kandti cytomegalovirus
+1869108|Gorilla beringei beringei cytomegalovirus
+1919083|Cynomolgus cytomegalovirus
+153301|Baboon cytomegalovirus OCOM4-37
+463653|Colobus guereza cytomegalovirus 1.1
+467771|Colobus guereza cytomegalovirus 1.2
+1379310|Piliocolobus badius cytomegalovirus 1b
+10366|Murid betaherpesvirus 1
+28304|Murid betaherpesvirus 2
+1261657|Murid betaherpesvirus 8
+1431747|unclassified Muromegalovirus
+10367|Murine cytomegalovirus (strain Smith)
+69156|Murine cytomegalovirus (strain K181)
+524649|Muromegalovirus C4A
+524650|Muromegalovirus G4
+524651|Muromegalovirus WP15B
+79700|Rat cytomegalovirus Maastricht
+1640278|Rat cytomegalovirus ALL-03
+1431748|Murine herpesvirus
+10373|Macaca mulatta cytomegalovirus
+37140|Atypical cytopathic virus
+70062|Porcine cytomegalovirus B6
+99803|Porcine cytomegalovirus OF-1
+132678|Tupaiid herpesvirus 2
+144210|Mandrillus betaherpesvirus
+291832|Nycticebus coucang betaherpesvirus 1
+398068|Myotis nattereri betaherpesvirus
+416613|Miniopterus schreibersii betaherpesvirus 1
+416614|Miniopterus schreibersii betaherpesvirus 2
+416615|Myotis blythii betaherpesvirus
+416616|Myotis myotis betaherpesvirus
+668548|Bat betaherpesvirus 2
+690692|Egyptian fruit bat betaherpesvirus
+1000653|Sorex araneus betaherpesvirus 1
+1000654|Sorex araneus betaherpesvirus 2
+1000655|Sorex araneus betaherpesvirus 3
+1000656|Sorex araneus betaherpesvirus 4
+1000657|Sorex araneus betaherpesvirus 5
+1000658|Sorex minutus betaherpesvirus 1
+1000659|Sorex minutus betaherpesvirus 2
+1195167|Bat betaherpesvirus B7D8
+1211015|Myotis escalerai betaherpesvirus
+1273575|Capreolus herpesvirus 1
+1325383|Eptesicus isabellinus betaherpesvirus 1
+1325384|Eptesicus isabellinus betaherpesvirus 2
+1325385|Eptesicus serotinus betaherpesvirus 1
+1325386|Hypsugo savii betaherpesvirus 1
+1325387|Miniopterus schreibersii betaherpesvirus 3
+1325388|Myotis bechsteinii betaherpesvirus 1
+1325389|Myotis daubentonii betaherpesvirus 1
+1325390|Myotis emarginatus betaherpesvirus 1
+1325391|Myotis mystacinus betaherpesvirus 1
+1325392|Myotis mystacinus betaherpesvirus 2
+1325393|Nyctalus lasiopterus betaherpesvirus 1
+1325394|Nyctalus leisleri betaherpesvirus 1
+1325395|Nyctalus noctula betaherpesvirus 1
+1325396|Pipistrellus kuhlii betaherpesvirus 1
+1325397|Pipistrellus pipistrellus betaherpesvirus 1
+1325398|Pipistrellus pipistrellus betaherpesvirus 2
+1325399|Pipistrellus pygmaeus betaherpesvirus 1
+1325400|Plecotus austriacus betaherpesvirus 1
+1325401|Plecotus austriacus betaherpesvirus 2
+1325402|Rhinolophus ferrumequinum betaherpesvirus 2
+1325403|Rhinolophus hipposideros betaherpesvirus 1
+1325404|Rousettus aegyptiacus betaherpesvirus 1
+1325405|Rousettus aegyptiacus betaherpesvirus 2
+1325406|Tadarida teniotis betaherpesvirus 1
+1325407|Tadarida teniotis betaherpesvirus 2
+1653056|Myotis escalerai betaherpesvirus 1
+1653057|Myotis blythii betaherpesvirus 1
+1653058|Myotis myotis betaherpesvirus 1
+1732025|Myotis alcathoe betaherpesvirus 1
+1834535|Marten betaherpesvirus
+1835097|Tadarida teniotis betaherpesvirus 3
+1835098|Myotis escalerai betaherpesvirus 2
+10372|Human betaherpesvirus 7
+32603|Human betaherpesvirus 6A
+32604|Human betaherpesvirus 6B
+431037|unclassified Roseolovirus
+57278|Human herpesvirus 7 strain JI
+57279|Human herpesvirus 7 strain MUK
+262398|Human herpesvirus 7 strain RK
+10369|Human herpesvirus 6 (strain GS)
+10370|Human herpesvirus 6 (strain Uganda-1102)
+36351|Human herpesvirus 6 strain Z29
+10368|Human herpesvirus 6
+308725|Pan troglodytes roseolovirus 1
+1370096|Cervid herpesvirus 3
+1543219|Gorilla gorilla herpesvirus 7
+1543220|Pan paniscus herpesvirus 7
+1543221|Pan troglodytes herpesvirus 7
+1846169|Macaca nemestrina herpesvirus 7
+1940555|Murine roseolovirus
+254249|Pan troglodytes herpesvirus 6
+146015|Elephantid betaherpesvirus 1
+548912|unclassified Proboscivirus
+654902|Elephantid herpesvirus 1 (isolate Kiba)
+759753|Elephant endotheliotropic herpesvirus 1A
+759754|Elephant endotheliotropic herpesvirus 1B
+1329410|Elephant endotheliotropic herpesvirus 1A/1B
+548913|Elephant endotheliotropic herpesvirus 3
+548914|Elephant endotheliotropic herpesvirus 4
+759755|Elephant endotheliotropic herpesvirus 2
+768738|Elephant endotheliotropic herpesvirus 5
+768739|Elephant endotheliotropic herpesvirus 6
+1166470|Elephant endotheliotropic herpesvirus 7
+1329409|Elephant endotheliotropic herpesvirus 3A
+1749251|Elephant endotheliotropic herpesvirus 3B
+1756184|Elephant endotheliotropic herpesvirus 4A
+1382992|Elephant endotheliotropic herpesvirus 5A
+1382993|Elephant endotheliotropic herpesvirus 5B
+1206069|Elephant endotheliotropic herpesvirus 7A
+10397|Tupaiid betaherpesvirus 1
+33706|Caviid betaherpesvirus 2
+1608255|Suid betaherpesvirus 2
+103920|Guinea pig cytomegalovirus (strain 22122 / ATCC VR682) (GPCMV)
+1415526|Caviid herpesvirus 2 str. CIDMTR
+10375|Lymphocryptovirus
+10379|Rhadinovirus
+35249|unclassified Gammaherpesvirinae
+548687|Macavirus
+548688|Percavirus
+686604|unassigned Gammaherpesvirinae
+10376|Human gammaherpesvirus 4
+45455|Macacine gammaherpesvirus 4
+106331|Callitrichine gammaherpesvirus 3
+106332|Papiine gammaherpesvirus 1
+159602|Panine gammaherpesvirus 1
+159603|Pongine gammaherpesvirus 2
+159604|Gorilline gammaherpesvirus 1
+323231|unclassified Lymphocryptovirus
+10377|Human herpesvirus 4 strain B95-8
+10378|Human herpesvirus 4 strain RAJI
+12509|Human herpesvirus 4 type 2
+31525|Human herpesvirus 4 strain CAO
+36352|Human herpesvirus 4 type 1
+82829|Epstein-barr virus strain p3hr-1
+82830|Epstein-barr virus strain ag876
+104240|Cynomolgus Epstein-Barr Virus TsB-B6
+114769|Cynomolgus Epstein-Barr Virus Si-IIA
+114770|Cynomolgus Epstein-Barr Virus A4
+212718|lymphocryptovirus 1
+212729|lymphocryptovirus 2
+308721|Saimiri sciureus lymphocryptovirus 3
+323232|Hylobates pileatus lymphocryptovirus
+323233|Hylobates agilis lymphocryptovirus
+467770|Papio hamadryas lymphocryptovirus 3
+1136457|Lymphocryptovirus Baboon/bone marrow/CII-013
+1136458|Lymphocryptovirus Baboon/eye/CII-163(b)
+1136459|Lymphocryptovirus Green Monkey/marrow/CII-040
+1136460|Lymphocryptovirus Green Monkey/marrow/CII-051
+1136461|Lymphocryptovirus Green Monkey/trachea/CII-044
+1136462|Lymphocryptovirus Green Monkey/trachea/CII-144
+1136463|Lymphocryptovirus Mangabey/muscle/BM-008
+1195658|Macaca fascicularis lymphocryptovirus
+1256524|Cynomolgus herpesvirus 4
+1676471|Pan troglodytes lymphocryptovirus
+1676472|Papio hamadryas lymphocryptovirus
+1716044|Lymphocryptovirus Macaca/pfe-lcl-E3
+1869105|Cercopithecus kandti lymphocryptovirus
+1869106|Gorilla beringei beringei lymphocryptovirus 1
+137878|Gorilla lymphocryptovirus 1
+203134|Pongo pygmaeus lymphocryptovirus 1
+209062|Pithecia pithecia lymphocryptovirus 1
+209063|Callithrix penicillata lymphocryptovirus 1
+209064|Cebus albifrons lymphocryptovirus 1
+209266|Ateles paniscus lymphocryptovirus 1
+212719|Piliocolobus badius lymphocryptovirus 1
+212720|Colobus guereza lymphocryptovirus 1
+212721|Gorilla gorilla lymphocryptovirus 1
+212722|Macaca fascicularis lymphocryptovirus 1
+212723|Macaca fuscata lymphocryptovirus 1
+212724|Macaca silenus lymphocryptovirus 1
+212725|Mandrillus sphinx lymphocryptovirus 1
+212726|Pan paniscus lymphocryptovirus 1
+212727|Pan troglodytes lymphocryptovirus 1
+212728|Semnopithecus entellus lymphocryptovirus 1
+219817|Saguinus midas lymphocryptovirus 1
+219818|Saimiri sciureus lymphocryptovirus 1
+221245|Macaca mulatta lymphocryptovirus 1
+221246|Macaca sylvanus lymphocryptovirus 1
+221685|Callithrix jacchus lymphocryptovirus 1
+221686|Macaca thibetana lymphocryptovirus 1
+221688|Hylobates leucogenys lymphocryptovirus 1
+221689|Papio hamadryas lymphocryptovirus 1
+230176|Hylobates lar lymphocryptovirus 1
+230177|Erythrocebus patas lymphocryptovirus 1
+240511|Hylobates muelleri lymphocryptovirus 1
+258922|Hylobates nomascus leucogenys lymphocryptovirus 1
+291836|Chlorocebus aethiops lymphocryptovirus 1
+291837|Hylobates syndactylus lymphocryptovirus 1
+291838|Leontopithecus rosalia lymphocryptovirus 1
+291839|Cercopithecus hamlyni lymphocryptovirus 1
+291840|Miopithecus talapoin lymphocryptovirus 1
+291841|Cercopithecus nictitans lymphocryptovirus 1
+291842|Lophocebus albigena lymphocrytovirus 1
+291843|Cercopithecus cephus lymphocrytovirus 1
+308704|Papio anubis lymphocryptovirus 1
+308705|Cercopithecus neglectus lymphocryptovirus 1
+691496|Cercocebus atys lymphocryptovirus 1
+691498|Colobus polykomos lymphocryptovirus 1
+987113|Lophocebus aterrimus lymphocryptovirus 1
+1093774|Ateles belzebuth Lymphocryptovirus 1
+1093775|Ateles fusciceps Lymphocryptovirus 1
+1093776|Ateles geoffroyi Lymphocryptovirus 1
+1093778|Cebus apella Lymphocryptovirus 1
+1093779|Cebus capucinus Lymphocryptovirus 1
+1093781|Lagothrix lagotricha Lymphocryptovirus 1
+1093782|Saguinus oedipus Lymphocryptovirus 1
+1093783|Saimiri boliviensis boliviensis Lymphocryptovirus 1
+1093784|Saimiri sciureus albigena Lymphocryptovirus 1
+1093785|Saimiri sciureus macrodon Lymphocryptovirus 1
+1093786|Saimiri sciureus sciureus Lymphocryptovirus 1
+1567495|Symphalangus syndactylus lymphocryptovirus 1
+203136|Gorilla gorilla lymphocryptovirus 2
+209061|Saimiri sciureus lymphocryptovirus 2
+212730|Papio hamadryas lymphocryptovirus 2
+221244|Macaca fuscata lymphocryptovirus 2
+221690|Mandrillus sphinx lymphocryptovirus 2
+291835|Cercopithecus neglectus lymphocryptovirus 2
+691497|Chlorocebus aethiops lymphocryptovirus 2
+691499|Macaca thibetana lymphocryptovirus 2
+691500|Piliocolobus badius lymphocryptovirus 2
+691501|Pongo pygmaeus lymphocryptovirus 2
+691502|Symphalangus syndactylus lymphocryptovirus 2
+1093777|Cebus albifrons lymphocryptovirus 2
+1093780|Cebus capucinus Lymphocryptovirus 2
+10380|Ateline gammaherpesvirus 2
+10381|Saimiriine gammaherpesvirus 2
+10385|Bovine gammaherpesvirus 4
+33708|Murid gammaherpesvirus 4
+37296|Human gammaherpesvirus 8
+85618|Ateline gammaherpesvirus 3
+154334|Macacine gammaherpesvirus 5
+224583|unclassified Rhadinovirus
+1605972|Cricetid gammaherpesvirus 2
+10382|Herpesvirus saimiri (strain 484-77)
+10383|Herpesvirus saimiri (strain 11)
+10384|Herpesvirus saimiri (strain 488)
+221983|Saimiri sciureus rhadinovirus 1
+353282|Saimiriine herpesvirus 2 (strain 484)
+10355|Bovine herpesvirus 4 (isolate DN-599)
+221984|Sus barbatus rhadinovirus 1
+221985|Babyrousa babyrussa rhadinovirus 1
+230457|Phacochoerus africanus rhadinovirus 1
+436506|Bovine herpesvirus 4 (isolate LVR140)
+436507|Bovine herpesvirus 4 (isolate V. test)
+338561|Murine herpesvirus strain 72
+338562|Murine herpesvirus strain 4556
+432370|Wood mouse herpesvirus
+1440122|Murid herpesvirus 68
+109047|Chlorocebus rhadinovirus 1
+111468|Macaque gamma virus
+111469|Retroperitoneal fibromatosis-associated herpesvirus
+135725|Pan troglodytes rhadinovirus 1
+137876|Gorilla rhadinovirus 1
+144211|Mandrillus herpesvirus 1
+209045|Macaca fascicularis rhadinovirus 1
+262584|Hylobates leucogenys rhadinovirus 2
+435895|Human herpesvirus 8 type M
+651668|Human herpesvirus 8 strain rKSHV.219
+868565|Human herpesvirus 8 strain GK18
+138896|Pan troglodytes rhadinovirus 1a
+138897|Pan troglodytes rhadinovirus 1b
+69256|Rhesus monkey rhadinovirus H26-95
+83534|Macaca mulatta rhadinovirus 17577
+109048|Chlorocebus rhadinovirus 2
+123630|Macaca nemestrina rhadinovirus 2
+144208|Mandrillus herpesvirus 2
+169974|Baboon gamma-herpesvirus
+272551|Macaca fuscata rhadinovirus
+703611|Macaca mulatta rhadinovirus
+10395|Herpesvirus sylvilagus
+46017|Leporid herpesvirus 1
+50293|Leporid herpesvirus 2
+171371|Pan troglodytes rhadinovirus 2
+171950|Pan rhadino-herpesvirus 2
+227134|Type 2 ruminant rhadinovirus
+227135|Type 1 ruminant rhadinovirus
+227509|Malignant catarrhal fever virus in white-tailed deer
+308714|Mus musculus rhadinovirus 1
+308716|Apodemus agrarius rhadinovirus 1
+308718|Clethrionomys glareolus rhadinovirus 1
+308719|Hippopotamus amphibius rhadinovirus 1
+333342|Fallow deer lymphotropic herpesvirus
+333343|Aoudad malignant catarrhal fever virus
+359947|Cetacea gammaherpesvirus
+379730|Suiformes rhadinovirus genogroup 1
+397104|Eptesicus serotinus rhadinovirus 1
+397105|Myotis nattereri rhadinovirus 1
+397106|Nyctalus noctula rhadinovirus 1
+397107|Nyctalus noctula rhadinovirus 2
+397108|Pipistrellus pipistrellus rhadinovirus 1
+397109|Plecotus auritus rhadinovirus 1
+398032|Apodemus flavicollis rhadinovirus 1
+398033|Bandicota savilei rhadinovirus 1
+410853|Elephantid herpesvirus 5
+410854|Procavid herpesvirus 1
+416617|Miniopterus schreibersii rhadinovirus
+416618|Myotis capaccinii rhadinovirus
+416619|Nyctalus lasiopterus rhadinovirus
+425184|Apodemus sylvaticus rhadinovirus 1
+425185|Bandicota indica rhadinovirus 1
+425186|Bandicota indica rhadinovirus 2
+425187|Bandicota indica rhadinovirus 3
+425188|Bandicota indica rhadinovirus 4
+425189|Microtus agrestis rhadinovirus 1
+425190|Rattus exulans rhadinovirus 1
+425191|Rattus exulans rhadinovirus 2
+425192|Rattus norvegicus rhadinovirus 1
+425193|Rattus norvegicus rhadinovirus 2
+425194|Rattus rattus rhadinovirus 1
+425195|Rattus rattus rhadinovirus 2
+425196|Rattus rattus rhadinovirus 3
+425197|Rattus tiomanicus rhadinovirus 1
+425198|Rattus tiomanicus rhadinovirus 2
+454123|Pipistrellus nathusii rhadinovirus 1
+456502|Mus cervicolor rhadinovirus 1
+456832|Myodes glareolus rhadinovirus 1
+462296|Macaca fascicularis rhadinovirus 2
+682884|Pan troglodytes rhadinovirus 3
+1379311|Colobus polykomos rhadinovirus 1
+1379312|Piliocolobus badius rhadinovirus 1
+1564904|Dolphin gammaherpesvirus
+1834538|Ruminant rhadinovirus 2
+1869109|Cercopithecus kandti rhadinovirus
+1869110|Gorilla beringei beringei rhadinovirus 1
+227124|Type 2 ruminant rhadinovirus of bighorn sheep
+227125|Type 2 ruminant rhadinovirus of domestic sheep
+227126|Type 2 ruminant rhadinovirus of black-tailed deer
+227127|Type 2 ruminant rhadinovirus of mule deer
+227128|Type 2 ruminant rhadinovirus of bison
+227129|Type 2 ruminant rhadinovirus of elk
+227130|Type 2 ruminant rhadinovirus of addax
+227132|Type 2 ruminant rhadinovirus of Oryx
+227451|Type 2 ruminant rhadinovirus of goat
+224585|Ruminant type 1 rhadinovirus in ibex
+224586|Ruminant type 1 rhadinovirus in oryx
+224587|Ruminant type 2 rhadinovirus in oryx
+227136|Muskox rhadinovirus 1
+227452|Type 1 ruminant rhadinovirus of muskox
+301599|Blainville's beaked whale gammaherpesvirus
+318416|Dwarf sperm whale gammaherpesvirus
+318417|Bottlenose dolphin gammaherpesvirus
+359948|Risso's dolphin gammaherpesvirus
+319745|Atlantic bottlenose dolphin gammaherpesvirus
+221986|Sus barbatus lymphotropic herpesvirus 1
+240513|Phacochoerus africanus lymphotropic herpesvirus 1
+93387|Tapirus terrestris gammaherpesvirus 1
+93388|Wild ass herpesvirus
+93389|Zebra herpesvirus
+104223|Deer malignant catarrhal fever virus
+107236|California sea lion herpesvirus
+135748|Murine herpesvirus 72
+169968|Porcine gamma-herpesvirus
+175816|American bison gammaherpesvirus
+212430|Asinine herpesvirus 4
+212435|Asinine herpesvirus 5
+212436|Asinine herpesvirus 6
+230458|Hexaprotodon liberiensis gammaherpesvirus 1
+230460|Diceros bicornis gammaherpesvirus 1
+230461|Tupaia belangeri gammaherpesvirus 1
+299472|Springbok herpesvirus 1
+299473|Springbok herpesvirus 2
+299474|Impala herpesvirus 1
+302475|Vaal rhebok herpesvirus MMN-2004
+333743|Hawaiian monk seal herpesvirus
+345308|Northern elephant seal herpesvirus
+353637|Elephantid herpesvirus 3
+353638|Elephantid herpesvirus 4
+353639|Trichechid herpesvirus 1
+379729|Artiodactyla gammaherpesvirus genogroup 1
+397367|Crocuta crocuta gammaherpesvirus 1
+397368|Panthera leo gammaherpesvirus 1
+397369|Rupicapra rupicapra gammaherpesvirus 1
+434028|Macropodid herpesvirus 3
+439203|Elephantid herpesvirus 6
+462297|Elephas maximus gammaherpesvirus 1
+462298|Sorex araneus gammaherpesvirus 1
+517184|Equus zebra gammaherpesvirus 1
+517194|Saimiri sciureus gammaherpesvirus 2
+550803|Cynomys herpesvirus
+655488|Sperm whale gammaherpesvirus
+655489|Stejneger's beaked whale gammaherpesvirus
+672017|Otariid herpesvirus 2
+672021|Phocid herpesvirus 5
+690693|Egyptian fruit bat gammaherpesvirus
+690694|White-headed marmoset gammaherpesvirus
+690695|Oriental small-clawed otter gammaherpesvirus
+768741|Elephant gammaherpesvirus 2
+768742|Elephant gammaherpesvirus 3A
+768743|Elephant gammaherpesvirus 3B
+768744|Elephant gammaherpesvirus 5
+943082|Mustelid herpesvirus-2
+1000650|Arvicola amphibius gammaherpesvirus 1
+1000651|Elephas maximus gammaherpesvirus 2
+1000652|Procavia capensis gammaherpesvirus 2
+1045882|Fisher herpesvirus
+1130095|Phascolarctid herpesvirus 1
+1200670|Myotis ricketti herpesvirus 1
+1200671|Myotis ricketti herpesvirus 2
+1204577|Otariid herpesvirus 3
+1204578|Phocid herpesvirus 6
+1210004|Phascolarctid herpesvirus 2
+1226368|Ursid gammaherpesvirus 1
+1240711|Otariid herpesvirus 4
+1249499|Reindeer gammaherpesvirus
+1288357|Canid herpesvirus 2
+1325581|Elephant gammaherpesvirus 1B
+1419109|Harp seal herpesvirus
+1419110|Hooded seal herpesvirus
+1419111|Ringed seal herpesvirus
+1452540|Felis catus gammaherpesvirus 1
+1452541|Lynx rufus gammaherpesvirus 1
+1452542|Puma concolor gammaherpesvirus 1
+1478596|Bottlenose dolphin herpesvirus V1353-K263
+1479000|Bottlenose dolphin herpesvirus 201MG_R
+1479476|Bottlenose dolphin herpesvirus DP01_K310
+1628896|Phocid herpesvirus 7
+1647106|Rupicapra pyrenaica gammaherpesvirus 1
+1679240|Gammaherpesvirus OtHV4
+1679241|Gammaherpesvirus OtHV1
+1706830|Leopardus pardalis gammaherpesvirus 1
+1706831|Lynx rufus gammaherpesvirus 2
+1720233|Phocoenid herpesvirus 1
+1758209|Balaenoptera acutorostrata gammaherpesvirus 1
+1758210|Balaenoptera acutorostrata gammaherpesvirus 2
+1758219|Grampus griseus gammaherpesvirus
+1778911|Bat gammaherpesvirus 8
+1780507|Myotis gammaherpesvirus 8
+1806069|Elephant gammaherpesvirus 4
+1814125|Macropodid herpesvirus 6
+1834525|Bighorn sheep gammaherpesvirus
+1834526|Elk gammaherpesvirus 1
+1834527|Elk gammaherpesvirus 2
+1834528|Elk gammaherpesvirus 3
+1834529|Marten alphaherpesvirus
+1834530|Marten gammaherpesvirus 1
+1834531|Marten gammaherpesvirus 2
+1834532|Porcupine caribou gammaherpesvirus 1
+1834533|Porcupine caribou gammaherpesvirus 2
+1835087|Eptesicus isabellinus gammaherpesvirus 1
+1835088|Miniopterus schreibersii gammaherpesvirus 1
+1835089|Myotis capaccinii gammaherpesvirus 1
+1835090|Myotis daubentonii gammaherpesvirus 1
+1835091|Myotis emarginatus gammaherpesvirus 1
+1835092|Myotis myotis gammaherpesvirus 1
+1835093|Nyctalus lasiopterus gammaherpesvirus 1
+1835094|Nyctalus leisleri gammaherpesvirus 1
+1835095|Rousettus aegyptiacus gammaherpesvirus 1
+1835096|Tadarida teniotis gammaherpesvirus 1
+1923962|Sousa chinensis gammaherpesvirus
+1923963|Steno bredanensis gammaherpesvirus
+1923964|Tursiops aduncus gammaherpesvirus
+1923965|Tursiops truncatus gammaherpesvirus
+1954225|Desmodus rotundus gammaherpesvirus
+1954226|Diphylla ecaudata gammaherpesvirus
+173567|Asinine herpesvirus 4.3
+212433|Asinine herpesvirus 4.1
+212434|Asinine herpesvirus 4.2
+173568|Asinine herpesvirus AHV5-1
+173569|Asinine herpesvirus AHV5-2
+173570|Asinine herpesvirus AHV5-3
+173571|Asinine herpesvirus AHV5a
+69955|Bovine lymphotropic herpesvirus
+1206068|Elephant gammaherpesvirus 5A
+1211484|Elephant gammaherpesvirus 5B
+10398|Ovine gammaherpesvirus 2
+35252|Alcelaphine gammaherpesvirus 1
+135102|Caprine gammaherpesvirus 2
+138184|Alcelaphine gammaherpesvirus 2
+333341|Hippotragine gammaherpesvirus 1
+884666|unclassified Macavirus
+1504288|Bovine gammaherpesvirus 6
+1960249|Suid gammaherpesvirus 3
+1960250|Suid gammaherpesvirus 4
+1960251|Suid gammaherpesvirus 5
+33705|Alcelaphine herpesvirus 1 strain WC11
+654901|Alcelaphine herpesvirus 1 strain C500
+884667|Macavirus strain Wasserbock241/DEU/2007
+988948|Macavirus strain Steinbock13831/DEU/2009
+988949|Macavirus strain Steinbock20882/DEU/2007
+91740|Porcine lymphotropic herpesvirus 1
+91741|Porcine lymphotropic herpesvirus 2
+199308|Porcine lymphotropic herpesvirus 3
+10371|Equid gammaherpesvirus 5
+12657|Equid gammaherpesvirus 2
+311179|Mustelid gammaherpesvirus 1
+82831|Equid herpesvirus type 2 strain 86/87
+82832|Equid herpesvirus type 2 strain t400/3
+47419|Phocid gammaherpesvirus 2
+50291|Sanguinine herpesvirus 1
+291612|Equid gammaherpesvirus 7
+1324804|Pteropine herpesvirus 2
+39059|unidentified herpesvirus
+52985|Cottontail Rabbit Herpesvirus
+72012|Oyster herpes-like virus
+91179|Asian elephant endotheliolytic herpesvirus
+91462|African elephant endotheliolytic herpesvirus
+136163|Caprine lymphotropic herpesvirus
+218248|Tilapia larvae herpesvirus
+240874|Psittacid herpesvirus 2
+240876|Psittacid herpesvirus 3
+240877|Psittacid herpesvirus 4
+253159|Varanid herpesvirus 1
+257469|Turtle herpesviruses
+291996|Varanid herpesvirus 2
+301027|Flounder herpesvirus
+324600|Pilchard herpesvirus
+433499|Bat herpesvirus
+562746|Hipposideros diadema herpesvirus
+672020|Delphinid herpesvirus 9
+685736|Herpesvirus whale/BW-70P/ES-CN/2005
+1032406|Acomys herpesvirus SVMS 226,222
+1032407|Dipodillus herpesvirus SVMS 065,081
+1195374|Rhinolophus ferrumequinum herpesvirus 1
+1195376|Tylonycteris robustula herpesvirus 1
+1227348|Mesoplodon densirostris herpesvirus
+1335470|Eidolon helvum herpesvirus 1
+1335471|Eidolon helvum herpesvirus 2
+1335472|Eidolon helvum herpesvirus 3
+1379306|Beluga whale herpesvirus
+1410510|Dzifa herpesvirus
+1463499|Odobenus rosmarus divergens herpesvirus
+1474808|Terrapene herpesvirus 1
+1536430|Emydid herpesvirus
+1536431|Glyptemys herpesvirus
+1615847|Penguin herpesvirus 1
+1621983|Soft-shell clam herpesvirus 1
+1699315|Testudinid herpesvirus 1
+1736048|Crocodyline herpesvirus 1
+1736051|Crocodyline herpesvirus 2
+1744840|Crocodyline herpesvirus 3
+1770233|Thalassarchid herpesvirus 1
+1792586|Cheirogaleid herpesvirus 1
+1792587|Cheirogaleid herpesvirus 2
+1792588|Lorisid herpesvirus 1
+1906351|Sea otter herpesvirus
+95547|Tortoise herpesvirus
+314498|Tortoise herpesvirus 2
+471966|Loggerhead genital-respiratory herpesvirus
+471967|Loggerhead orocutaneous herpesvirus
+542376|Tortoise herpesvirus Allmi1
+39566|Gallid herpesvirus
+119207|Ovine herpesvirus 1
+172652|Cercopithecine herpesvirus 3
+226584|Iguanid herpesvirus 2
+1034795|uncultured Herpesvirus

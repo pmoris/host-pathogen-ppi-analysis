@@ -23,3 +23,15 @@ go_enrichment_tool/obo_tools\.py
 domain-motif/
 
 MiningPatterns1.0/
+
+docs/\.ipynb_checkpoints/
+
+data/raw/*
+
+src/data_prep/__pycache__/
+
+src/go_tools/__pycache__/
+
+src/ppi_tools/__pycache__/
+
+notebooks/\.ipynb_checkpoints/
