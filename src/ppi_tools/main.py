@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 
 """
-Module to parse protein-protein interaction datasets in mitab format and convert them into transaction datasets.
+Main module to parse protein-protein interaction data sets (mitab format), label them with GO and InterPro annotations
+and convert them into transaction data sets suitable for frequent item set mining.
+
+Must be run as a script.
+
+Paths are hard-coded relative to the repository.
 """
+
 # TODO: mutuable list default values should be changed to tuples or if None, set to list
 
 import collections
@@ -16,6 +22,7 @@ import id_mapper
 import label_go
 import label_interpro
 import ppi_import
+
 from data_prep import retrieve_taxids
 
 from go_tools import gaf_parser
@@ -32,7 +39,6 @@ from go_tools import obo_tools
 # pandas display options
 pd.set_option('display.max_columns', None)
 pd.options.display.max_colwidth = 200
-
 
 
 def annotate_inter_intra(interaction_dataframe):
@@ -104,10 +110,10 @@ def concat_interaction_datasets(list_of_datasets):
     for i in list_of_datasets:
         i['origin'] = i.name
 
-    df_concat = pd.concat(list_of_datasets, axis=0, ignore_index=True, join='outer')
+    concatenated_df = pd.concat(list_of_datasets, axis=0, ignore_index=True, join='outer')
     # df_concat = df_concat.drop_duplicates(subset=['xref_partners_sorted'])
 
-    return df_concat
+    return concatenated_df
 
 
 def reorder_pathogen_host_entries(interaction_dataframe, host_list=list('taxid:9606')):
@@ -178,8 +184,10 @@ def label_term(label_set, taxid, pathogen_set):
     """Adds host/virus labels to terms and returns string representation (comma separated terms).
 
     Should be called via an apply function that calls it for both partners' term sets (e.g. GO terms) and taxids
-    for each interaction in a dataset.
-    Note: currently all hosts are labelled identically.
+    for each interaction in a data set.
+
+    Note: currently all hosts are labelled identically because the function simply checks whether a taxid belongs
+          to a set of virus taxids.
 
 
     Parameters
@@ -190,6 +198,8 @@ def label_term(label_set, taxid, pathogen_set):
     taxid : string
         The taxid of the protein partners, stored in the taxid_A/B columns of the interaction DataFrame.
         E.g. taxid:9606
+    pathogen_set : set
+        A set containing all relevant pathogen taxids.
 
     Returns
     -------
@@ -240,19 +250,19 @@ def pathogen_group_mapper(taxid, pathogen_group_dict):
 
 
 if __name__ == '__main__':
-    # Read in PPI datasets
+    # Read in PPI data sets
     df_virhost = ppi_import.read_mitab_virhost(r'../../data/raw/ppi_data/VirHostNet_January_2017.txt')
 
     df_hpidb2 = ppi_import.read_mitab_hpidb2(r'../../data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt')
 
     df_phisto = ppi_import.read_mitab_phisto(r'../../data/raw/ppi_data/phisto_Jan19_2017.csv',
-                                  r'../../data/raw/ppi_data/mi.obo')
+                                             r'../../data/raw/ppi_data/mi.obo')
 
     # Concatenate the different sources
     print('Concatenating PPI data sets...')
     df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto])
 
-    # Map entrez gene id's to uniprot ac's
+    # Map Entrez gene id's to UniProt ACs
     id_mapper.map2uniprot(df_concat, filepath=r'../../data/interim/mappings/')
     # TODO: no intact-EBI mapping...
 
@@ -285,7 +295,7 @@ if __name__ == '__main__':
     # bash script to check overlap:
     # comm <(cut -f3 -d, phisto_Jan19_2017.csv | sed 's/"//g' | sort -u ) <(cut -f2 hpidb2_March14_2017_mitab.txt | sed s/uniprotkb://g | sort -u)
 
-    # Check non-UniProt AC's
+    # Check non-UniProt ACs
     print('\nNumber of interactions without UniProt AC')
     print(df_concat.loc[(~df_concat.xref_A.str.contains('uniprot')) |
                         (~df_concat.xref_B.str.contains('uniprot'))].groupby('origin').size())
@@ -329,7 +339,7 @@ if __name__ == '__main__':
     print(df_herpes.loc[(~df_herpes.xref_A.str.contains('uniprot')) |
                         (~df_herpes.xref_B.str.contains('uniprot'))].groupby('origin').size())
 
-    # Filter on UniProt AC's due to GO mapping being UniProt-based
+    # Filter on UniProt ACs due to GO mapping being UniProt-based
     df_herpes = df_herpes.loc[(df_herpes.xref_A.str.contains('uniprot')) & (df_herpes.xref_B.str.contains('uniprot'))]
     df_herpes = df_herpes.reset_index(drop=True)
     print('Omitting all non-UniProt AC entries...')
@@ -422,13 +432,15 @@ if __name__ == '__main__':
 
     print('Remapping GO terms to desired depth', depth)
     label_go.remap_GO_depth(df_herpes, depth, go_dict, list(exclusion))
+
+
     # depth = {'biological_process': 2, 'molecular_function': 1, 'cellular_component': 2}
     # remap_GO_depth(df_herpes, depth, go_dict, ['xref_B_GO'])
     # MF: needs deeper mapping for "binding"
     # CC: OK, virus needs deeper...membrane would benefit from deeper as well.
 
     def count_term(go_term, interaction_dataframe, column_list=None):
-        if column_list == None:
+        if column_list is None:
             column_list = ['xref_A_GO', 'xref_B_GO']
         count = 0
         sets_array = interaction_dataframe[column_list].values.ravel()
@@ -469,7 +481,9 @@ if __name__ == '__main__':
 
     # Add InterPro labels
     print('Adding InterPro annotations...')
-    uniprot2interpro = label_interpro.create_uniprot2interpro_dict(unique_ac, filepath=r'../../data/interim/interpro_data/protein2ipr_filtered.txt')
+    uniprot2interpro = label_interpro.create_uniprot2interpro_dict(unique_ac,
+                                                                   filepath=r'../../data/interim/interpro_data'
+                                                                            r'/protein2ipr_filtered.txt')
     label_interpro.annotate_interpro(df_herpes, uniprot2interpro)
     label_host_pathogen(df_herpes, herpes_taxids, columns=['interpro_A', 'interpro_B'],
                         taxid_columns=['taxid_A', 'taxid_B'])
@@ -497,7 +511,8 @@ if __name__ == '__main__':
 
     # Merge A and B InterPro columns into one
     has_InterPro_mask = df_herpes[['interpro_A', 'interpro_B']].notnull().all(axis=1)
-    combined_interpro_labels = df_herpes.loc[has_InterPro_mask, 'interpro_A'] + ',' + df_herpes.loc[has_InterPro_mask, 'interpro_B']
+    combined_interpro_labels = df_herpes.loc[has_InterPro_mask, 'interpro_A'] + ',' + df_herpes.loc[
+        has_InterPro_mask, 'interpro_B']
     # updates NaN in called Series/DF with values from argument Series/DF
     combined_interpro_labels = combined_interpro_labels.combine_first(df_herpes['interpro_A'])
     combined_interpro_labels = combined_interpro_labels.combine_first(df_herpes['interpro_B'])
@@ -540,9 +555,9 @@ if __name__ == '__main__':
         df_output_grouped.reset_index(drop=True)
         df_output_grouped.to_csv(str(output_directory) + r'/' + str(i) + '.csv', sep=',', index=False)
 
-# TODO: df_herpes[['xref_A_GO', 'xref_B_GO']].notnull() how to melt this to 1 column of boolean indices?
-# df_herpes[['xref_A_GO', 'xref_B_GO']].notnull().all(axis=1)
-# TODO: EBI-intact identifiers?
+    # TODO: df_herpes[['xref_A_GO', 'xref_B_GO']].notnull() how to melt this to 1 column of boolean indices?
+    # df_herpes[['xref_A_GO', 'xref_B_GO']].notnull().all(axis=1)
+    # TODO: EBI-intact identifiers?
 
     df_herpes.to_csv(str(output_directory) + r'/ppi_network.csv', sep=';', index=False)
 
