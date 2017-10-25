@@ -1,0 +1,29 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+@EXPLICIT
+https://repo.continuum.io/pkgs/main/linux-64/ca-certificates-2017.08.26-h1d4fec5_0.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/certifi-2017.7.27.1-py36h8b7b77e_0.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/intel-openmp-2018.0.0-h15fc484_7.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/libedit-3.1-heed3624_0.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/libffi-3.2.1-h4deb6c0_3.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/libgcc-ng-7.2.0-h7cc24e2_2.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/libstdcxx-ng-7.2.0-h7a57d05_2.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/mkl-2018.0.0-hb491cac_4.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/ncurses-6.0-h06874d7_1.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/numpy-1.13.3-py36ha12f23b_0.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/openssl-1.0.2l-h077ae2c_5.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/pandas-0.20.3-py36h842e28d_2.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/pip-9.0.1-py36h8ec8b28_3.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/python-3.6.3-hc9025b9_1.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/python-dateutil-2.6.1-py36h88d3b88_1.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/pytz-2017.2-py36hc2ccc2a_1.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/readline-7.0-hac23ff0_3.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/setuptools-36.5.0-py36he42e2e1_0.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/six-1.11.0-py36h372c433_1.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/sqlite-3.20.1-h6d8b0f3_1.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/tk-8.6.7-h5979e9b_1.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/urllib3-1.12-py36_0.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/wheel-0.29.0-py36he7f4e38_1.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/xz-5.2.3-h2bcbf08_1.tar.bz2
+https://repo.continuum.io/pkgs/main/linux-64/zlib-1.2.11-hfbfcf68_1.tar.bz2
