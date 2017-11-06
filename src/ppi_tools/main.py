@@ -19,6 +19,7 @@ sys.path.append(os.path.abspath('..'))
 
 from pathlib import Path
 
+import argparse
 import numpy as np
 import pandas as pd
 
@@ -254,6 +255,15 @@ def pathogen_group_mapper(taxid, pathogen_group_dict):
 
 
 if __name__ == '__main__':
+    # Check provided arguments
+    parser = argparse.ArgumentParser(
+        description='Script to filter and annotate PPI databases into a dataset suitable for itemset mining.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('-d', '--dry', action="store_true", help='Perform dry run without saving output.')
+    parser.add_argument('-o', '--output', type=str, default=r'../../data/processed/transaction_datasets/',
+                        help='Output file or path')
+    # TODO: add arguments for every type of input data source instead of hardcoding directory structure.
+    args = parser.parse_args()
+
     # Read in PPI data sets
     df_virhost = ppi_import.read_mitab_virhost(r'../../data/raw/ppi_data/VirHostNet_January_2017.txt')
 
@@ -493,10 +503,6 @@ if __name__ == '__main__':
                         taxid_columns=['taxid_A', 'taxid_B'])
 
     # Save to transaction database
-    # Note: Pathlib functionality is broken in Pandas 0.20!
-    output_directory = Path(r'../../data/processed/transaction_datasets/')
-    output_directory.mkdir(exist_ok=True)
-
     # WRONG APPROACH: NaN values in either column will result in NaN in combined column...
     # combined_GO_labels_old = df_herpes['xref_A_GO'] + ',' + df_herpes['xref_B_GO']
     # compare combined_GO_labels[[8061, 8062, 8122,8123]] with combined_GO_labels_old[[8061, 8062, 8122,8123]]
@@ -547,25 +553,30 @@ if __name__ == '__main__':
     #
     # combine_terms_for_export(df_herpes)
 
-    print('Saving labelled PPI datasets to', output_directory.absolute())
-    df_output = df_herpes[['xref_partners_sorted', 'GO', 'interpro']]
-    df_output.reset_index(drop=True)
-    df_output.to_csv(str(output_directory) + r'/ppi_transactions.csv', sep=',', index=False)
-    # NOTE: run sed -i 's/"//g' to remove double quotes and treat GO column as separate items.
+    if not args.dry:
+        # Note: Pathlib functionality is broken in Pandas 0.20!
+        output_directory = Path(args.output)
+        output_directory.mkdir(exist_ok=True)
 
-    # Save to separate transaction datasets for each pathogen group
-    # for i in df_herpes['pathogen_groups'].dropna().unique():
-    for i in pd.unique(df_herpes['pathogen_groups'].dropna()):
-        df_output_grouped = df_herpes.loc[df_herpes['pathogen_groups'] == i,
-                                          ['xref_partners_sorted', 'GO', 'interpro']]
-        df_output_grouped.reset_index(drop=True)
-        df_output_grouped.to_csv(str(output_directory) + r'/' + str(i) + '.csv', sep=',', index=False)
+        print('Saving labelled PPI datasets to', output_directory.resolve())
+        df_output = df_herpes[['xref_partners_sorted', 'GO', 'interpro']]
+        df_output.reset_index(drop=True)
+        df_output.to_csv(str(output_directory) + r'/ppi_transactions.csv', sep=',', index=False)
+        # NOTE: run sed -i 's/"//g' to remove double quotes and treat GO column as separate items.
 
-    # TODO: df_herpes[['xref_A_GO', 'xref_B_GO']].notnull() how to melt this to 1 column of boolean indices?
-    # df_herpes[['xref_A_GO', 'xref_B_GO']].notnull().all(axis=1)
-    # TODO: EBI-intact identifiers?
+        # Save to separate transaction datasets for each pathogen group
+        # for i in df_herpes['pathogen_groups'].dropna().unique():
+        for i in pd.unique(df_herpes['pathogen_groups'].dropna()):
+            df_output_grouped = df_herpes.loc[df_herpes['pathogen_groups'] == i,
+                                              ['xref_partners_sorted', 'GO', 'interpro']]
+            df_output_grouped.reset_index(drop=True)
+            df_output_grouped.to_csv(str(output_directory) + r'/' + str(i) + '.csv', sep=',', index=False)
 
-    df_herpes.to_csv(str(output_directory) + r'/ppi_network.csv', sep=';', index=False)
+        # TODO: df_herpes[['xref_A_GO', 'xref_B_GO']].notnull() how to melt this to 1 column of boolean indices?
+        # df_herpes[['xref_A_GO', 'xref_B_GO']].notnull().all(axis=1)
+        # TODO: EBI-intact identifiers?
+
+        df_herpes.to_csv(str(output_directory) + r'/ppi_network.csv', sep=';', index=False)
 
 
 # TODO: create taxid-pair identifier
