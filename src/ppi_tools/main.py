@@ -13,6 +13,10 @@ Paths are hard-coded relative to the repository.
 
 import collections
 
+import os, sys
+sys.path.append(os.path.abspath('..'))
+# or Path('.').parent
+
 from pathlib import Path
 
 import numpy as np
@@ -503,9 +507,11 @@ if __name__ == '__main__':
     has_GO_mask = df_herpes[['xref_A_GO', 'xref_B_GO']].notnull().all(axis=1)
     combined_GO_labels = df_herpes.loc[has_GO_mask, 'xref_A_GO'] + ',' + df_herpes.loc[has_GO_mask, 'xref_B_GO']
     # updates NaN in called Series/DF with values from argument Series/DF
+    # also supplies values for non-existing indices/columns
+    # e.g. indices with NaNs were absent from combined_GO_labels Series and are now added again.
     combined_GO_labels = combined_GO_labels.combine_first(df_herpes['xref_A_GO'])
     combined_GO_labels = combined_GO_labels.combine_first(df_herpes['xref_B_GO'])
-    # join into dataframe
+    # name Series and join into dataframe
     combined_GO_labels.rename('GO', inplace=True)
     df_herpes = df_herpes.join(combined_GO_labels)
 
@@ -516,7 +522,7 @@ if __name__ == '__main__':
     # updates NaN in called Series/DF with values from argument Series/DF
     combined_interpro_labels = combined_interpro_labels.combine_first(df_herpes['interpro_A'])
     combined_interpro_labels = combined_interpro_labels.combine_first(df_herpes['interpro_B'])
-    # join into dataframe
+    # name Series and join into dataframe
     combined_interpro_labels.rename('interpro', inplace=True)
     df_herpes = df_herpes.join(combined_interpro_labels)
 
@@ -541,7 +547,7 @@ if __name__ == '__main__':
     #
     # combine_terms_for_export(df_herpes)
 
-    print('Saving labelled PPI datasets to', output_directory)
+    print('Saving labelled PPI datasets to', output_directory.absolute())
     df_output = df_herpes[['xref_partners_sorted', 'GO', 'interpro']]
     df_output.reset_index(drop=True)
     df_output.to_csv(str(output_directory) + r'/ppi_transactions.csv', sep=',', index=False)
