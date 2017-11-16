@@ -3,7 +3,8 @@
 """
 Module to create protein id mappings and apply them to a dataframe.
 """
-
+import urllib.request;
+urllib.parse
 import numpy as np
 import pandas as pd
 
@@ -41,7 +42,8 @@ def create_mapping_files(interaction_dataframe, from_id, description, savepath, 
     # create space-separated id string
     ids = pd.Series()
     for col in columns:
-        to_map = interaction_dataframe.loc[interaction_dataframe[col].str.contains(description), col]
+        # note: use startswith to avoid mixing ensembl and embl ids...
+        to_map = interaction_dataframe.loc[interaction_dataframe[col].str.startswith(description), col]
         ids = ids.append(to_map)
     ids = ids.reset_index(drop=True)
     ids = ids.str.split(':').str[1].unique()
@@ -50,9 +52,6 @@ def create_mapping_files(interaction_dataframe, from_id, description, savepath, 
     # http://www.uniprot.org/help/api_idmapping#id_mapping_python_example
     # https://docs.python.org/3/howto/urllib2.html
     # https://www.biostars.org/p/66904/
-
-    import urllib.request;
-    urllib.parse
 
     url = 'http://www.uniprot.org/uploadlists/'
 
@@ -74,18 +73,20 @@ def create_mapping_files(interaction_dataframe, from_id, description, savepath, 
     with urllib.request.urlopen(request) as response:
         mapping = response.read()
 
-    Path(savepath).parent.mkdir(parents=True, exist_ok=True)
-    Path(savepath).write_bytes(mapping)
+    savepath = Path(savepath)
+    savepath.parent.mkdir(parents=True, exist_ok=True)
+    savepath.write_bytes(mapping)
 
-    print('Created mapping files between UniProt ACs and', ids_str, 'in the data sets.\nStored in', savepath+'.')
+    print('Created mapping files between UniProt ACs and', ids_str,
+          'in the data sets.\nStored in', str(savepath.resolve()) + '.')
 
 
-def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/', columns=list(('xref_A', 'xref_B'))):
+def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/', columns=None):
     """ Remap identifiers to UniProt AC's.
 
     Replaces non-UniProt AC's for the specified columns of a pandas DataFrame.
     Identifiers that could not be mapped are left unchanged.
-    Identifiers that map to multiple UniProt AC's are concatenated into a tuple.
+    Identifiers that map to multiple UniProt AC's are concatenated into a long string separated by 'MULT_MAP'.
     Only reviewed identifiers are considered.
 
     Parameters
@@ -107,28 +108,43 @@ def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/',
     """
     # TODO: automatically retrieve descriptions and identifiers from file.
     # bash one-liner to retrieve data sources
-    # $ tail -n +2 hpidb2_March14_2017_mitab.txt | cut -f1 | sed -r 's/(^.*):.*/\1/g' | sort -u
-    for i in [['P_ENTREZGENEID', 'entrez'], ['EMBL_ID', 'embl'], ['ENSEMBLGENOME_ID', 'ensemblgenomes'],
-              ['P_REFSEQ_AC', 'refseq']]:
-        # Define filepath
-        path = filepath + i[1] + r'2uniprot.txt'
+    # $ cat <(tail -n +2 ../raw/ppi_data/hpidb2_March14_2017_mitab.txt | cut -f1) <(tail -n +2 ../raw/ppi_data/hpidb2_March14_2017_mitab.txt | cut -f2) | sed -r 's/(^.*?):.*/\1/g' | sort -u
+    # hpidb: ddbj/embl/genbank, ensembl, ensemblgenomes, entrez, gene/locuslink, intact, refseq, uniprotkb
+    # hpidb: ensembl, entrez gene/locuslink, intact, uniprotkb
+    # virhostnet: refseq, uniprotkb
+
+    if not columns:
+        columns = ['xref_A', 'xref_B']
+
+    identifiers = {'ddbj/embl/genbank:': 'EMBL_ID', 'ensembl:': 'ENSEMBL_ID', 'ensemblgenomes:': 'ENSEMBLGENOME_ID',
+                   'entrez gene/locuslink:': 'P_ENTREZGENEID', 'refseq:': 'P_REFSEQ_AC'}
+    #NOTE: UniProt REST API does not support intact EBI:identifiers.
+
+    for db_tag, id_abbreviation in identifiers.items():
+        # Define filepath (without forward slashes)
+        path = Path(filepath) / (db_tag.replace('/', '').strip(':') + r'2uniprot.txt')
+
         # Re-run this if data set changes...
         # TODO: add options to force re-run
         if not Path(path).is_file():
-            create_mapping_files(interaction_dataframe, i[0], i[1], path, columns)
+            create_mapping_files(interaction_dataframe, id_abbreviation, db_tag, str(path), columns)
+
         # Read in file as array
-        with Path(path).open() as mapping:
-            # Skip unreviewed identifiers
-            mapping_array = np.array([[line.split('\t')[i] for i in [0, 2, 3]]
+        with path.open() as mapping:
+            # TODO: possible to keep unreviewed identifiers? Will result in many more 1:n mappings...
+            mapping_array = np.array([[line.split('\t')[i] for i in [0, 2]]
                                       for line in mapping if '\treviewed' in line])
-            # Store mapping into dictionary where non-UniProt keys map to lists of UniProt ACs.
+            # Store mapping into dictionary where non-UniProt keys map to lists of UniProtACs.
             mapping_dict = {}
             for j in mapping_array:
-                if not j[0] in mapping_dict:
-                    mapping_dict[j[0]] = [j[1]]
+                from_id = j[0]
+                uniprot_acc = 'uniprotkb:' + j[1]
+                if not from_id in mapping_dict:
+                    mapping_dict[from_id] = [uniprot_acc]
                 else:
-                    mapping_dict[j[0]].append(j[1])
-                    # TODO: not needed, always 1 to 1 mapping?
+                    # even when only selecting reviewed proteins, there are still 1:n mappings
+                    # e.g. http://www.uniprot.org/uniprot/?query=yourlist:M2017111583C3DD8CE55183C76102DC5D3A26728BF70646W&sort=yourlist:M2017111583C3DD8CE55183C76102DC5D3A26728BF70646W&columns=yourlist%28M2017111583C3DD8CE55183C76102DC5D3A26728BF70646W%29,isomap%28M2017111583C3DD8CE55183C76102DC5D3A26728BF70646W%29,id,entry+name,reviewed,protein+names,genes,organism,length
+                    mapping_dict[from_id].append(uniprot_acc)
 
                     # print(len(entrez2uniprot_array)) # 526
                     # print(np.unique(entrez2uniprot_array[:, 0], return_index=True)) # 510
@@ -137,17 +153,31 @@ def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/',
                     # mask[unique_indices] = False
                     # print(entrez2uniprot_array[mask])
 
-            for col in columns:
-                mapping_selection = (interaction_dataframe[col].str.contains(i[1])) | \
-                                    (interaction_dataframe[col].str.contains(i[1]))
+            def lambda_helper(row_entry):
+                # retrieve id mapping if it exists, otherwise retain original id
+                new_id = mapping_dict.get(row_entry.split(':')[1], row_entry)
+                # all new mappings are in list format
+                if type(new_id) == list:
+                    # if multiple mappings, return as tuple
+                    if len(new_id) > 1:
+                        return 'MULT_MAP'.join(new_id)
+                    else: # retrieve id as string from list
+                        return new_id[0]
+                # if no list is returned by dict.get(), original id is passed
+                return new_id
 
-                interaction_dataframe.loc[mapping_selection,
-                                          col] = interaction_dataframe.loc[mapping_selection,
-                                                                           col].apply(lambda x:
-                                                                                      tuple(mapping_dict[x.split(':')[
-                                                                                          1]]) if x in mapping_dict
-                                                                                      else x)
-    print('Converted all identifiers to UniProt ACs.')
+            for col in columns:     # note: use startswith to avoid mixing ensembl and embl ids...
+                mapping_selection = interaction_dataframe[col].str.startswith(db_tag)
+                interaction_dataframe.loc[mapping_selection, col] = \
+                    interaction_dataframe.loc[mapping_selection, col].apply(lambda x: lambda_helper(x))
+
+                # interaction_dataframe.loc[mapping_selection, col] = \
+                #     interaction_dataframe.loc[mapping_selection, col].apply(lambda x:
+                #                                                             tuple(mapping_dict[x.split(':')[1]])
+                #                                                             if x in mapping_dict else x)
+                # interaction_dataframe.loc[mapping_selection, col].apply(lambda x:
+                #                                                         tuple(mapping_dict.get(x.split(':')[1], x)))
+    print('Converted all found identifiers to UniProt ACs.')
     '''
     # cat <(cut -f1 hpidb2_March14_2017_mitab.txt) <(cut -f2 hpidb2_March14_2017_mitab.txt) | grep entrez | sort -u |
     # sed -rn 's/^.*:(.*)/\1/p' | wc -l
@@ -160,3 +190,33 @@ def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/',
     # grep -P '\treviewed' test.txt | cut -f1 | sort -u | wc -l
     # 510
     '''
+
+def lookup(interaction_dataframe, columns=None):
+    """ Remap identifiers to UniProt AC's.
+
+    Tries to replace non-UniProt AC's for the specified columns of a pandas DataFrame by looking in the unique
+    xref columns.
+    Only replaces entry name if a UniProt AC is found.
+
+    Parameters
+    ----------
+    interaction_dataframe : DataFrame
+        DataFrame containing protein identifiers that need to be remapped to UniProt Accesion Numbers.
+    columns : list
+        The names of the columns containing the identifiers that need to be remapped.
+        (Defaults to None, which uses ['xref_A', 'xref_B', 'protein_xref_1_unique', 'protein_xref_1_unique'].
+
+    Returns
+    -------
+    None
+        Modifies the supplied DataFrame in-place.
+
+    """
+    if not columns:
+        columns = ['xref_A', 'xref_B', 'protein_xref_1_unique', 'protein_xref_2_unique']
+
+    for col_xref, col_lookup in zip(columns[:2], columns[2:]):
+        mapping_selection = ( ~ interaction_dataframe[col_xref].str.contains('uniprot', case=False) &
+                                interaction_dataframe[col_lookup].str.contains('uniprot', case=False))
+        interaction_dataframe.loc[mapping_selection, col_xref] = \
+            interaction_dataframe[mapping_selection, col_lookup].apply(lambda x: x)
