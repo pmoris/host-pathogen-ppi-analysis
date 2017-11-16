@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Main module to parse protein-protein interaction data sets (mitab format), label them with GO and InterPro annotations
+Main module to parse protein-protein interaction datasets (mitab format), label them with GO and InterPro annotations
 and convert them into transaction data sets suitable for frequent item set mining.
 
 Must be run as a script.
@@ -189,7 +189,7 @@ def label_term(label_set, taxid, pathogen_set):
     """Adds host/virus labels to terms and returns string representation (comma separated terms).
 
     Should be called via an apply function that calls it for both partners' term sets (e.g. GO terms) and taxids
-    for each interaction in a data set.
+    for each interaction in a dataset.
 
     Note: currently all hosts are labelled identically because the function simply checks whether a taxid belongs
           to a set of virus taxids.
@@ -216,14 +216,14 @@ def label_term(label_set, taxid, pathogen_set):
         return label_set
     else:
         if taxid in pathogen_set:
-            label = 'virus-'
+            label = 'v@'
         else:
-            label = 'host-'
+            label = 'h@'
 
         labeled_list = []
         for i in label_set:
             labeled_list.append(label + i)
-        return ','.join(labeled_list)
+        return ';'.join(labeled_list)
 
 
 def pathogen_group_mapper(taxid, pathogen_group_dict):
@@ -264,7 +264,7 @@ if __name__ == '__main__':
     # TODO: add arguments for every type of input data source instead of hardcoding directory structure.
     args = parser.parse_args()
 
-    # Read in PPI data sets
+    # Read in PPI datasets
     df_virhost = ppi_import.read_mitab_virhost(r'../../data/raw/ppi_data/VirHostNet_January_2017.txt')
 
     df_hpidb2 = ppi_import.read_mitab_hpidb2(r'../../data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt')
@@ -273,10 +273,11 @@ if __name__ == '__main__':
                                              r'../../data/raw/ppi_data/mi.obo')
 
     # Concatenate the different sources
-    print('Concatenating PPI data sets...')
+    print('Concatenating PPI datasets...')
     df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto])
 
-    # Map Entrez gene id's to UniProt ACs
+    # Map non-UniProt entries to UniProt ACs
+    # id_mapper.lookup(df_concat)
     id_mapper.map2uniprot(df_concat, filepath=r'../../data/interim/mappings/')
     # TODO: no intact-EBI mapping...
 
@@ -304,7 +305,7 @@ if __name__ == '__main__':
     print('\nNumber of duplicated interactions on raw datasets')
     print(np.sum(df_concat.duplicated(subset=['xref_partners_sorted'])))
 
-    print('\nNumber of unique interactions per raw data set')
+    print('\nNumber of unique interactions per raw dataset')
     print(df_concat.groupby('origin')['xref_partners_sorted'].nunique())
     # bash script to check overlap:
     # comm <(cut -f3 -d, phisto_Jan19_2017.csv | sed 's/"//g' | sort -u ) <(cut -f2 hpidb2_March14_2017_mitab.txt | sed s/uniprotkb://g | sort -u)
@@ -317,7 +318,7 @@ if __name__ == '__main__':
     # Remove duplicate interaction pairs (including different detection methods and publications)
     # https://stackoverflow.com/a/41650846
     # https://stackoverflow.com/questions/33042777/
-    # Note that this will result in the first data set (e.g. hpidb2) having priority over the others.
+    # Note that this will result in the first dataset (e.g. hpidb2) having priority over the others.
     df_concat_dedup = df_concat.drop_duplicates(subset=['xref_partners_sorted'], keep='first')
     # df_concat_dedup = df_concat.drop_duplicates(subset=['xref_partners_sorted', 'taxid_B', 'taxid_A'], keep='first')
     df_concat_dedup = df_concat_dedup.reset_index(drop=True)
@@ -511,7 +512,7 @@ if __name__ == '__main__':
 
     # Merge A and B GO columns into one
     has_GO_mask = df_herpes[['xref_A_GO', 'xref_B_GO']].notnull().all(axis=1)
-    combined_GO_labels = df_herpes.loc[has_GO_mask, 'xref_A_GO'] + ',' + df_herpes.loc[has_GO_mask, 'xref_B_GO']
+    combined_GO_labels = df_herpes.loc[has_GO_mask, 'xref_A_GO'] + ';' + df_herpes.loc[has_GO_mask, 'xref_B_GO']
     # updates NaN in called Series/DF with values from argument Series/DF
     # also supplies values for non-existing indices/columns
     # e.g. indices with NaNs were absent from combined_GO_labels Series and are now added again.
@@ -523,7 +524,7 @@ if __name__ == '__main__':
 
     # Merge A and B InterPro columns into one
     has_InterPro_mask = df_herpes[['interpro_A', 'interpro_B']].notnull().all(axis=1)
-    combined_interpro_labels = df_herpes.loc[has_InterPro_mask, 'interpro_A'] + ',' + df_herpes.loc[
+    combined_interpro_labels = df_herpes.loc[has_InterPro_mask, 'interpro_A'] + ';' + df_herpes.loc[
         has_InterPro_mask, 'interpro_B']
     # updates NaN in called Series/DF with values from argument Series/DF
     combined_interpro_labels = combined_interpro_labels.combine_first(df_herpes['interpro_A'])
@@ -553,6 +554,7 @@ if __name__ == '__main__':
     #
     # combine_terms_for_export(df_herpes)
 
+    # Save output
     if not args.dry:
         # Note: Pathlib functionality is broken in Pandas 0.20!
         output_directory = Path(args.output)
@@ -561,6 +563,9 @@ if __name__ == '__main__':
         print('Saving labelled PPI datasets to', output_directory.resolve())
         df_output = df_herpes[['xref_partners_sorted', 'GO', 'interpro']]
         df_output.reset_index(drop=True)
+        df_output = pd.concat([df_output['xref_partners_sorted'],
+                               df_output['GO'].str.split(';', expand=True),
+                               df_output['interpro'].str.split(';', expand=True)], axis=1)
         df_output.to_csv(str(output_directory) + r'/ppi_transactions.csv', sep=',', index=False)
         # NOTE: run sed -i 's/"//g' to remove double quotes and treat GO column as separate items.
 
