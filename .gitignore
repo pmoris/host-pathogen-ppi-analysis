@@ -1,24 +1,8 @@
 *.goa
 *.obo
-ppi_data/VirHostNet_January_2017.txt
-ppi_data/phisto_Jan19_2017.csv
-ppi_data/hpidb2_March14_2017_mitab.txt
-ppi_data/hpidb2_March14_2017_mitab_plus.txt
-taxid_data/taxdump/
+
 \.idea/
 */__pycache__/
-
-go_enrichment_tool/__init__\.py
-
-go_enrichment_tool/enrichment_stats\.py
-
-go_enrichment_tool/gaf_parser\.py
-
-go_enrichment_tool/go_enrichment_script\.py
-
-go_enrichment_tool/genelist_importer\.py
-
-go_enrichment_tool/obo_tools\.py
 
 domain-motif/
 
@@ -29,9 +13,12 @@ docs/\.ipynb_checkpoints/
 data/raw/*
 
 src/data_prep/__pycache__/
-
 src/go_tools/__pycache__/
-
 src/ppi_tools/__pycache__/
+src/mining/MiningPattern2.0b
 
 notebooks/\.ipynb_checkpoints/
+
+notes-to-do\.txt
+
+pattern_mining_tool/

@@ -290,11 +290,9 @@ if __name__ == '__main__':
     # df_concat['xref_partners_sorted'] = pd.Series(map(tuple, xref_partners_sorted_array))
     xref_partners_df = pd.DataFrame(xref_partners_sorted_array, columns=['A', 'B'])
     df_concat['xref_partners_sorted'] = xref_partners_df['A'] + '%' + xref_partners_df['B']
-    # TODO: change into string separated by | (?) rather than tuple.
 
     # Label interactions as being within or between species.
     annotate_inter_intra(df_concat)
-    # TODO: filter on inter-species interactions?
 
     # Filter out intra-species interactions
     print('Omitting intra-species interactions...')
@@ -310,15 +308,15 @@ if __name__ == '__main__':
     print('\nNumber of duplicated interactions on raw datasets')
     print(np.sum(df_concat.duplicated(subset=['xref_partners_sorted'])))
 
-    print('\nNumber of unique interactions per raw dataset')
+    print('\nNumber of unique interactions per raw data set')
     print(df_concat.groupby('origin')['xref_partners_sorted'].nunique())
     # bash script to check overlap:
     # comm <(cut -f3 -d, phisto_Jan19_2017.csv | sed 's/"//g' | sort -u ) <(cut -f2 hpidb2_March14_2017_mitab.txt | sed s/uniprotkb://g | sort -u)
 
     # Check non-UniProt ACs
     print('\nNumber of interactions without UniProt AC')
-    print(df_concat.loc[(~df_concat.xref_A.str.contains('uniprot')) |
-                        (~df_concat.xref_B.str.contains('uniprot'))].groupby('origin').size())
+    print(df_concat.loc[(~df_concat.xref_A.str.contains('uniprot', case=False)) |
+                        (~df_concat.xref_B.str.contains('uniprot', case=False))].groupby('origin').size())
 
     # Remove duplicate interaction pairs (including different detection methods and publications)
     # https://stackoverflow.com/a/41650846
@@ -364,6 +362,17 @@ if __name__ == '__main__':
     df_herpes = df_herpes.reset_index(drop=True)
     print('Omitting all non-UniProt AC entries...')
 
+    # TODO: Filter on interaction types
+    # psi - mi: MI:0915(physical association)
+    # psi - mi: MI:0914(association)
+    # psi - mi: MI:0407(directinteraction)
+    # psi - mi: MI:0403(colocalization)
+    # psi - mi: MI:0217(phosphorylation reaction)
+    # psi - mi: MI:0208(geneticinteraction)
+    # print(df_herpes['interaction_type'].value_counts())
+    # df_herpes = df_herpes.loc[df_herpes.interaction_type.str.contains('association')] # fails due to NaNs... df.isnull().sum()
+
+
     # Print some information about the interactions
     print('\nNumber of inter versus intra interactions:')
     print(df_herpes.groupby(['inter-intra', 'origin']).size())
@@ -401,10 +410,6 @@ if __name__ == '__main__':
     # Count missing values across columns
     print('\nMissing values in each column:')
     print(df_herpes.isnull().sum(axis=0), '\n')
-
-    print('\n\n\n\n\n\nSIZE\n\n\n\n\n\n\n')
-    print(df_herpes.shape)
-    print('\n\n\n\n\n\nSIZE\n\n\n\n\n\n\n')
 
     # Create Gene Ontology dictionaries
     print('Creating Gene Ontology dictionaries...')
@@ -592,7 +597,4 @@ if __name__ == '__main__':
 
         df_herpes.to_csv(str(output_directory) + r'/ppi_network.csv', sep=';', index=False)
 
-        print('\n\n\n\n\n\nSIZE\n\n\n\n\n\n\n')
-        print(df_herpes.shape)
-        print('\n\n\n\n\n\nSIZE\n\n\n\n\n\n\n')
 # TODO: create taxid-pair identifier
