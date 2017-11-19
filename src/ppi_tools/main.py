@@ -116,6 +116,7 @@ def concat_interaction_datasets(list_of_datasets):
         i['origin'] = i.name
 
     concatenated_df = pd.concat(list_of_datasets, axis=0, ignore_index=True, join='outer')
+    concatenated_df.reset_index(inplace=True, drop=True)
     # df_concat = df_concat.drop_duplicates(subset=['xref_partners_sorted'])
 
     return concatenated_df
@@ -277,11 +278,14 @@ if __name__ == '__main__':
     df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto])
 
     # Map non-UniProt entries to UniProt ACs
-    # id_mapper.lookup(df_concat)
     id_mapper.map2uniprot(df_concat, filepath=r'../../data/interim/mappings/')
     # TODO: no intact-EBI mapping...
+    # Remove PPIs with multiple id mappings because otherwise this would artificially inflate their numbers during
+    # frequent item set mining
+    df_concat = id_mapper.remove_mult(df_concat)
 
     # Add unique identifier for interaction pairs
+    # note: absolutely critical to have index from 0 to n here!
     xref_partners_sorted_array = np.sort(np.stack((df_concat.xref_A, df_concat.xref_B), axis=1), axis=1)
     # df_concat['xref_partners_sorted'] = pd.Series(map(tuple, xref_partners_sorted_array))
     xref_partners_df = pd.DataFrame(xref_partners_sorted_array, columns=['A', 'B'])
@@ -295,6 +299,7 @@ if __name__ == '__main__':
     # Filter out intra-species interactions
     print('Omitting intra-species interactions...')
     df_concat = df_concat[df_concat['inter-intra'] == 'inter-species']
+    df_concat = df_concat.reset_index(drop=True)
 
     # Size of each data source
     print('\nData source sizes:\n')
@@ -330,7 +335,7 @@ if __name__ == '__main__':
     # Will come into play when comparing groups and different groups have same interaction
     # Which is not the case here, since both are human herpesvirus 1 strains
     # Similar issue for pubmed ID, method, etc.
-    print('\nOmitting duplicates as defined by protein ACs and taxids.')
+    print('\nOmitting duplicates as defined by UniProt ACs and taxids.')
 
     # Retrieve Herpesviridae (taxid:10292) list, see retrieve_taxids.py script to generate child taxids
     # TODO: import from retrieve_Taxids and create on the spot
@@ -396,6 +401,10 @@ if __name__ == '__main__':
     # Count missing values across columns
     print('\nMissing values in each column:')
     print(df_herpes.isnull().sum(axis=0), '\n')
+
+    print('\n\n\n\n\n\nSIZE\n\n\n\n\n\n\n')
+    print(df_herpes.shape)
+    print('\n\n\n\n\n\nSIZE\n\n\n\n\n\n\n')
 
     # Create Gene Ontology dictionaries
     print('Creating Gene Ontology dictionaries...')
@@ -562,7 +571,7 @@ if __name__ == '__main__':
 
         print('Saving labelled PPI datasets to', output_directory.resolve())
         df_output = df_herpes[['xref_partners_sorted', 'GO', 'interpro']]
-        df_output.reset_index(drop=True)
+        df_output.reset_index(inplace=True, drop=True)
         df_output = pd.concat([df_output['xref_partners_sorted'],
                                df_output['GO'].str.split(';', expand=True),
                                df_output['interpro'].str.split(';', expand=True)], axis=1)
@@ -574,7 +583,7 @@ if __name__ == '__main__':
         for i in pd.unique(df_herpes['pathogen_groups'].dropna()):
             df_output_grouped = df_herpes.loc[df_herpes['pathogen_groups'] == i,
                                               ['xref_partners_sorted', 'GO', 'interpro']]
-            df_output_grouped.reset_index(drop=True)
+            df_output_grouped.reset_index(inplace=True, drop=True)
             df_output_grouped.to_csv(str(output_directory) + r'/' + str(i) + '.csv', sep=',', index=False)
 
         # TODO: df_herpes[['xref_A_GO', 'xref_B_GO']].notnull() how to melt this to 1 column of boolean indices?
@@ -583,5 +592,7 @@ if __name__ == '__main__':
 
         df_herpes.to_csv(str(output_directory) + r'/ppi_network.csv', sep=';', index=False)
 
-
+        print('\n\n\n\n\n\nSIZE\n\n\n\n\n\n\n')
+        print(df_herpes.shape)
+        print('\n\n\n\n\n\nSIZE\n\n\n\n\n\n\n')
 # TODO: create taxid-pair identifier

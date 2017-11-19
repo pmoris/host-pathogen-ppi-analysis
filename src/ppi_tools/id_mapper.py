@@ -86,8 +86,11 @@ def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/',
 
     Replaces non-UniProt AC's for the specified columns of a pandas DataFrame.
     Identifiers that could not be mapped are left unchanged.
-    Identifiers that map to multiple UniProt AC's are concatenated into a long string separated by 'MULT_MAP'.
     Only reviewed identifiers are considered.
+    Identifiers that map to multiple UniProt AC's are concatenated into a long string separated by 'MULT_MAP'.
+    The reason being: passing a list or tuple would upset any str.contains() or str.startswith()
+    lookups from that point onwards (boolean array would contain NaNs).
+
 
     Parameters
     ----------
@@ -104,7 +107,6 @@ def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/',
     -------
     None
         Modifies the supplied DataFrame in-place.
-
     """
     # TODO: automatically retrieve descriptions and identifiers from file.
     # bash one-liner to retrieve data sources
@@ -158,7 +160,7 @@ def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/',
                 new_id = mapping_dict.get(row_entry.split(':')[1], row_entry)
                 # all new mappings are in list format
                 if type(new_id) == list:
-                    # if multiple mappings, return as tuple
+                    # if multiple mappings, return as list
                     if len(new_id) > 1:
                         return 'MULT_MAP'.join(new_id)
                     else: # retrieve id as string from list
@@ -171,12 +173,6 @@ def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/',
                 interaction_dataframe.loc[mapping_selection, col] = \
                     interaction_dataframe.loc[mapping_selection, col].apply(lambda x: lambda_helper(x))
 
-                # interaction_dataframe.loc[mapping_selection, col] = \
-                #     interaction_dataframe.loc[mapping_selection, col].apply(lambda x:
-                #                                                             tuple(mapping_dict[x.split(':')[1]])
-                #                                                             if x in mapping_dict else x)
-                # interaction_dataframe.loc[mapping_selection, col].apply(lambda x:
-                #                                                         tuple(mapping_dict.get(x.split(':')[1], x)))
     print('Converted all found identifiers to UniProt ACs.')
     '''
     # cat <(cut -f1 hpidb2_March14_2017_mitab.txt) <(cut -f2 hpidb2_March14_2017_mitab.txt) | grep entrez | sort -u |
@@ -191,32 +187,69 @@ def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/',
     # 510
     '''
 
-def lookup(interaction_dataframe, columns=None):
-    """ Remap identifiers to UniProt AC's.
+"""
+def explode_mult(interaction_dataframe, columns=None):
+    # 1) select relevant parts of data frame
+    # 2) do list splitting into multiple rows
+    # 3) append to ~original_selection DF
+    # or make it so every identifier is in a list, even if it's a single one
+"""
 
-    Tries to replace non-UniProt AC's for the specified columns of a pandas DataFrame by looking in the unique
-    xref columns.
-    Only replaces entry name if a UniProt AC is found.
+def remove_mult(interaction_dataframe, columns=None):
+    """ Remove PPIs where either entry has multiple mappings to UniProtKB ids.
+    These identifiers should be removed because otherwise this would artificially inflate their numbers during
+    frequent item set mining.
 
     Parameters
     ----------
     interaction_dataframe : DataFrame
-        DataFrame containing protein identifiers that need to be remapped to UniProt Accesion Numbers.
+        DataFrame containing protein identifiers for PPIs.
     columns : list
-        The names of the columns containing the identifiers that need to be remapped.
-        (Defaults to None, which uses ['xref_A', 'xref_B', 'protein_xref_1_unique', 'protein_xref_1_unique'].
+        The names of the columns containing the identifiers that need to be removed.
+        (The defaults are xref_A and xref_B).
 
     Returns
     -------
     None
-        Modifies the supplied DataFrame in-place.
-
+        The subset of the DataFrame with PPIs whose partners have 1 unique mapping to UniProt ACs.
     """
     if not columns:
-        columns = ['xref_A', 'xref_B', 'protein_xref_1_unique', 'protein_xref_2_unique']
+        columns = ['xref_A', 'xref_B']
 
-    for col_xref, col_lookup in zip(columns[:2], columns[2:]):
-        mapping_selection = ( ~ interaction_dataframe[col_xref].str.contains('uniprot', case=False) &
-                                interaction_dataframe[col_lookup].str.contains('uniprot', case=False))
-        interaction_dataframe.loc[mapping_selection, col_xref] = \
-            interaction_dataframe[mapping_selection, col_lookup].apply(lambda x: x)
+    selection = (~interaction_dataframe[columns[0]].str.contains('MULT_MAP') &
+                 ~interaction_dataframe[columns[1]].str.contains('MULT_MAP'))
+
+    print('Omitted {} PPIs due to the existance of multiple mappings.'.format(np.sum(~selection)))
+    interaction_dataframe = interaction_dataframe.loc[selection].apply(lambda x: x)
+    interaction_dataframe = interaction_dataframe.reset_index(drop=True)
+    return interaction_dataframe
+
+# def lookup(interaction_dataframe, columns=None):
+#     """ Remap identifiers to UniProt AC's.
+#
+#     Tries to replace non-UniProt AC's for the specified columns of a pandas DataFrame by looking in the unique
+#     xref columns.
+#     Only replaces entry name if a UniProt AC is found.
+#
+#     Parameters
+#     ----------
+#     interaction_dataframe : DataFrame
+#         DataFrame containing protein identifiers that need to be remapped to UniProt Accesion Numbers.
+#     columns : list
+#         The names of the columns containing the identifiers that need to be remapped.
+#         (Defaults to None, which uses ['xref_A', 'xref_B', 'protein_xref_1_unique', 'protein_xref_1_unique'].
+#
+#     Returns
+#     -------
+#     None
+#         Modifies the supplied DataFrame in-place.
+#
+#     """
+#     if not columns:
+#         columns = ['xref_A', 'xref_B', 'protein_xref_1_unique', 'protein_xref_2_unique']
+#
+#     for col_xref, col_lookup in zip(columns[:2], columns[2:]):
+#         mapping_selection = ( ~ interaction_dataframe[col_xref].str.contains('uniprot', case=False) &
+#                                 interaction_dataframe[col_lookup].str.contains('uniprot', case=False))
+#         interaction_dataframe.loc[mapping_selection, col_xref] = \
+#             interaction_dataframe[mapping_selection, col_lookup].apply(lambda x: x)
