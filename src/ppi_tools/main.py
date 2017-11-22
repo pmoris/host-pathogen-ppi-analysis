@@ -11,8 +11,6 @@ Paths are hard-coded relative to the repository.
 
 # TODO: mutuable list default values should be changed to tuples or if None, set to list
 
-import collections
-
 import os, sys
 sys.path.append(os.path.abspath('..'))
 # or Path('.').parent
@@ -224,7 +222,7 @@ def label_term(label_set, taxid, pathogen_set):
         labeled_list = []
         for i in label_set:
             labeled_list.append(label + i)
-        return ';'.join(labeled_list)
+        return ','.join(labeled_list)
 
 
 def pathogen_group_mapper(taxid, pathogen_group_dict):
@@ -444,7 +442,7 @@ if __name__ == '__main__':
                  'GO:0016032': 'viral process', 'GO:0044215': 'other organism',
                  'GO:0050789': 'regulation of biological process', 'GO:0005515': 'protein binding',
                  'GO:0019012': 'virion', 'GO:0044423': 'virion part', 'GO:0039642': 'virion nucleoid',
-                 'GO:0019028': 'viral capsid', 'GO:0055036':'virion membrane', 'GO:0036338': 'viral membrane',
+                 'GO:0019028': 'viral capsid', 'GO:0055036': 'virion membrane', 'GO:0036338': 'viral membrane',
                  'GO:0098015': 'virus tail'}
     # np.sum(df_herpes1.loc[df_herpes1['xref_A_GO'].notnull(), 'xref_A_GO'].apply(lambda x: True if 'GO:0043657' in x else False))
     # regulation of biological process: 5108 and 2929 in A/B
@@ -528,7 +526,7 @@ if __name__ == '__main__':
 
     # Merge A and B GO columns into one
     has_GO_mask = df_herpes[['xref_A_GO', 'xref_B_GO']].notnull().all(axis=1)
-    combined_GO_labels = df_herpes.loc[has_GO_mask, 'xref_A_GO'] + ';' + df_herpes.loc[has_GO_mask, 'xref_B_GO']
+    combined_GO_labels = df_herpes.loc[has_GO_mask, 'xref_A_GO'] + ',' + df_herpes.loc[has_GO_mask, 'xref_B_GO']
     # updates NaN in called Series/DF with values from argument Series/DF
     # also supplies values for non-existing indices/columns
     # e.g. indices with NaNs were absent from combined_GO_labels Series and are now added again.
@@ -540,7 +538,7 @@ if __name__ == '__main__':
 
     # Merge A and B InterPro columns into one
     has_InterPro_mask = df_herpes[['interpro_A', 'interpro_B']].notnull().all(axis=1)
-    combined_interpro_labels = df_herpes.loc[has_InterPro_mask, 'interpro_A'] + ';' + df_herpes.loc[
+    combined_interpro_labels = df_herpes.loc[has_InterPro_mask, 'interpro_A'] + ',' + df_herpes.loc[
         has_InterPro_mask, 'interpro_B']
     # updates NaN in called Series/DF with values from argument Series/DF
     combined_interpro_labels = combined_interpro_labels.combine_first(df_herpes['interpro_A'])
@@ -579,7 +577,7 @@ if __name__ == '__main__':
         print('Saving labelled PPI datasets to', output_directory.resolve())
         df_output = df_herpes[['xref_partners_sorted', 'GO', 'interpro']]
         df_output.reset_index(inplace=True, drop=True)
-        df_output.to_csv(output_path, sep=';', index=False, header=False)
+        df_output.to_csv(output_path, sep=',', index=False, header=False)
         # still requires script to remove quotes...
         with Path(output_path).open("r") as source:
             data = source.read()
