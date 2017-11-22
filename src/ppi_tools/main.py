@@ -443,7 +443,9 @@ if __name__ == '__main__':
                  'GO:0043657': 'host cell', 'GO:0018995': 'host', 'GO:0044424': 'intracellular part',
                  'GO:0016032': 'viral process', 'GO:0044215': 'other organism',
                  'GO:0050789': 'regulation of biological process', 'GO:0005515': 'protein binding',
-                 'GO:0019012': 'virion', 'GO:0044423': 'virion part'}
+                 'GO:0019012': 'virion', 'GO:0044423': 'virion part', 'GO:0039642': 'virion nucleoid',
+                 'GO:0019028': 'viral capsid', 'GO:0055036':'virion membrane', 'GO:0036338': 'viral membrane',
+                 'GO:0098015': 'virus tail'}
     # np.sum(df_herpes1.loc[df_herpes1['xref_A_GO'].notnull(), 'xref_A_GO'].apply(lambda x: True if 'GO:0043657' in x else False))
     # regulation of biological process: 5108 and 2929 in A/B
     # cell part 6827 and 1
@@ -573,15 +575,24 @@ if __name__ == '__main__':
         # Note: Pathlib functionality is broken in Pandas 0.20!
         output_directory = Path(args.output)
         output_directory.mkdir(exist_ok=True)
-
+        output_path = output_directory / 'ppi_transactions.csv'
         print('Saving labelled PPI datasets to', output_directory.resolve())
         df_output = df_herpes[['xref_partners_sorted', 'GO', 'interpro']]
         df_output.reset_index(inplace=True, drop=True)
-        df_output = pd.concat([df_output['xref_partners_sorted'],
-                               df_output['GO'].str.split(';', expand=True),
-                               df_output['interpro'].str.split(';', expand=True)], axis=1)
-        df_output.to_csv(str(output_directory) + r'/ppi_transactions.csv', sep=',', index=False)
-        # NOTE: run sed -i 's/"//g' to remove double quotes and treat GO column as separate items.
+        df_output.to_csv(output_path, sep=';', index=False, header=False)
+        # still requires script to remove quotes...
+        with Path(output_path).open("r") as source:
+            data = source.read()
+            no_quotes = data.replace('"', '')
+        with Path(output_path).open("w") as target:
+            target.write(no_quotes)
+
+
+        # optional: expand each label into its own column, but introduces a lot of empty columns
+        # df_output = pd.concat([df_output['xref_partners_sorted'],
+        #                        df_output['GO'].str.split(';', expand=True),
+        #                        df_output['interpro'].str.split(';', expand=True)], axis=1)
+        # df_output.to_csv(str(output_directory) + r'/ppi_transactions.csv', sep=',', index=False, header=False, doublequote=False)
 
         # Save to separate transaction datasets for each pathogen group
         # for i in df_herpes['pathogen_groups'].dropna().unique():
@@ -589,7 +600,7 @@ if __name__ == '__main__':
             df_output_grouped = df_herpes.loc[df_herpes['pathogen_groups'] == i,
                                               ['xref_partners_sorted', 'GO', 'interpro']]
             df_output_grouped.reset_index(inplace=True, drop=True)
-            df_output_grouped.to_csv(str(output_directory) + r'/' + str(i) + '.csv', sep=',', index=False)
+            df_output_grouped.to_csv(str(output_directory) + r'/' + str(i) + '.csv', sep=';', index=False, header=False)
 
         # TODO: df_herpes[['xref_A_GO', 'xref_B_GO']].notnull() how to melt this to 1 column of boolean indices?
         # df_herpes[['xref_A_GO', 'xref_B_GO']].notnull().all(axis=1)
