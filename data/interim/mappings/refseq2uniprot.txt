@@ -1,4 +1,4 @@
-yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD8O	isomap:M20171022A7434721E10EE6586998A056CCD0537E189CD8O	Entry	Entry name	Status	Protein names	Gene names	Organism	Length
+yourlist:M20171116AAFB7E4D2F1D05654627429E83DA5CCEDCB0987	isomap:M20171116AAFB7E4D2F1D05654627429E83DA5CCEDCB0987	Entry	Entry name	Status	Protein names	Gene names	Organism	Length
 YP_214011		A0A1S5YGI6	A0A1S5YGI6_MUHV1	unreviewed	M03 protein	m03	Murid herpesvirus 1 (MuHV-1) (Mouse cytomegalovirus)	288
 YP_214043		A0A1S5YH07	A0A1S5YH07_MUHV1	unreviewed	M29.1 protein	m29.1	Murid herpesvirus 1 (MuHV-1) (Mouse cytomegalovirus)	183
 YP_214067		A0A1S5YGR5	A0A1S5YGR5_MUHV1	unreviewed	Envelope glycoprotein B (gB)	M55 gB	Murid herpesvirus 1 (MuHV-1) (Mouse cytomegalovirus)	937

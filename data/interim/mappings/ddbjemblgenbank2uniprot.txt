@@ -1,4 +1,4 @@
-yourlist:M2017102283C3DD8CE55183C76102DC5D3A26728BF0B875W	isomap:M2017102283C3DD8CE55183C76102DC5D3A26728BF0B875W	Entry	Entry name	Status	Protein names	Gene names	Organism	Length
+yourlist:M2017111683C3DD8CE55183C76102DC5D3A26728BF7779D5	isomap:M2017111683C3DD8CE55183C76102DC5D3A26728BF7779D5	Entry	Entry name	Status	Protein names	Gene names	Organism	Length
 M11841		P04022	GAG_SRV1	reviewed	Gag polyprotein (Core polyprotein) [Cleaved into: Matrix protein p10; Core phosphoprotein pp18; p12; Capsid protein p27; Nucleocapsid protein p14; p4]	gag	Simian retrovirus SRV-1	658
 M11841		P04024	VPRT_SRV1	reviewed	Protease (EC 3.4.23.-)	pro prt	Simian retrovirus SRV-1	314
 M11841		P04025	POL_SRV1	reviewed	Pol polyprotein [Cleaved into: Reverse transcriptase/ribonuclease H (RT) (EC 2.7.7.49) (EC 2.7.7.7) (EC 3.1.26.4); Integrase (IN) (EC 2.7.7.-) (EC 3.1.-.-)]	pol	Simian retrovirus SRV-1	867

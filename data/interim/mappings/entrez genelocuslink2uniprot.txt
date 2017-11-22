@@ -1,4 +1,4 @@
-yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A7434721E10EE6586998A056CCD0537E189CD35	Entry	Entry name	Status	Protein names	Gene names	Organism	Length
+yourlist:M20171116F725F458AC8690F874DD868E4ED79B88D9A3DCC	isomap:M20171116F725F458AC8690F874DD868E4ED79B88D9A3DCC	Entry	Entry name	Status	Protein names	Gene names	Organism	Length
 7161		A0A024R4C3	A0A024R4C3_HUMAN	unreviewed	Tumor protein p73, isoform CRA_a	TP73 hCG_19088	Homo sapiens (Human)	636
 7161		A0A0C4DFW9	A0A0C4DFW9_HUMAN	unreviewed	Cellular tumor antigen p53	TP73 hCG_19088	Homo sapiens (Human)	426
 7161		O15350	P73_HUMAN	reviewed	Tumor protein p73 (p53-like transcription factor) (p53-related protein)	TP73 P73	Homo sapiens (Human)	636
@@ -20,7 +20,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 10018		A0A0A0MRE7	A0A0A0MRE7_HUMAN	unreviewed	Bcl-2-like protein 11	BCL2L11	Homo sapiens (Human)	98
 10018		A0A0C4DH20	A0A0C4DH20_HUMAN	unreviewed	Bcl-2-like protein 11	BCL2L11	Homo sapiens (Human)	75
 10018		O43521	B2L11_HUMAN	reviewed	Bcl-2-like protein 11 (Bcl2-L-11) (Bcl2-interacting mediator of cell death)	BCL2L11 BIM	Homo sapiens (Human)	198
-100322881		Q8VD40	Q8VD40_CAVPO	unreviewed	F-box protein OCP1	OCP1 Fbxo2	Cavia porcellus (Guinea pig)	300
+100322881		Q8VD40	Q8VD40_CAVPO	unreviewed	F-box protein 2 (F-box protein OCP1)	OCP1 FBXO2	Cavia porcellus (Guinea pig)	300
 100337511		Q7ZYL5	KF22B_XENLA	reviewed	Kinesin-like protein KIF22-B (Chromokinesin kid-B) (Xkid-B)	kif22-b kid-b	Xenopus laevis (African clawed frog)	650
 10048		A0A024QZW3	A0A024QZW3_HUMAN	unreviewed	RAN binding protein 9, isoform CRA_a	RANBP9 hCG_36756	Homo sapiens (Human)	729
 10048		Q96S59	RANB9_HUMAN	reviewed	Ran-binding protein 9 (RanBP9) (BPM-L) (BPM90) (Ran-binding protein M) (RanBPM) (RanBP7)	RANBP9 RANBPM	Homo sapiens (Human)	729
@@ -54,7 +54,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 10142		Q6PJH3	Q6PJH3_HUMAN	unreviewed	A kinase (PRKA) anchor protein (Yotiao) 9, isoform CRA_c (A-kinase anchor protein 9) (AKAP9 protein)	AKAP9 hCG_1812018	Homo sapiens (Human)	314
 10142		Q99996	AKAP9_HUMAN	reviewed	A-kinase anchor protein 9 (AKAP-9) (A-kinase anchor protein 350 kDa) (AKAP 350) (hgAKAP 350) (A-kinase anchor protein 450 kDa) (AKAP 450) (AKAP 120-like protein) (Centrosome- and Golgi-localized PKN-associated protein) (CG-NAP) (Protein hyperion) (Protein kinase A-anchoring protein 9) (PRKA9) (Protein yotiao)	AKAP9 AKAP350 AKAP450 KIAA0803	Homo sapiens (Human)	3911
 10146		Q13283	G3BP1_HUMAN	reviewed	Ras GTPase-activating protein-binding protein 1 (G3BP-1) (EC 3.6.4.12) (EC 3.6.4.13) (ATP-dependent DNA helicase VIII) (hDH VIII) (GAP SH3 domain-binding protein 1)	G3BP1 G3BP	Homo sapiens (Human)	466
-10146		Q5U0Q1	Q5U0Q1_HUMAN	unreviewed	Ras-GTPase-activating protein SH3-domain-binding protein (Ras-GTPase-activating protein SH3-domain-binding protein, isoform CRA_a) (Uncharacterized protein DKFZp686L1159) (cDNA, FLJ92947, Homo sapiens Ras-GTPase-activating protein SH3-domain-bindingprotein (G3BP), mRNA)	DKFZp686L1159 G3BP hCG_39146	Homo sapiens (Human)	466
+10146		Q5U0Q1	Q5U0Q1_HUMAN	unreviewed	Ras-GTPase-activating protein SH3-domain-binding protein (Ras-GTPase-activating protein SH3-domain-binding protein, isoform CRA_a) (Uncharacterized protein DKFZp686L1159) (cDNA, FLJ92947, Homo sapiens Ras-GTPase-activating protein SH3-domain-bindingprotein (G3BP), mRNA)	G3BP DKFZp686L1159 hCG_39146	Homo sapiens (Human)	466
 10146		Q6ZP53	Q6ZP53_HUMAN	unreviewed	cDNA FLJ26493 fis, clone KDN06317, highly similar to Ras-GTPase-activating protein binding protein 1		Homo sapiens (Human)	307
 10155		Q13263	TIF1B_HUMAN	reviewed	Transcription intermediary factor 1-beta (TIF1-beta) (E3 SUMO-protein ligase TRIM28) (EC 2.3.2.27) (KRAB-associated protein 1) (KAP-1) (KRAB-interacting protein 1) (KRIP-1) (Nuclear corepressor KAP-1) (RING finger protein 96) (RING-type E3 ubiquitin transferase TIF1-beta) (Tripartite motif-containing protein 28)	TRIM28 KAP1 RNF96 TIF1B	Homo sapiens (Human)	835
 10159		O75787	RENR_HUMAN	reviewed	Renin receptor (ATPase H(+)-transporting lysosomal accessory protein 2) (ATPase H(+)-transporting lysosomal-interacting protein 2) (ER-localized type I transmembrane adaptor) (Embryonic liver differentiation factor 10) (N14F) (Renin/prorenin receptor) (Vacuolar ATP synthase membrane sector-associated protein M8-9) (ATP6M8-9) (V-ATPase M8.9 subunit)	ATP6AP2 ATP6IP2 CAPER ELDF10 HT028 MSTP009 PSEC0072	Homo sapiens (Human)	350
@@ -311,7 +311,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 10987		A0A024R7W9	A0A024R7W9_HUMAN	unreviewed	COP9 constitutive photomorphogenic homolog subunit 5 (Arabidopsis), isoform CRA_a (Testis secretory sperm-binding protein Li 231m)	COPS5 hCG_27806	Homo sapiens (Human)	334
 10987		Q92905	CSN5_HUMAN	reviewed	COP9 signalosome complex subunit 5 (SGN5) (Signalosome subunit 5) (EC 3.4.-.-) (Jun activation domain-binding protein 1)	COPS5 CSN5 JAB1	Homo sapiens (Human)	334
 10989		Q16891	MIC60_HUMAN	reviewed	MICOS complex subunit MIC60 (Cell proliferation-inducing gene 4/52 protein) (Mitochondrial inner membrane protein) (Mitofilin) (p87/89)	IMMT HMP MIC60 MINOS2 PIG4 PIG52	Homo sapiens (Human)	758
-10992		Q13435	SF3B2_HUMAN	reviewed	Splicing factor 3B subunit 2 (Pre-mRNA-splicing factor SF3b 145 kDa subunit) (SF3b145) (SF3b150) (Spliceosome-associated protein 145) (SAP 145)	SF3B2 SAP145	Homo sapiens (Human)	895
+10992		Q13435	SF3B2_HUMAN	reviewed	Splicing factor 3B subunit 2 (Pre-mRNA-splicing factor SF3b 145 kDa subunit) (SF3b145) (Spliceosome-associated protein 145) (SAP 145)	SF3B2 SAP145	Homo sapiens (Human)	895
 10999		A0A024R8D2	A0A024R8D2_HUMAN	unreviewed	Solute carrier family 27 (Fatty acid transporter), member 4, isoform CRA_a	SLC27A4 hCG_2039405	Homo sapiens (Human)	643
 10999		Q6P1M0	S27A4_HUMAN	reviewed	Long-chain fatty acid transport protein 4 (FATP-4) (Fatty acid transport protein 4) (EC 6.2.1.-) (Solute carrier family 27 member 4)	SLC27A4 ACSVL4 FATP4	Homo sapiens (Human)	643
 11033		A8K3A2	A8K3A2_HUMAN	unreviewed	cDNA FLJ77789		Homo sapiens (Human)	302
@@ -334,7 +334,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 1107		Q12873	CHD3_HUMAN	reviewed	Chromodomain-helicase-DNA-binding protein 3 (CHD-3) (EC 3.6.4.12) (ATP-dependent helicase CHD3) (Mi-2 autoantigen 240 kDa protein) (Mi2-alpha) (Zinc finger helicase) (hZFH)	CHD3	Homo sapiens (Human)	2000
 1107		Q2TAZ1	Q2TAZ1_HUMAN	unreviewed	CHD3 protein (Fragment)	CHD3	Homo sapiens (Human)	661
 11079		O15258	RER1_HUMAN	reviewed	Protein RER1	RER1	Homo sapiens (Human)	196
-11079		Q5T094	Q5T094_HUMAN	unreviewed	RER1 retention in endoplasmic reticulum 1 homolog (S. cerevisiae), isoform CRA_a (Similar to S. cerevisiae RER1) (cDNA FLJ78405, highly similar to Homo sapiens RER1 retention in endoplasmic reticulum 1 homolog (S. cerevisiae), mRNA)	RER1 hCG_24604	Homo sapiens (Human)	196
+11079		Q5T094	Q5T094_HUMAN	unreviewed	Protein RER1	RER1 hCG_24604	Homo sapiens (Human)	196
 1108		F5GWX5	F5GWX5_HUMAN	unreviewed	Chromodomain-helicase-DNA-binding protein 4	CHD4	Homo sapiens (Human)	1905
 1108		Q14839	CHD4_HUMAN	reviewed	Chromodomain-helicase-DNA-binding protein 4 (CHD-4) (EC 3.6.4.12) (ATP-dependent helicase CHD4) (Mi-2 autoantigen 218 kDa protein) (Mi2-beta)	CHD4	Homo sapiens (Human)	1912
 11091		P61964	WDR5_HUMAN	reviewed	WD repeat-containing protein 5 (BMP2-induced 3-kb gene protein)	WDR5 BIG3	Homo sapiens (Human)	334
@@ -604,9 +604,9 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 18983		Q3TLK9	Q3TLK9_MOUSE	unreviewed	CCR4-NOT transcription complex subunit 7	Cnot7	Mus musculus (Mouse)	248
 18983		Q543X5	Q543X5_MOUSE	unreviewed	CCR4-NOT transcription complex, subunit 7, isoform CRA_b	Cnot7 mCG_4614	Mus musculus (Mouse)	285
 18983		Q60809	CNOT7_MOUSE	reviewed	CCR4-NOT transcription complex subunit 7 (EC 3.1.13.4) (CCR4-associated factor 1) (CAF-1)	Cnot7 Caf1	Mus musculus (Mouse)	285
-19016		M1VPI1	M1VPI1_MOUSE	unreviewed	Peroxisome proliferator-activated receptor gamma	Pparg	Mus musculus (Mouse)	475
+19016		M1VPI1	M1VPI1_MOUSE	unreviewed	Peroxisome proliferator-activated receptor gamma (PPAR-gamma) (Nuclear receptor subfamily 1 group C member 3)	Pparg PPARG	Mus musculus (Mouse)	475
 19016		P37238	PPARG_MOUSE	reviewed	Peroxisome proliferator-activated receptor gamma (PPAR-gamma) (Nuclear receptor subfamily 1 group C member 3)	Pparg Nr1c3	Mus musculus (Mouse)	505
-19016		Q6GU14	Q6GU14_MOUSE	unreviewed	Peroxisome proliferator-activated receptor gamma (Peroxisome proliferator-activated receptor gamma isoform 2) (Peroxisome proliferator-activated receptor gamma transcript 2)	Pparg	Mus musculus (Mouse)	505
+19016		Q6GU14	Q6GU14_MOUSE	unreviewed	Peroxisome proliferator-activated receptor gamma (PPAR-gamma) (Nuclear receptor subfamily 1 group C member 3)	Pparg PPARG	Mus musculus (Mouse)	505
 191		P23526	SAHH_HUMAN	reviewed	Adenosylhomocysteinase (AdoHcyase) (EC 3.3.1.1) (S-adenosyl-L-homocysteine hydrolase)	AHCY SAHH	Homo sapiens (Human)	432
 191		Q1RMG2	Q1RMG2_HUMAN	unreviewed	Adenosylhomocysteinase (EC 3.3.1.1)	AHCY	Homo sapiens (Human)	306
 1915		P68104	EF1A1_HUMAN	reviewed	Elongation factor 1-alpha 1 (EF-1-alpha-1) (Elongation factor Tu) (EF-Tu) (Eukaryotic elongation factor 1 A-1) (eEF1A-1) (Leukocyte receptor cluster member 7)	EEF1A1 EEF1A EF1A LENG7	Homo sapiens (Human)	462
@@ -652,7 +652,6 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 2017		Q53HG7	Q53HG7_HUMAN	unreviewed	Cortactin isoform a variant (Fragment)		Homo sapiens (Human)	550
 201931		Q8IY95	TM192_HUMAN	reviewed	Transmembrane protein 192	TMEM192	Homo sapiens (Human)	271
 2023		A0A024R4F1	A0A024R4F1_HUMAN	unreviewed	Enolase 1, (Alpha), isoform CRA_a (Epididymis secretory protein Li 17)	ENO1 HEL-S-17 hCG_22399	Homo sapiens (Human)	434
-2023		E2DRY6	E2DRY6_HUMAN	unreviewed	C-myc promoter-binding protein 1		Homo sapiens (Human)	338
 2023		P06733	ENOA_HUMAN	reviewed	Alpha-enolase (EC 4.2.1.11) (2-phospho-D-glycerate hydro-lyase) (C-myc promoter-binding protein) (Enolase 1) (MBP-1) (MPB-1) (Non-neural enolase) (NNE) (Phosphopyruvate hydratase) (Plasminogen-binding protein)	ENO1 ENO1L1 MBPB1 MPB1	Homo sapiens (Human)	434
 2029		O43768	ENSA_HUMAN	reviewed	Alpha-endosulfine (ARPP-19e)	ENSA	Homo sapiens (Human)	121
 203068		B4DMJ5	B4DMJ5_HUMAN	unreviewed	cDNA FLJ53012, highly similar to Tubulin beta-7 chain		Homo sapiens (Human)	242
@@ -661,7 +660,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 203068		P07437	TBB5_HUMAN	reviewed	Tubulin beta chain (Tubulin beta-5 chain)	TUBB TUBB5 OK/SW-cl.56	Homo sapiens (Human)	444
 203068		Q5ST81	Q5ST81_HUMAN	unreviewed	Tubulin beta chain	TUBB	Homo sapiens (Human)	372
 203068		Q5SU16	Q5SU16_HUMAN	unreviewed	Tubulin beta chain	TUBB OK/SW-cl.56 hCG_26016	Homo sapiens (Human)	444
-2033		Q09472	EP300_HUMAN	reviewed	Histone acetyltransferase p300 (p300 HAT) (EC 2.3.1.48) (E1A-associated protein p300)	EP300 P300	Homo sapiens (Human)	2414
+2033		Q09472	EP300_HUMAN	reviewed	Histone acetyltransferase p300 (p300 HAT) (EC 2.3.1.48) (E1A-associated protein p300) (Histone butyryltransferase p300) (EC 2.3.1.-) (Histone crotonyltransferase p300) (EC 2.3.1.-) (Protein propionyltransferase p300) (EC 2.3.1.-)	EP300 P300	Homo sapiens (Human)	2414
 2033		Q7Z6C1	Q7Z6C1_HUMAN	unreviewed	EP300 protein (Fragment)	EP300	Homo sapiens (Human)	1553
 2035		P11171	41_HUMAN	reviewed	Protein 4.1 (P4.1) (4.1R) (Band 4.1) (EPB4.1)	EPB41 E41P	Homo sapiens (Human)	864
 2035		Q1WWM3	Q1WWM3_HUMAN	unreviewed	EPB41 protein (Fragment)	EPB41	Homo sapiens (Human)	742
@@ -809,7 +808,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 23175		Q14693	LPIN1_HUMAN	reviewed	Phosphatidate phosphatase LPIN1 (EC 3.1.3.4) (Lipin-1)	LPIN1 KIAA0188	Homo sapiens (Human)	890
 2318		Q14315	FLNC_HUMAN	reviewed	Filamin-C (FLN-C) (FLNc) (ABP-280-like protein) (ABP-L) (Actin-binding-like protein) (Filamin-2) (Gamma-filamin)	FLNC ABPL FLN2	Homo sapiens (Human)	2725
 2318		Q59H94	Q59H94_HUMAN	unreviewed	Gamma filamin variant (Fragment)		Homo sapiens (Human)	1342
-23184		Q14696	MESD_HUMAN	reviewed	LDLR chaperone MESD (Mesoderm development candidate 2) (Mesoderm development protein) (Renal carcinoma antigen NY-REN-61)	MESDC2 KIAA0081 MESD UNQ1911/PRO4369	Homo sapiens (Human)	234
+23184		Q14696	MESD_HUMAN	reviewed	LRP chaperone MESD (LDLR chaperone MESD) (Mesoderm development LRP chaperone MESD) (Mesoderm development candidate 2) (Mesoderm development protein) (Renal carcinoma antigen NY-REN-61)	MESD KIAA0081 MESDC2 MESDM UNQ1911/PRO4369	Homo sapiens (Human)	234
 23186		Q9UKL0	RCOR1_HUMAN	reviewed	REST corepressor 1 (Protein CoREST)	RCOR1 KIAA0071 RCOR	Homo sapiens (Human)	485
 23192		B3KVU2	B3KVU2_HUMAN	unreviewed	Cysteine protease (EC 3.4.22.-)		Homo sapiens (Human)	146
 23192		Q9Y4P1	ATG4B_HUMAN	reviewed	Cysteine protease ATG4B (EC 3.4.22.-) (AUT-like 1 cysteine endopeptidase) (Autophagin-1) (Autophagy-related cysteine endopeptidase 1) (Autophagy-related protein 4 homolog B) (hAPG4B)	ATG4B APG4B AUTL1 KIAA0943	Homo sapiens (Human)	393
@@ -998,7 +997,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 25940		I6L9E8	I6L9E8_HUMAN	unreviewed	Family with sequence similarity 98, member A	FAM98A	Homo sapiens (Human)	518
 25940		Q8NCA5	FA98A_HUMAN	reviewed	Protein FAM98A	FAM98A	Homo sapiens (Human)	519
 25942		Q96ST3	SIN3A_HUMAN	reviewed	Paired amphipathic helix protein Sin3a (Histone deacetylase complex subunit Sin3a) (Transcriptional corepressor Sin3a)	SIN3A	Homo sapiens (Human)	1273
-25962		Q69YN4	VIR_HUMAN	reviewed	Protein virilizer homolog	KIAA1429 MSTP054	Homo sapiens (Human)	1812
+25962		Q69YN4	VIR_HUMAN	reviewed	Protein virilizer homolog	VIRMA KIAA1429 MSTP054	Homo sapiens (Human)	1812
 2597		P04406	G3P_HUMAN	reviewed	Glyceraldehyde-3-phosphate dehydrogenase (GAPDH) (EC 1.2.1.12) (Peptidyl-cysteine S-nitrosylase GAPDH) (EC 2.6.99.-)	GAPDH GAPD CDABP0047 OK/SW-cl.12	Homo sapiens (Human)	335
 2597		V9HVZ4	V9HVZ4_HUMAN	unreviewed	Glyceraldehyde-3-phosphate dehydrogenase (EC 1.2.1.12)	HEL-S-162eP	Homo sapiens (Human)	335
 26031		Q9H4L5	OSBL3_HUMAN	reviewed	Oxysterol-binding protein-related protein 3 (ORP-3) (OSBP-related protein 3)	OSBPL3 KIAA0704 ORP3 OSBP3	Homo sapiens (Human)	887
@@ -1014,7 +1013,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 26135		Q63HR1	Q63HR1_HUMAN	unreviewed	Uncharacterized protein DKFZp686P17171	DKFZp686P17171	Homo sapiens (Human)	387
 26135		Q8NC51	PAIRB_HUMAN	reviewed	Plasminogen activator inhibitor 1 RNA-binding protein (PAI1 RNA-binding protein 1) (PAI-RBP1) (SERPINE1 mRNA-binding protein 1)	SERBP1 PAIRBP1 CGI-55	Homo sapiens (Human)	408
 26156		O76021	RL1D1_HUMAN	reviewed	Ribosomal L1 domain-containing protein 1 (CATX-11) (Cellular senescence-inhibited gene protein) (Protein PBK1)	RSL1D1 CATX11 CSIG PBK1 L12	Homo sapiens (Human)	490
-26168		Q9H4L4	SENP3_HUMAN	reviewed	Sentrin-specific protease 3 (EC 3.4.22.68) (SUMO-1-specific protease 3) (Sentrin/SUMO-specific protease SENP3)	SENP3 SSP3 SUSP3	Homo sapiens (Human)	574
+26168		Q9H4L4	SENP3_HUMAN	reviewed	Sentrin-specific protease 3 (EC 3.4.22.-) (SUMO-1-specific protease 3) (Sentrin/SUMO-specific protease SENP3)	SENP3 SSP3 SUSP3	Homo sapiens (Human)	574
 26270		Q9NRD1	FBX6_HUMAN	reviewed	F-box only protein 6 (F-box protein that recognizes sugar chains 2) (F-box/G-domain protein 2)	FBXO6 FBG2 FBS2 FBX6	Homo sapiens (Human)	293
 26273		Q49AF1	Q49AF1_HUMAN	unreviewed	F-box only protein 3 (FBXO3 protein) (cDNA, FLJ79185, highly similar to F-box only protein 3)	FBXO3	Homo sapiens (Human)	158
 26273		Q9UK99	FBX3_HUMAN	reviewed	F-box only protein 3	FBXO3 FBX3	Homo sapiens (Human)	471
@@ -1177,7 +1176,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 28977		Q9Y6G3	RM42_HUMAN	reviewed	39S ribosomal protein L42, mitochondrial (L42mt) (MRP-L42) (39S ribosomal protein L31, mitochondrial) (L31mt) (MRP-L31) (Mitochondrial large ribosomal subunit protein mL42)	MRPL42 MRPL31 MRPS32 RPML31 HSPC204 PTD007	Homo sapiens (Human)	142
 28988		B4DUF9	B4DUF9_HUMAN	unreviewed	cDNA FLJ59432, highly similar to Drebrin-like protein		Homo sapiens (Human)	336
 28988		Q9UJU6	DBNL_HUMAN	reviewed	Drebrin-like protein (Cervical SH3P7) (Cervical mucin-associated protein) (Drebrin-F) (HPK1-interacting protein of 55 kDa) (HIP-55) (SH3 domain-containing protein 7)	DBNL CMAP SH3P7 PP5423	Homo sapiens (Human)	430
-29072		Q9BYW2	SETD2_HUMAN	reviewed	Histone-lysine N-methyltransferase SETD2 (EC 2.1.1.43) (HIF-1) (Huntingtin yeast partner B) (Huntingtin-interacting protein 1) (HIP-1) (Huntingtin-interacting protein B) (Lysine N-methyltransferase 3A) (SET domain-containing protein 2) (hSET2) (p231HBP)	SETD2 HIF1 HYPB KIAA1732 KMT3A SET2 HSPC069	Homo sapiens (Human)	2564
+29072		Q9BYW2	SETD2_HUMAN	reviewed	Histone-lysine N-methyltransferase SETD2 (EC 2.1.1.43) (HIF-1) (Huntingtin yeast partner B) (Huntingtin-interacting protein 1) (HIP-1) (Huntingtin-interacting protein B) (Lysine N-methyltransferase 3A) (Protein-lysine N-methyltransferase SETD2) (EC 2.1.1.-) (SET domain-containing protein 2) (hSET2) (p231HBP)	SETD2 HIF1 HYPB KIAA1732 KMT3A SET2 HSPC069	Homo sapiens (Human)	2564
 2908		B7Z7I2	B7Z7I2_HUMAN	unreviewed	cDNA FLJ50281, highly similar to Glucocorticoid receptor		Homo sapiens (Human)	380
 2908		E5KQF5	E5KQF5_HUMAN	unreviewed	Glucocorticoid receptor (Nuclear receptor subfamily 3, group C, member 1 (Glucocorticoid receptor), isoform CRA_b)	NR3C1 hCG_37601	Homo sapiens (Human)	742
 2908		E5KQF6	E5KQF6_HUMAN	unreviewed	Glucocorticoid receptor (Nuclear receptor subfamily 3, group C, member 1 (Glucocorticoid receptor), isoform CRA_a)	NR3C1 hCG_37601	Homo sapiens (Human)	778
@@ -1220,7 +1219,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 2980		Q02747	GUC2A_HUMAN	reviewed	Guanylin (Guanylate cyclase activator 2A) (Guanylate cyclase-activating protein 1) (Guanylate cyclase-activating protein I) (GCAP-I) [Cleaved into: HMW-guanylin; Guanylin]	GUCA2A GUCA2	Homo sapiens (Human)	115
 29843		Q6N001	Q6N001_HUMAN	unreviewed	Uncharacterized protein DKFZp686L1432	DKFZp686L1432	Homo sapiens (Human)	162
 29843		Q7Z3G1	Q7Z3G1_HUMAN	unreviewed	Uncharacterized protein DKFZp686P15142	DKFZp686P15142	Homo sapiens (Human)	123
-29843		Q9P0U3	SENP1_HUMAN	reviewed	Sentrin-specific protease 1 (EC 3.4.22.68) (Sentrin/SUMO-specific protease SENP1)	SENP1	Homo sapiens (Human)	644
+29843		Q9P0U3	SENP1_HUMAN	reviewed	Sentrin-specific protease 1 (EC 3.4.22.-) (Sentrin/SUMO-specific protease SENP1)	SENP1	Homo sapiens (Human)	644
 29882		Q9UJX6	ANC2_HUMAN	reviewed	Anaphase-promoting complex subunit 2 (APC2) (Cyclosome subunit 2)	ANAPC2 APC2 KIAA1406	Homo sapiens (Human)	822
 29915		Q9Y5Z7	HCFC2_HUMAN	reviewed	Host cell factor 2 (HCF-2) (C2 factor)	HCFC2	Homo sapiens (Human)	792
 29920		A0A087WTV6	A0A087WTV6_HUMAN	unreviewed	Pyrroline-5-carboxylate reductase 2	PYCR2	Homo sapiens (Human)	246
@@ -1249,12 +1248,12 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 3015		P0C0S5	H2AZ_HUMAN	reviewed	Histone H2A.Z (H2A/z)	H2AFZ H2AZ	Homo sapiens (Human)	128
 3017		A0A024QZZ7	A0A024QZZ7_HUMAN	unreviewed	Histone H2B	HIST1H2BD hCG_1640483	Homo sapiens (Human)	126
 3017		P58876	H2B1D_HUMAN	reviewed	Histone H2B type 1-D (HIRA-interacting protein 2) (Histone H2B.1 B) (Histone H2B.b) (H2B/b)	HIST1H2BD H2BFB HIRIP2	Homo sapiens (Human)	126
-8339		B2R4S9	B2R4S9_HUMAN	unreviewed	Histone H2B	HIST1H2BI HIST1H2BC HIST1H2BE HIST1H2BF HIST1H2BG hCG_1640484 hCG_1640985 hCG_1641780 hCG_1787353 hCG_1787365	Homo sapiens (Human)	126
+8339		B2R4S9	B2R4S9_HUMAN	unreviewed	Histone H2B	HIST1H2BC HIST1H2BE HIST1H2BF HIST1H2BG HIST1H2BI hCG_1640484 hCG_1640985 hCG_1641780 hCG_1787353 hCG_1787365	Homo sapiens (Human)	126
 3017,8339	,	P62807	H2B1C_HUMAN	reviewed	Histone H2B type 1-C/E/F/G/I (Histone H2B.1 A) (Histone H2B.a) (H2B/a) (Histone H2B.g) (H2B/g) (Histone H2B.h) (H2B/h) (Histone H2B.k) (H2B/k) (Histone H2B.l) (H2B/l)	HIST1H2BC H2BFL; HIST1H2BE H2BFH; HIST1H2BF H2BFG; HIST1H2BG H2BFA; HIST1H2BI H2BFK	Homo sapiens (Human)	126
 3018		P33778	H2B1B_HUMAN	reviewed	Histone H2B type 1-B (Histone H2B.1) (Histone H2B.f) (H2B/f)	HIST1H2BB H2BFF	Homo sapiens (Human)	126
 302		A0A024R5Z7	A0A024R5Z7_HUMAN	unreviewed	Annexin	ANXA2 hCG_2004404	Homo sapiens (Human)	339
 302		P07355	ANXA2_HUMAN	reviewed	Annexin A2 (Annexin II) (Annexin-2) (Calpactin I heavy chain) (Calpactin-1 heavy chain) (Chromobindin-8) (Lipocortin II) (Placental anticoagulant protein IV) (PAP-IV) (Protein I) (p36)	ANXA2 ANX2 ANX2L4 CAL1H LPC2D	Homo sapiens (Human)	339
-3021,3020	,	B2R4P9	B2R4P9_HUMAN	unreviewed	Histone H3	H3F3A H3F3B hCG_1984517 hCG_1989319	Homo sapiens (Human)	136
+3021,3020	,	B2R4P9	B2R4P9_HUMAN	unreviewed	Histone H3	H3F3B H3F3A hCG_1984517 hCG_1989319	Homo sapiens (Human)	136
 3021,3020	,	P84243	H33_HUMAN	reviewed	Histone H3.3	H3F3A H3.3A H3F3 PP781; H3F3B H3.3B	Homo sapiens (Human)	136
 3030		E9KL44	E9KL44_HUMAN	unreviewed	Epididymis tissue sperm binding protein Li 14m		Homo sapiens (Human)	763
 3030		P40939	ECHA_HUMAN	reviewed	Trifunctional enzyme subunit alpha, mitochondrial (78 kDa gastrin-binding protein) (TP-alpha) [Includes: Long-chain enoyl-CoA hydratase (EC 4.2.1.17); Long chain 3-hydroxyacyl-CoA dehydrogenase (EC 1.1.1.211)]	HADHA HADH	Homo sapiens (Human)	763
@@ -1289,12 +1288,12 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 31		B2ZZ90	B2ZZ90_HUMAN	unreviewed	Acetyl-Coenzyme A carboxylase alpha (HCG30204, isoform CRA_b)	ACACA hCG_30204	Homo sapiens (Human)	2346
 31		Q13085	ACACA_HUMAN	reviewed	Acetyl-CoA carboxylase 1 (ACC1) (EC 6.4.1.2) (ACC-alpha) [Includes: Biotin carboxylase (EC 6.3.4.14)]	ACACA ACAC ACC1 ACCA	Homo sapiens (Human)	2346
 31		Q7Z5W8	Q7Z5W8_HUMAN	unreviewed	ACACA protein (Fragment)	ACACA	Homo sapiens (Human)	690
-3105		B1PKY1	B1PKY1_HUMAN	unreviewed	MHC class I antigen	HLA-A	Homo sapiens (Human)	365
+3105		B1PKY1	B1PKY1_HUMAN	unreviewed	MHC class I antigen	HLA-A HLA	Homo sapiens (Human)	365
 3105		B2R7U3	B2R7U3_HUMAN	unreviewed	cDNA, FLJ93604, highly similar to Homo sapiens major histocompatibility complex, class I, A (HLA-A),mRNA		Homo sapiens (Human)	365
 3105		O78126	O78126_HUMAN	unreviewed	MHC class I HLA-A	MHC class I HLA-A	Homo sapiens (Human)	362
 3105		P04439	1A03_HUMAN	reviewed	HLA class I histocompatibility antigen, A-3 alpha chain (MHC class I antigen A*3)	HLA-A HLAA	Homo sapiens (Human)	365
 3105		P30443	1A01_HUMAN	reviewed	HLA class I histocompatibility antigen, A-1 alpha chain (MHC class I antigen A*1)	HLA-A HLAA	Homo sapiens (Human)	365
-3105		Q5SUL5	Q5SUL5_HUMAN	unreviewed	MHC class I antigen	HLA-A	Homo sapiens (Human)	365
+3105		Q5SUL5	Q5SUL5_HUMAN	unreviewed	MHC class I antigen	HLA-A HLA	Homo sapiens (Human)	365
 3106		E5FQ95	E5FQ95_HUMAN	unreviewed	MHC class I antigen	HLA-B	Homo sapiens (Human)	362
 3106		P01889	1B07_HUMAN	reviewed	HLA class I histocompatibility antigen, B-7 alpha chain (MHC class I antigen B*7)	HLA-B HLAB	Homo sapiens (Human)	362
 3107		O19617	O19617_HUMAN	unreviewed	HLA class I antigen (HLA class I histocompatibility antigen, Cw-6 alpha chain) (HLA-C protein) (MHC class I antigen) (Major histocompatibility complex, class I, C)	HLA-C HLA-Cw	Homo sapiens (Human)	366
@@ -1302,7 +1301,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 3107		Q6R739	Q6R739_HUMAN	unreviewed	HLA class I antigen (MHC class I antigen)	HLA-Cw HLA-C	Homo sapiens (Human)	366
 3107		Q95HC2	Q95HC2_HUMAN	unreviewed	HLA-C protein (Fragment)	HLA-C	Homo sapiens (Human)	365
 3140		Q95460	HMR1_HUMAN	reviewed	Major histocompatibility complex class I-related gene protein (MHC class I-related gene protein) (Class I histocompatibility antigen-like protein)	MR1	Homo sapiens (Human)	341
-31405		M9NDP1	M9NDP1_DROME	unreviewed	Cut up, isoform E (EC 3.6.1.3) (GEO12310p1)	ctp anon-WO03040301.128 Cdlc1 Ctp Ddlc-1 Ddlc1 ddlc1 Dlc dlc DLC8 Dmel\CG6998 l(1)G0153 l(1)G0204 l(1)G0207 l(1)G0244 l(1)G0248 l(1)G0338 l(1)G0371 l(1)G0387 l(1)G0432 l(1)G0445 LC8 lincRNA.S8635 CG6998 Dmel_CG6998	Drosophila melanogaster (Fruit fly)	89
+31405		M9NDP1	M9NDP1_DROME	unreviewed	Cut up, isoform E (EC 3.6.1.3) (GEO12310p1)	ctp anon-WO03040301.128 Cdlc1 CG6998 Ctp Ddlc-1 Ddlc1 ddlc1 Dlc dlc DLC8 Dmel\CG6998 l(1)G0153 l(1)G0204 l(1)G0207 l(1)G0244 l(1)G0248 l(1)G0338 l(1)G0371 l(1)G0387 l(1)G0432 l(1)G0445 LC8 lincRNA.S8635 Dmel_CG6998	Drosophila melanogaster (Fruit fly)	89
 31405		Q24117	DYL1_DROME	reviewed	Dynein light chain 1, cytoplasmic (8 kDa dynein light chain) (Cut up protein)	ctp Cdlc1 ddlc1 CG6998	Drosophila melanogaster (Fruit fly)	89
 3146		A0A024RDR0	A0A024RDR0_HUMAN	unreviewed	High-mobility group box 1, isoform CRA_a	HMGB1 hCG_2020366	Homo sapiens (Human)	215
 3146		P09429	HMGB1_HUMAN	reviewed	High mobility group protein B1 (High mobility group protein 1) (HMG-1)	HMGB1 HMG1	Homo sapiens (Human)	215
@@ -1310,8 +1309,8 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 3151		P05204	HMGN2_HUMAN	reviewed	Non-histone chromosomal protein HMG-17 (High mobility group nucleosome-binding domain-containing protein 2)	HMGN2 HMG17	Homo sapiens (Human)	90
 3159		P17096	HMGA1_HUMAN	reviewed	High mobility group protein HMG-I/HMG-Y (HMG-I(Y)) (High mobility group AT-hook protein 1) (High mobility group protein A1) (High mobility group protein R)	HMGA1 HMGIY	Homo sapiens (Human)	107
 3159		Q5T6U8	Q5T6U8_HUMAN	unreviewed	High mobility group AT-hook 1	HMGA1	Homo sapiens (Human)	96
-31598		Q9W3Y1	Q9W3Y1_DROME	unreviewed	Cdc7 kinase, isoform A (EC 2.7.11.-) (EC 2.7.11.13)	Cdc7 anon-WO03040301.250 cdc7 cdc7-related CT25076 Dmel\CG32742 L(1)G0148 l(1)G0148 l(1)G0149 l(1)G0461 CG32742 CG8655 CG8656 Dmel_CG32742	Drosophila melanogaster (Fruit fly)	700
-31598		X2JCT3	X2JCT3_DROME	unreviewed	Cdc7 kinase, isoform B (EC 2.7.11.-) (EC 2.7.11.13)	Cdc7 anon-WO03040301.250 cdc7 cdc7-related CT25076 Dmel\CG32742 L(1)G0148 l(1)G0148 l(1)G0149 l(1)G0461 CG32742 CG8655 CG8656 Dmel_CG32742	Drosophila melanogaster (Fruit fly)	699
+31598		Q9W3Y1	Q9W3Y1_DROME	unreviewed	Cdc7 kinase, isoform A (EC 2.7.11.-) (EC 2.7.11.13)	Cdc7 anon-WO03040301.250 cdc7 cdc7-related CG32742 CG8655 CG8656 CT25076 Dmel\CG32742 L(1)G0148 l(1)G0148 l(1)G0149 l(1)G0461 Dmel_CG32742	Drosophila melanogaster (Fruit fly)	700
+31598		X2JCT3	X2JCT3_DROME	unreviewed	Cdc7 kinase, isoform B (EC 2.7.11.-) (EC 2.7.11.13)	Cdc7 anon-WO03040301.250 cdc7 cdc7-related CG32742 CG8655 CG8656 CT25076 Dmel\CG32742 L(1)G0148 l(1)G0148 l(1)G0149 l(1)G0461 Dmel_CG32742	Drosophila melanogaster (Fruit fly)	699
 3162		P09601	HMOX1_HUMAN	reviewed	Heme oxygenase 1 (HO-1) (EC 1.14.14.18)	HMOX1 HO HO1	Homo sapiens (Human)	288
 3162		Q6FH11	Q6FH11_HUMAN	unreviewed	HMOX1 protein (Heme oxygenase (Decycling) 1)	HMOX1 hCG_40033	Homo sapiens (Human)	288
 3164		A0A024R126	A0A024R126_HUMAN	unreviewed	Nuclear receptor subfamily 4, group A, member 1, isoform CRA_d	NR4A1 hCG_37966	Homo sapiens (Human)	598
@@ -1364,7 +1363,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 328		P27695	APEX1_HUMAN	reviewed	DNA-(apurinic or apyrimidinic site) lyase (EC 3.1.-.-) (EC 4.2.99.18) (APEX nuclease) (APEN) (Apurinic-apyrimidinic endonuclease 1) (AP endonuclease 1) (APE-1) (REF-1) (Redox factor-1) [Cleaved into: DNA-(apurinic or apyrimidinic site) lyase, mitochondrial]	APEX1 APE APE1 APEX APX HAP1 REF1	Homo sapiens (Human)	318
 328		Q5TZP7	Q5TZP7_HUMAN	unreviewed	DNA-(apurinic or apyrimidinic site) lyase (EC 4.2.99.18)	APEX1 hCG_40473	Homo sapiens (Human)	318
 3300		P25686	DNJB2_HUMAN	reviewed	DnaJ homolog subfamily B member 2 (Heat shock 40 kDa protein 3) (Heat shock protein J1) (HSJ-1)	DNAJB2 HSJ1 HSPF3	Homo sapiens (Human)	324
-3303		A8K5I0	A8K5I0_HUMAN	unreviewed	Epididymis secretory protein Li 103 (HSPA1A) (HSPA1B) (Heat shock 70kDa protein 1A) (Heat shock 70kDa protein 1B) (cDNA FLJ75127, highly similar to Homo sapiens heat shock 70kDa protein 1A, mRNA)	HSPA1A HEL-S-103 HSPA1B hCG_1820593 hCG_43726	Homo sapiens (Human)	641
+3303		A8K5I0	A8K5I0_HUMAN	unreviewed	Epididymis secretory protein Li 103 (HSPA1A) (HSPA1B) (Heat shock 70kDa protein 1A) (Heat shock 70kDa protein 1B) (cDNA FLJ75127, highly similar to Homo sapiens heat shock 70kDa protein 1A, mRNA)	HSPA1B HEL-S-103 HSPA1A hCG_1820593 hCG_43726	Homo sapiens (Human)	641
 3303		B3KTT5	B3KTT5_HUMAN	unreviewed	cDNA FLJ38698 fis, clone KIDNE2002015, highly similar to HEAT SHOCK 70 kDa PROTEIN 1		Homo sapiens (Human)	476
 3303		P0DMV8	HS71A_HUMAN	reviewed	Heat shock 70 kDa protein 1A (Heat shock 70 kDa protein 1) (HSP70-1) (HSP70.1)	HSPA1A HSP72 HSPA1 HSX70	Homo sapiens (Human)	641
 3303		P0DMV9	HS71B_HUMAN	reviewed	Heat shock 70 kDa protein 1B (Heat shock 70 kDa protein 2) (HSP70-2) (HSP70.2)	HSPA1B HSP72	Homo sapiens (Human)	641
@@ -1413,14 +1412,14 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 344558		Q8TEJ3	SH3R3_HUMAN	reviewed	SH3 domain-containing RING finger protein 3 (Plenty of SH3s 2) (SH3 multiple domains protein 4)	SH3RF3 POSH2 SH3MD4	Homo sapiens (Human)	882
 345651		Q562R1	ACTBL_HUMAN	reviewed	Beta-actin-like protein 2 (Kappa-actin)	ACTBL2	Homo sapiens (Human)	376
 347733		Q9BVA1	TBB2B_HUMAN	reviewed	Tubulin beta-2B chain	TUBB2B	Homo sapiens (Human)	445
-34974		M9PD16	M9PD16_DROME	unreviewed	Chiffon, isoform D	chif BG:DS09218.1 BG:DS09218.2 chf Chif Dbf4 Dmel\CG5813 DS09218.1 fs(2)chiffon CG5813 CG5817 Dmel_CG5813	Drosophila melanogaster (Fruit fly)	1695
+34974		M9PD16	M9PD16_DROME	unreviewed	Chiffon, isoform D	chif BG:DS09218.1 BG:DS09218.2 CG5813 CG5817 chf Chif Dbf4 Dmel\CG5813 DS09218.1 fs(2)chiffon Dmel_CG5813	Drosophila melanogaster (Fruit fly)	1695
 34974		Q9NK54	CHIF_DROME	reviewed	Protein chiffon	chif CG5813	Drosophila melanogaster (Fruit fly)	1711
-351		A0A0A0MRG2	A0A0A0MRG2_HUMAN	unreviewed	Amyloid beta A4 protein	APP	Homo sapiens (Human)	660
+351		A0A0A0MRG2	A0A0A0MRG2_HUMAN	unreviewed	Amyloid-beta A4 protein	APP	Homo sapiens (Human)	660
 351		A0A140VJC8	A0A140VJC8_HUMAN	unreviewed	Testicular tissue protein Li 2		Homo sapiens (Human)	770
 351		B4DGD0	B4DGD0_HUMAN	unreviewed	cDNA FLJ50491, highly similar to Amyloid beta A4 protein (APP) (ABPP)(Alzheimer disease amyloid protein) (Cerebral vascularamyloid peptide) (CVAP) (Protease nexin-II) (PN-II)(APPI) (PreA4)		Homo sapiens (Human)	714
 351		B4DJT9	B4DJT9_HUMAN	unreviewed	cDNA FLJ59550, highly similar to Homo sapiens amyloid beta (A4) protein, transcript variant 3, mRNA		Homo sapiens (Human)	660
-351		E9PG40	E9PG40_HUMAN	unreviewed	Amyloid beta A4 protein	APP	Homo sapiens (Human)	714
-351		P05067	A4_HUMAN	reviewed	Amyloid-beta A4 protein (ABPP) (APPI) (APP) (Alzheimer disease amyloid protein) (Amyloid precursor protein) (Amyloid-beta precursor protein) (Cerebral vascular amyloid peptide) (CVAP) (PreA4) (Protease nexin-II) (PN-II) [Cleaved into: N-APP; Soluble APP-alpha (S-APP-alpha); Soluble APP-beta (S-APP-beta); C99; Amyloid-beta protein 42 (Abeta42) (Beta-APP42); Amyloid-beta protein 40 (Abeta40) (Beta-APP40); C83; P3(42); P3(40); C80; Gamma-secretase C-terminal fragment 59 (Amyloid intracellular domain 59) (AICD-59) (AID(59)) (Gamma-CTF(59)); Gamma-secretase C-terminal fragment 57 (Amyloid intracellular domain 57) (AICD-57) (AID(57)) (Gamma-CTF(57)); Gamma-secretase C-terminal fragment 50 (Amyloid intracellular domain 50) (AICD-50) (AID(50)) (Gamma-CTF(50)); C31]	APP A4 AD1	Homo sapiens (Human)	770
+351		E9PG40	E9PG40_HUMAN	unreviewed	Amyloid-beta A4 protein	APP	Homo sapiens (Human)	714
+351		P05067	A4_HUMAN	reviewed	Amyloid-beta A4 protein (ABPP) (APPI) (APP) (Alzheimer disease amyloid protein) (Amyloid precursor protein) (Amyloid-beta precursor protein) (Cerebral vascular amyloid peptide) (CVAP) (PreA4) (Protease nexin-II) (PN-II) [Cleaved into: N-APP; Soluble APP-alpha (S-APP-alpha); Soluble APP-beta (S-APP-beta); C99 (Beta-secretase C-terminal fragment) (Beta-CTF); Amyloid-beta protein 42 (Abeta42) (Beta-APP42); Amyloid-beta protein 40 (Abeta40) (Beta-APP40); C83 (Alpha-secretase C-terminal fragment) (Alpha-CTF); P3(42); P3(40); C80; Gamma-secretase C-terminal fragment 59 (Amyloid intracellular domain 59) (AICD-59) (AID(59)) (Gamma-CTF(59)); Gamma-secretase C-terminal fragment 57 (Amyloid intracellular domain 57) (AICD-57) (AID(57)) (Gamma-CTF(57)); Gamma-secretase C-terminal fragment 50 (Amyloid intracellular domain 50) (AICD-50) (AID(50)) (Gamma-CTF(50)); C31]	APP A4 AD1	Homo sapiens (Human)	770
 3516		Q06330	SUH_HUMAN	reviewed	Recombining binding protein suppressor of hairless (CBF-1) (J kappa-recombination signal-binding protein) (RBP-J kappa) (RBP-J) (RBP-JK) (Renal carcinoma antigen NY-REN-30)	RBPJ IGKJRB IGKJRB1 RBPJK RBPSUH	Homo sapiens (Human)	500
 3550		Q13123	RED_HUMAN	reviewed	Protein Red (Cytokine IK) (IK factor) (Protein RER)	IK RED RER	Homo sapiens (Human)	557
 3550		Q95HA6	Q95HA6_HUMAN	unreviewed	IK cytokine, down-regulator of HLA II	IK	Homo sapiens (Human)	557
@@ -1594,8 +1593,8 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 4217		Q99683	M3K5_HUMAN	reviewed	Mitogen-activated protein kinase kinase kinase 5 (EC 2.7.11.25) (Apoptosis signal-regulating kinase 1) (ASK-1) (MAPK/ERK kinase kinase 5) (MEK kinase 5) (MEKK 5)	MAP3K5 ASK1 MAPKKK5 MEKK5	Homo sapiens (Human)	1374
 4234		Q9UBP6	TRMB_HUMAN	reviewed	tRNA (guanine-N(7)-)-methyltransferase (EC 2.1.1.33) (Methyltransferase-like protein 1) (tRNA (guanine(46)-N(7))-methyltransferase) (tRNA(m7G46)-methyltransferase)	METTL1 C12orf1	Homo sapiens (Human)	276
 4236		P55081	MFAP1_HUMAN	reviewed	Microfibrillar-associated protein 1	MFAP1	Homo sapiens (Human)	439
-42504		A0A0B4KHK1	A0A0B4KHK1_DROME	unreviewed	Supernumerary limbs, isoform B	slmb BcDNA:GM02031 beta-TRCP Beta-TRCP1 betaTrCP crd Dmel\CG3412 FBXW1 ica l(3)00295 MENE (3R)-B MENE(3R)-B shv SLIMB Slimb slimb SLMB Slmb wel CG3412 Dmel_CG3412	Drosophila melanogaster (Fruit fly)	597
-42504		Q9VDE3	Q9VDE3_DROME	unreviewed	LD08669p (Slimb) (Supernumerary limbs, isoform A) (Supernumerary limbs, isoform C)	slmb BcDNA:GM02031 beta-TRCP Beta-TRCP1 betaTrCP crd Dmel\CG3412 FBXW1 ica l(3)00295 MENE (3R)-B MENE(3R)-B shv SLIMB Slimb slimb SLMB Slmb wel CG3412 Dmel_CG3412	Drosophila melanogaster (Fruit fly)	510
+42504		A0A0B4KHK1	A0A0B4KHK1_DROME	unreviewed	Supernumerary limbs, isoform B	slmb BcDNA:GM02031 beta-TRCP Beta-TRCP1 betaTrCP CG3412 crd Dmel\CG3412 FBXW1 ica l(3)00295 MENE (3R)-B MENE(3R)-B shv SLIMB Slimb slimb SLMB Slmb wel Dmel_CG3412	Drosophila melanogaster (Fruit fly)	597
+42504		Q9VDE3	Q9VDE3_DROME	unreviewed	LD08669p (Slimb) (Supernumerary limbs, isoform A) (Supernumerary limbs, isoform C)	slmb BcDNA:GM02031 beta-TRCP Beta-TRCP1 betaTrCP CG3412 crd Dmel\CG3412 FBXW1 ica l(3)00295 MENE (3R)-B MENE(3R)-B shv SLIMB Slimb slimb SLMB Slmb wel Dmel_CG3412	Drosophila melanogaster (Fruit fly)	510
 427887		A0A1D5PC18	A0A1D5PC18_CHICK	unreviewed	Histone H3	H3F3C	Gallus gallus (Chicken)	136
 427887		P84247	H33_CHICK	reviewed	Histone H3.3 (H3.3A/B) (Histone H3 class II)	H3-IX; H3-X	Gallus gallus (Chicken)	136
 4282		I4AY87	I4AY87_HUMAN	unreviewed	Macrophage migration inhibitory factor (Fragment)	MIF	Homo sapiens (Human)	115
@@ -1744,7 +1743,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 5033		Q5VSQ6	Q5VSQ6_HUMAN	unreviewed	Procollagen-proline, 2-oxoglutarate 4-dioxygenase (Proline 4-hydroxylase), alpha polypeptide I variant (Procollagen-proline, 2-oxoglutarate 4-dioxygenase (Proline 4-hydroxylase), alpha polypeptide I, isoform CRA_a) (Procollagen-proline, 2-oxoglutarate 4-dioxygenase (Proline 4-hydroxylase), alpha polypeptide I, isoform CRA_b) (Fragment)	P4HA1 hCG_19276	Homo sapiens (Human)	534
 5034		A0A024R8S5	A0A024R8S5_HUMAN	unreviewed	Protein disulfide-isomerase (EC 5.3.4.1)	P4HB hCG_95895	Homo sapiens (Human)	508
 5034		P07237	PDIA1_HUMAN	reviewed	Protein disulfide-isomerase (PDI) (EC 5.3.4.1) (Cellular thyroid hormone-binding protein) (Prolyl 4-hydroxylase subunit beta) (p55)	P4HB ERBA2L PDI PDIA1 PO4DB	Homo sapiens (Human)	508
-5037		D9IAI1	D9IAI1_HUMAN	unreviewed	Epididymis secretory protein Li 34 (Phosphatidylethanolamine binding protein 1, isoform CRA_a) (Phosphatidylethanolamine-binding protein 1)	PEBP1 HEL-S-34 hCG_2016249	Homo sapiens (Human)	187
+5037		D9IAI1	D9IAI1_HUMAN	unreviewed	Epididymis secretory protein Li 34 (Phosphatidylethanolamine binding protein 1, isoform CRA_a) (Phosphatidylethanolamine-binding protein 1)	HEL-S-34 PEBP1 hCG_2016249	Homo sapiens (Human)	187
 5037		P30086	PEBP1_HUMAN	reviewed	Phosphatidylethanolamine-binding protein 1 (PEBP-1) (HCNPpp) (Neuropolypeptide h3) (Prostatic-binding protein) (Raf kinase inhibitor protein) (RKIP) [Cleaved into: Hippocampal cholinergic neurostimulating peptide (HCNP)]	PEBP1 PBP PEBP	Homo sapiens (Human)	187
 504244		Q3ZCJ7	TBA1C_BOVIN	reviewed	Tubulin alpha-1C chain [Cleaved into: Detyrosinated tubulin alpha-1C chain]	TUBA1C	Bos taurus (Bovine)	449
 5045		A0A024RC70	A0A024RC70_HUMAN	unreviewed	Furin (Paired basic amino acid cleaving enzyme), isoform CRA_a	FURIN hCG_32577	Homo sapiens (Human)	794
@@ -1885,7 +1884,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 52		A0A140VK37	A0A140VK37_HUMAN	unreviewed	Testicular secretory protein Li 37		Homo sapiens (Human)	112
 52		P24666	PPAC_HUMAN	reviewed	Low molecular weight phosphotyrosine protein phosphatase (LMW-PTP) (LMW-PTPase) (EC 3.1.3.48) (Adipocyte acid phosphatase) (Low molecular weight cytosolic acid phosphatase) (EC 3.1.3.2) (Red cell acid phosphatase 1)	ACP1	Homo sapiens (Human)	158
 52		Q59EH3	Q59EH3_HUMAN	unreviewed	Acid phosphatase 1 isoform c variant (Fragment)		Homo sapiens (Human)	165
-5204		Q99471	PFD5_HUMAN	reviewed	Prefoldin subunit 5 (C-Myc-binding protein Mm-1) (Myc modulator 1)	PFDN5 MM1 PFD5	Homo sapiens (Human)	154
+5204		Q99471	PFD5_HUMAN	reviewed	Prefoldin subunit 5 (Myc modulator 1) (c-Myc-binding protein Mm-1)	PFDN5 MM1 PFD5	Homo sapiens (Human)	154
 5211		P17858	PFKAL_HUMAN	reviewed	ATP-dependent 6-phosphofructokinase, liver type (ATP-PFK) (PFK-L) (EC 2.7.1.11) (6-phosphofructokinase type B) (Phosphofructo-1-kinase isozyme B) (PFK-B) (Phosphohexokinase)	PFKL	Homo sapiens (Human)	780
 5211		Q7L2M7	Q7L2M7_HUMAN	unreviewed	PFKL protein (Fragment)	PFKL	Homo sapiens (Human)	568
 5214		Q01813	PFKAP_HUMAN	reviewed	ATP-dependent 6-phosphofructokinase, platelet type (ATP-PFK) (PFK-P) (EC 2.7.1.11) (6-phosphofructokinase type C) (Phosphofructo-1-kinase isozyme C) (PFK-C) (Phosphohexokinase)	PFKP PFKF	Homo sapiens (Human)	784
@@ -1968,7 +1967,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 54476		A8K8N1	A8K8N1_HUMAN	unreviewed	cDNA FLJ76440, highly similar to Homo sapiens TRIAD3 protein (TRIAD3), transcript variant 1, mRNA		Homo sapiens (Human)	923
 54476		Q9NWF9	RN216_HUMAN	reviewed	E3 ubiquitin-protein ligase RNF216 (EC 2.3.2.27) (RING finger protein 216) (RING-type E3 ubiquitin transferase RNF216) (Triad domain-containing protein 3) (Ubiquitin-conjugating enzyme 7-interacting protein 1) (Zinc finger protein inhibiting NF-kappa-B)	RNF216 TRIAD3 UBCE7IP1 ZIN	Homo sapiens (Human)	866
 54496		A0A024R6Z2	A0A024R6Z2_HUMAN	unreviewed	Protein arginine methyltransferase 7, isoform CRA_b	PRMT7 hCG_28114	Homo sapiens (Human)	613
-54496		A0A024R726	A0A024R726_HUMAN	unreviewed	Protein arginine methyltransferase 7, isoform CRA_a	PRMT7 hCG_28114	Homo sapiens (Human)	692
+54496		A0A024R726	A0A024R726_HUMAN	unreviewed	Protein arginine N-methyltransferase (EC 2.1.1.321)	PRMT7 hCG_28114	Homo sapiens (Human)	692
 54496		Q9NVM4	ANM7_HUMAN	reviewed	Protein arginine N-methyltransferase 7 (EC 2.1.1.321) (Histone-arginine N-methyltransferase PRMT7) ([Myelin basic protein]-arginine N-methyltransferase PRMT7)	PRMT7 KIAA1933	Homo sapiens (Human)	692
 5451		A0A024R8Y2	A0A024R8Y2_HUMAN	unreviewed	POU domain protein	POU2F1 hCG_37990	Homo sapiens (Human)	743
 5451		P14859	PO2F1_HUMAN	reviewed	POU domain, class 2, transcription factor 1 (NF-A1) (Octamer-binding protein 1) (Oct-1) (Octamer-binding transcription factor 1) (OTF-1)	POU2F1 OCT1 OTF1	Homo sapiens (Human)	743
@@ -2001,7 +2000,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 54876		Q9NXF7	DCA16_HUMAN	reviewed	DDB1- and CUL4-associated factor 16	DCAF16 C4orf30	Homo sapiens (Human)	216
 54882		Q8IWZ3	ANKH1_HUMAN	reviewed	Ankyrin repeat and KH domain-containing protein 1 (HIV-1 Vpr-binding ankyrin repeat protein) (Multiple ankyrin repeats single KH domain) (hMASK)	ANKHD1 KIAA1085 MASK VBARP PP2500	Homo sapiens (Human)	2542
 54940		A0A024R9U3	A0A024R9U3_HUMAN	unreviewed	OCIA domain containing 1, isoform CRA_a	OCIAD1 hCG_1641572	Homo sapiens (Human)	245
-54940		Q9NX40	OCAD1_HUMAN	reviewed	OCIA domain-containing protein 1 (Ovarian carcinoma immunoreactive antigen)	OCIAD1 OCIA	Homo sapiens (Human)	245
+54940		Q9NX40	OCAD1_HUMAN	reviewed	OCIA domain-containing protein 1 (Ovarian cancer immunoreactive antigen domain containing 1) (Ovarian carcinoma immunoreactive antigen)	OCIAD1 ASRIJ OCIA	Homo sapiens (Human)	245
 54958		Q9NX00	TM160_HUMAN	reviewed	Transmembrane protein 160	TMEM160	Homo sapiens (Human)	188
 5496		O15355	PPM1G_HUMAN	reviewed	Protein phosphatase 1G (EC 3.1.3.16) (Protein phosphatase 1C) (Protein phosphatase 2C isoform gamma) (PP2C-gamma) (Protein phosphatase magnesium-dependent 1 gamma)	PPM1G PPM1C	Homo sapiens (Human)	546
 5496		Q6IAU5	Q6IAU5_HUMAN	unreviewed	PPM1G protein (Protein phosphatase 1G (Formerly 2C), magnesium-dependent, gamma isoform) (Uncharacterized protein PPM1G)	PPM1G hCG_21229	Homo sapiens (Human)	546
@@ -2048,8 +2047,8 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 55269		A0A024RDP4	A0A024RDP4_HUMAN	unreviewed	Paraspeckle component 1, isoform CRA_b	PSPC1 hCG_2019837	Homo sapiens (Human)	393
 55269		B4DWI8	B4DWI8_HUMAN	unreviewed	cDNA FLJ57805, highly similar to Homo sapiens paraspeckle component 1 (PSPC1), transcript variant alpha, mRNA		Homo sapiens (Human)	463
 55269		Q8WXF1	PSPC1_HUMAN	reviewed	Paraspeckle component 1 (Paraspeckle protein 1)	PSPC1 PSP1	Homo sapiens (Human)	523
-5529		B7Z5X1	B7Z5X1_HUMAN	unreviewed	cDNA FLJ60843, highly similar to Serine/threonine-protein phosphatase 2A 56 kDa regulatory subunit epsilon isoform		Homo sapiens (Human)	462
-5529		B7Z7C0	B7Z7C0_HUMAN	unreviewed	cDNA FLJ53109, highly similar to Serine/threonine-protein phosphatase 2A 56 kDa regulatory subunit epsilon isoform		Homo sapiens (Human)	391
+5529		B7Z5X1	B7Z5X1_HUMAN	unreviewed	Serine/threonine-protein phosphatase 2A 56 kDa regulatory subunit		Homo sapiens (Human)	462
+5529		B7Z7C0	B7Z7C0_HUMAN	unreviewed	Serine/threonine-protein phosphatase 2A 56 kDa regulatory subunit		Homo sapiens (Human)	391
 5529		Q16537	2A5E_HUMAN	reviewed	Serine/threonine-protein phosphatase 2A 56 kDa regulatory subunit epsilon isoform (PP2A B subunit isoform B'-epsilon) (PP2A B subunit isoform B56-epsilon) (PP2A B subunit isoform PR61-epsilon) (PP2A B subunit isoform R5-epsilon)	PPP2R5E	Homo sapiens (Human)	467
 5529		Q59EK0	Q59EK0_HUMAN	unreviewed	Epsilon isoform of regulatory subunit B56, protein phosphatase 2A variant (Fragment)		Homo sapiens (Human)	501
 55291		A0A024R5F3	A0A024R5F3_HUMAN	unreviewed	SAPS domain family, member 3, isoform CRA_c	SAPS3 hCG_26461	Homo sapiens (Human)	793
@@ -2730,8 +2729,8 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 7089		Q04725	TLE2_HUMAN	reviewed	Transducin-like enhancer protein 2 (Enhancer of split groucho-like protein 2) (ESG2)	TLE2	Homo sapiens (Human)	743
 7095		D3DNQ1	D3DNQ1_HUMAN	unreviewed	Translocation protein 1, isoform CRA_b	TLOC1 hCG_16182	Homo sapiens (Human)	361
 7095		Q99442	SEC62_HUMAN	reviewed	Translocation protein SEC62 (Translocation protein 1) (TP-1) (hTP-1)	SEC62 TLOC1	Homo sapiens (Human)	399
-7097		A0A0S2Z4S4	A0A0S2Z4S4_HUMAN	unreviewed	Toll-like receptor 2 isoform 1 (Fragment)	TLR2	Homo sapiens (Human)	784
-7097		B3KWR9	B3KWR9_HUMAN	unreviewed	cDNA FLJ43671 fis, clone SYNOV4007553, highly similar to Toll-like receptor 2		Homo sapiens (Human)	784
+7097		A0A0S2Z4S4	A0A0S2Z4S4_HUMAN	unreviewed	Toll-like receptor (Fragment)	TLR2	Homo sapiens (Human)	784
+7097		B3KWR9	B3KWR9_HUMAN	unreviewed	Toll-like receptor		Homo sapiens (Human)	784
 7097		O60603	TLR2_HUMAN	reviewed	Toll-like receptor 2 (Toll/interleukin-1 receptor-like protein 4) (CD antigen CD282)	TLR2 TIL4	Homo sapiens (Human)	784
 71		P63261	ACTG_HUMAN	reviewed	Actin, cytoplasmic 2 (Gamma-actin) [Cleaved into: Actin, cytoplasmic 2, N-terminally processed]	ACTG1 ACTG	Homo sapiens (Human)	375
 7102		P41732	TSN7_HUMAN	reviewed	Tetraspanin-7 (Tspan-7) (Cell surface glycoprotein A15) (Membrane component chromosome X surface marker 1) (T-cell acute lymphoblastic leukemia-associated antigen 1) (TALLA-1) (Transmembrane 4 superfamily member 2) (CD antigen CD231)	TSPAN7 A15 DXS1692E MXS1 TM4SF2	Homo sapiens (Human)	249
@@ -2810,8 +2809,8 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 7324		P51965	UB2E1_HUMAN	reviewed	Ubiquitin-conjugating enzyme E2 E1 (EC 2.3.2.23) ((E3-independent) E2 ubiquitin-conjugating enzyme E1) (EC 2.3.2.24) (E2 ubiquitin-conjugating enzyme E1) (UbcH6) (Ubiquitin carrier protein E1) (Ubiquitin-protein ligase E1)	UBE2E1 UBCH6	Homo sapiens (Human)	193
 7328		A4D1L5	A4D1L5_HUMAN	unreviewed	Ubiquitin-conjugating enzyme E2H (UBC8 homolog, yeast) (Ubiquitin-conjugating enzyme E2H (UBC8 homolog, yeast), isoform CRA_b) (Ubiquitin-conjugating enzyme E2H isoform 1) (Ubiquitin-conjugating enzyme E2H isoform A)	UBE2H hCG_18056 tcag7.352	Homo sapiens (Human)	183
 7328		P62256	UBE2H_HUMAN	reviewed	Ubiquitin-conjugating enzyme E2 H (EC 2.3.2.23) ((E3-independent) E2 ubiquitin-conjugating enzyme H) (EC 2.3.2.24) (E2 ubiquitin-conjugating enzyme H) (UbcH2) (Ubiquitin carrier protein H) (Ubiquitin-conjugating enzyme E2-20K) (Ubiquitin-protein ligase H)	UBE2H	Homo sapiens (Human)	183
-7329		A8K503	A8K503_HUMAN	unreviewed	SUMO-conjugating enzyme (EC 2.3.2.-)		Homo sapiens (Human)	158
-7329		B0QYN7	B0QYN7_HUMAN	unreviewed	SUMO-conjugating enzyme (EC 2.3.2.-)	UBE2I	Homo sapiens (Human)	184
+7329		A8K503	A8K503_HUMAN	unreviewed	cDNA FLJ76182, highly similar to Homo sapiens ubiquitin-conjugating enzyme E2I (UBC9 homolog, yeast) (UBE2I), transcript variant 1, mRNA		Homo sapiens (Human)	158
+7329		B0QYN7	B0QYN7_HUMAN	unreviewed	SUMO-conjugating enzyme UBC9	UBE2I	Homo sapiens (Human)	184
 7329		P63279	UBC9_HUMAN	reviewed	SUMO-conjugating enzyme UBC9 (EC 2.3.2.-) (RING-type E3 SUMO transferase UBC9) (SUMO-protein ligase) (Ubiquitin carrier protein 9) (Ubiquitin carrier protein I) (Ubiquitin-conjugating enzyme E2 I) (Ubiquitin-protein ligase I) (p18)	UBE2I UBC9 UBCE9	Homo sapiens (Human)	158
 7332		A0A024R1A4	A0A024R1A4_HUMAN	unreviewed	Ubiquitin-conjugating enzyme E2L 3, isoform CRA_a	UBE2L3 hCG_32558	Homo sapiens (Human)	154
 7332		P68036	UB2L3_HUMAN	reviewed	Ubiquitin-conjugating enzyme E2 L3 (EC 2.3.2.23) (E2 ubiquitin-conjugating enzyme L3) (L-UBC) (UbcH7) (Ubiquitin carrier protein L3) (Ubiquitin-conjugating enzyme E2-F1) (Ubiquitin-protein ligase L3)	UBE2L3 UBCE7 UBCH7	Homo sapiens (Human)	154
@@ -2932,7 +2931,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 7965		A8MU58	A8MU58_HUMAN	unreviewed	Aminoacyl tRNA synthase complex-interacting multifunctional protein 2	AIMP2	Homo sapiens (Human)	242
 7965		F8W950	F8W950_HUMAN	unreviewed	Aminoacyl tRNA synthase complex-interacting multifunctional protein 2	AIMP2	Homo sapiens (Human)	251
 7965		Q13155	AIMP2_HUMAN	reviewed	Aminoacyl tRNA synthase complex-interacting multifunctional protein 2 (Multisynthase complex auxiliary component p38) (Protein JTV-1)	AIMP2 JTV1 PRO0992	Homo sapiens (Human)	320
-79709		Q8NBJ5	GT251_HUMAN	reviewed	Procollagen galactosyltransferase 1 (EC 2.4.1.50) (Collagen beta(1-O)galactosyltransferase 1) (Glycosyltransferase 25 family member 1) (Hydroxylysine galactosyltransferase 1)	COLGALT1 GLT25D1 PSEC0241	Homo sapiens (Human)	622
+79709		Q8NBJ5	GT251_HUMAN	reviewed	Procollagen galactosyltransferase 1 (EC 2.4.1.50) (Collagen beta(1-O)galactosyltransferase 1) (ColGalT 1) (Glycosyltransferase 25 family member 1) (Hydroxylysine galactosyltransferase 1)	COLGALT1 GLT25D1 PSEC0241	Homo sapiens (Human)	622
 79711		B3KT38	B3KT38_HUMAN	unreviewed	cDNA FLJ37578 fis, clone BRCOC2003732, highly similar to Importin-4		Homo sapiens (Human)	945
 79711		Q8TEX9	IPO4_HUMAN	reviewed	Importin-4 (Imp4) (Importin-4b) (Imp4b) (Ran-binding protein 4) (RanBP4)	IPO4 IMP4B RANBP4	Homo sapiens (Human)	1081
 79718		Q9BZK7	TBL1R_HUMAN	reviewed	F-box-like/WD repeat-containing protein TBL1XR1 (Nuclear receptor corepressor/HDAC3 complex subunit TBLR1) (TBL1-related protein 1) (Transducin beta-like 1X-related protein 1)	TBL1XR1 IRA1 TBLR1	Homo sapiens (Human)	514
@@ -2948,7 +2947,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 79902		J3KT10	J3KT10_HUMAN	unreviewed	Nuclear pore complex protein Nup85	NUP85	Homo sapiens (Human)	611
 79902		Q9BW27	NUP85_HUMAN	reviewed	Nuclear pore complex protein Nup85 (85 kDa nucleoporin) (FROUNT) (Nucleoporin Nup75) (Nucleoporin Nup85) (Pericentrin-1)	NUP85 NUP75 PCNT1	Homo sapiens (Human)	656
 80010		Q9H9A7	RMI1_HUMAN	reviewed	RecQ-mediated genome instability protein 1 (BLM-associated protein of 75 kDa) (BLAP75) (FAAP75)	RMI1 C9orf76	Homo sapiens (Human)	625
-801		B4DJ51	B4DJ51_HUMAN	unreviewed	Calmodulin 1 (Phosphorylase kinase, delta), isoform CRA_a (Calmodulin 3 (Phosphorylase kinase, delta), isoform CRA_b) (Epididymis secretory protein Li 72) (cDNA FLJ61744, highly similar to Calmodulin)	CALM1 CALM3 HEL-S-72 hCG_20313 hCG_21749	Homo sapiens (Human)	149
+801		B4DJ51	B4DJ51_HUMAN	unreviewed	Calmodulin 1 (Phosphorylase kinase, delta), isoform CRA_a (Calmodulin 3 (Phosphorylase kinase, delta), isoform CRA_b) (Epididymis secretory protein Li 72) (cDNA FLJ61744, highly similar to Calmodulin)	HEL-S-72 CALM1 CALM3 hCG_20313 hCG_21749	Homo sapiens (Human)	149
 801		E7ETZ0	E7ETZ0_HUMAN	unreviewed	Calmodulin-1	CALM1	Homo sapiens (Human)	150
 801		P0DP23	CALM1_HUMAN	reviewed	Calmodulin-1	CALM1 CALM CAM CAM1	Homo sapiens (Human)	149
 801		P0DP24	CALM2_HUMAN	reviewed	Calmodulin-2	CALM2 CAM2 CAMB	Homo sapiens (Human)	149
@@ -3161,10 +3160,10 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 839557		A0A178W4P7	A0A178W4P7_ARATH	unreviewed	UVH6	AXX17_At1g02440	Arabidopsis thaliana (Mouse-ear cress)	758
 839557		Q8W4M7	ERCC2_ARATH	reviewed	DNA repair helicase XPD (EC 3.6.4.12) (ERCC2 homolog) (RAD3 homolog) (UV hypersensitive protein 6) (AtUVH6) (XPD homolog) (AtXPD)	XPD UVH6 At1g03190 F15K9.20	Arabidopsis thaliana (Mouse-ear cress)	758
 839620		A0A178WBG2	A0A178WBG2_ARATH	unreviewed	NTF2A	At1g27310 AXX17_At1g27730	Arabidopsis thaliana (Mouse-ear cress)	122
-839620		Q9FZK4	Q9FZK4_ARATH	unreviewed	F17L21.10 (Nuclear transport factor 2A) (Similar to nuclear transport factor 2)	NTF2A nuclear transport factor 2A At1g27310 At1g27310/F17L21.10 F17L21.10 F17L21_10	Arabidopsis thaliana (Mouse-ear cress)	122
+839620		Q9FZK4	NTF2A_ARATH	reviewed	Nuclear transport factor 2A (AtNTF2a)	NTF2A At1g27310 F17L21.10	Arabidopsis thaliana (Mouse-ear cress)	122
 839690		A0A178W1S4	A0A178W1S4_ARATH	unreviewed	NTF2B	AXX17_At1g28340	Arabidopsis thaliana (Mouse-ear cress)	126
 839690		A8MS55	A8MS55_ARATH	unreviewed	Nuclear transport factor 2B	NTF2B nuclear transport factor 2B At1g27970 F13K9.26 F13K9_26	Arabidopsis thaliana (Mouse-ear cress)	134
-839690		Q9C7F5	NTF2_ARATH	reviewed	Nuclear transport factor 2 (NTF-2)	NTF2 At1g27970 F13K9.26	Arabidopsis thaliana (Mouse-ear cress)	126
+839690		Q9C7F5	NTF2B_ARATH	reviewed	Nuclear transport factor 2B (AtNTF2b) (NTF-2)	NTF2B At1g27970 F13K9.26	Arabidopsis thaliana (Mouse-ear cress)	126
 84061		A0A087WU53	A0A087WU53_HUMAN	unreviewed	Magnesium transporter protein 1	MAGT1	Homo sapiens (Human)	367
 84061		Q9H0U3	MAGT1_HUMAN	reviewed	Magnesium transporter protein 1 (MagT1) (Implantation-associated protein) (IAP)	MAGT1 IAG2 PSEC0084 UNQ628/PRO1244	Homo sapiens (Human)	335
 841		A0A024R3Z8	A0A024R3Z8_HUMAN	unreviewed	HCG16983, isoform CRA_b	hCG_16983	Homo sapiens (Human)	464
@@ -3347,7 +3346,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 8945		Q9Y297	FBW1A_HUMAN	reviewed	F-box/WD repeat-containing protein 1A (E3RSIkappaB) (Epididymis tissue protein Li 2a) (F-box and WD repeats protein beta-TrCP) (pIkappaBalpha-E3 receptor subunit)	BTRC BTRCP FBW1A FBXW1A	Homo sapiens (Human)	605
 8969		A4FTV9	A4FTV9_HUMAN	unreviewed	Histone H2A	HIST1H2AK HIST1H2AG HIST1H2AI HIST1H2AL HIST1H2AM hCG_1640463 hCG_1640467 hCG_1641458 hCG_1643754 hCG_1743060	Homo sapiens (Human)	130
 8969		B2R5B3	B2R5B3_HUMAN	unreviewed	Histone H2A		Homo sapiens (Human)	130
-8969		P0C0S8	H2A1_HUMAN	reviewed	Histone H2A type 1 (H2A.1) (Histone H2A/p)	HIST1H2AG H2AFP; HIST1H2AI H2AFC; HIST1H2AK H2AFD; HIST1H2AL H2AFI; HIST1H2AM H2AFN	Homo sapiens (Human)	130
+8969		P0C0S8	H2A1_HUMAN	reviewed	Histone H2A type 1 (H2A.1) (Histone H2A/ptl)	HIST1H2AG H2AFP; HIST1H2AI H2AFC; HIST1H2AK H2AFD; HIST1H2AL H2AFI; HIST1H2AM H2AFN	Homo sapiens (Human)	130
 8970		A0A024RCJ2	A0A024RCJ2_HUMAN	unreviewed	Histone H2B	HIST1H2BJ hCG_1641457	Homo sapiens (Human)	126
 8970		P06899	H2B1J_HUMAN	reviewed	Histone H2B type 1-J (Histone H2B.1) (Histone H2B.r) (H2B/r)	HIST1H2BJ H2BFR	Homo sapiens (Human)	126
 8971		Q92522	H1X_HUMAN	reviewed	Histone H1x	H1FX	Homo sapiens (Human)	213
@@ -3369,7 +3368,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 9040		A0A024R4T4	A0A024R4T4_HUMAN	unreviewed	Ubiquitin-conjugating enzyme E2M (UBC12 homolog, yeast), isoform CRA_a	UBE2M hCG_2045958	Homo sapiens (Human)	183
 9040		P61081	UBC12_HUMAN	reviewed	NEDD8-conjugating enzyme Ubc12 (EC 6.3.2.-) (NEDD8 carrier protein) (NEDD8 protein ligase) (Ubiquitin-conjugating enzyme E2 M)	UBE2M UBC12	Homo sapiens (Human)	183
 90416		A0A024R9J9	A0A024R9J9_HUMAN	unreviewed	Coiled-coil domain containing 32, isoform CRA_a	CCDC32 hCG_1999239	Homo sapiens (Human)	185
-90416		Q9BV29	CO057_HUMAN	reviewed	Uncharacterized protein C15orf57 (Protein CCDC32)	C15orf57 CCDC32	Homo sapiens (Human)	185
+90416		Q9BV29	CCD32_HUMAN	reviewed	Coiled-coil domain-containing protein 32	CCDC32 C15orf57	Homo sapiens (Human)	185
 9044		O14981	BTAF1_HUMAN	reviewed	TATA-binding protein-associated factor 172 (EC 3.6.4.-) (ATP-dependent helicase BTAF1) (B-TFIID transcription factor-associated 170 kDa subunit) (TAF(II)170) (TBP-associated factor 172) (TAF-172)	BTAF1 TAF172	Homo sapiens (Human)	1849
 9044		Q2M1V9	Q2M1V9_HUMAN	unreviewed	BTAF1 RNA polymerase II, B-TFIID transcription factor-associated, 170kDa (BTAF1 RNA polymerase II, B-TFIID transcription factor-associated, 170kDa (Mot1 homolog, S. cerevisiae), isoform CRA_a)	BTAF1 hCG_19287	Homo sapiens (Human)	1849
 9044		Q8N6J1	Q8N6J1_HUMAN	unreviewed	BTAF1 protein (Fragment)	BTAF1	Homo sapiens (Human)	680
@@ -3387,7 +3386,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 90780		Q9BRQ0	PYGO2_HUMAN	reviewed	Pygopus homolog 2	PYGO2 PP7910	Homo sapiens (Human)	406
 908		A0A024RDL1	A0A024RDL1_HUMAN	unreviewed	Chaperonin containing TCP1, subunit 6A (Zeta 1), isoform CRA_a	CCT6A hCG_18831	Homo sapiens (Human)	531
 908		P40227	TCPZ_HUMAN	reviewed	T-complex protein 1 subunit zeta (TCP-1-zeta) (Acute morphine dependence-related protein 2) (CCT-zeta-1) (HTR3) (Tcp20)	CCT6A CCT6 CCTZ	Homo sapiens (Human)	531
-90809		Q86T03	TM55B_HUMAN	reviewed	Type 1 phosphatidylinositol 4,5-bisphosphate 4-phosphatase (Type 1 PtdIns-4,5-P2 4-Ptase) (EC 3.1.3.78) (PtdIns-4,5-P2 4-Ptase I) (Transmembrane protein 55B)	TMEM55B C14orf9	Homo sapiens (Human)	277
+90809		Q86T03	PP4P1_HUMAN	reviewed	Type 1 phosphatidylinositol 4,5-bisphosphate 4-phosphatase (Type 1 PtdIns-4,5-P2 4-Ptase) (EC 3.1.3.78) (PtdIns-4,5-P2 4-Ptase I) (Transmembrane protein 55B)	PIP4P1 C14orf9 TMEM55B	Homo sapiens (Human)	277
 9092		O43290	SNUT1_HUMAN	reviewed	U4/U6.U5 tri-snRNP-associated protein 1 (SNU66 homolog) (hSnu66) (Squamous cell carcinoma antigen recognized by T-cells 1) (SART-1) (hSART-1) (U4/U6.U5 tri-snRNP-associated 110 kDa protein) (allergen Hom s 1)	SART1	Homo sapiens (Human)	800
 9097		P54578	UBP14_HUMAN	reviewed	Ubiquitin carboxyl-terminal hydrolase 14 (EC 3.4.19.12) (Deubiquitinating enzyme 14) (Ubiquitin thioesterase 14) (Ubiquitin-specific-processing protease 14)	USP14 TGT	Homo sapiens (Human)	494
 9099		O75604	UBP2_HUMAN	reviewed	Ubiquitin carboxyl-terminal hydrolase 2 (EC 3.4.19.12) (41 kDa ubiquitin-specific protease) (Deubiquitinating enzyme 2) (Ubiquitin thioesterase 2) (Ubiquitin-specific-processing protease 2)	USP2 UBP41	Homo sapiens (Human)	605
@@ -3554,8 +3553,8 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 9918		B3KMS0	B3KMS0_HUMAN	unreviewed	Condensin complex subunit 1		Homo sapiens (Human)	1401
 9918		B3KY03	B3KY03_HUMAN	unreviewed	Condensin complex subunit 1		Homo sapiens (Human)	1362
 9918		Q15021	CND1_HUMAN	reviewed	Condensin complex subunit 1 (Chromosome condensation-related SMC-associated protein 1) (Chromosome-associated protein D2) (hCAP-D2) (Non-SMC condensin I complex subunit D2) (XCAP-D2 homolog)	NCAPD2 CAPD2 CNAP1 KIAA0159	Homo sapiens (Human)	1401
-9919		F1T0I1	F1T0I1_HUMAN	unreviewed	Protein transport protein Sec16A	SEC16A	Homo sapiens (Human)	2334
-9919		J3KNL6	J3KNL6_HUMAN	unreviewed	Protein transport protein Sec16A	SEC16A	Homo sapiens (Human)	2357
+9919		F1T0I1	F1T0I1_HUMAN	unreviewed	Protein transport protein sec16	SEC16A	Homo sapiens (Human)	2334
+9919		J3KNL6	J3KNL6_HUMAN	unreviewed	Protein transport protein sec16	SEC16A	Homo sapiens (Human)	2357
 9919		O15027	SC16A_HUMAN	reviewed	Protein transport protein Sec16A (SEC16 homolog A)	SEC16A KIAA0310 SEC16 SEC16L	Homo sapiens (Human)	2179
 9921		A0A024RBP0	A0A024RBP0_HUMAN	unreviewed	Ring finger protein 10, isoform CRA_a	RNF10 hCG_27770	Homo sapiens (Human)	811
 9921		Q8N5U6	RNF10_HUMAN	reviewed	RING finger protein 10	RNF10 KIAA0262 RIE2	Homo sapiens (Human)	811
@@ -3566,7 +3565,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 996		B4DL80	B4DL80_HUMAN	unreviewed	cDNA FLJ57525, highly similar to Cell division cycle protein 27 homolog		Homo sapiens (Human)	763
 996		G5EA36	G5EA36_HUMAN	unreviewed	Cell division cycle 27, isoform CRA_c (Cell division cycle protein 27 homolog)	CDC27 hCG_1993274	Homo sapiens (Human)	823
 996		P30260	CDC27_HUMAN	reviewed	Cell division cycle protein 27 homolog (Anaphase-promoting complex subunit 3) (APC3) (CDC27 homolog) (CDC27Hs) (H-NUC)	CDC27 ANAPC3 D0S1430E D17S978E	Homo sapiens (Human)	824
-9967		Q9Y2W1	TR150_HUMAN	reviewed	Thyroid hormone receptor-associated protein 3 (Thyroid hormone receptor-associated protein complex 150 kDa component) (Trap150)	THRAP3 TRAP150	Homo sapiens (Human)	955
+9967		Q9Y2W1	TR150_HUMAN	reviewed	Thyroid hormone receptor-associated protein 3 (BCLAF1 and THRAP3 family member 2) (Thyroid hormone receptor-associated protein complex 150 kDa component) (Trap150)	THRAP3 BCLAF2 TRAP150	Homo sapiens (Human)	955
 997		A0A024R1Z1	A0A024R1Z1_HUMAN	unreviewed	Cell division cycle 34, isoform CRA_a	CDC34 hCG_20568	Homo sapiens (Human)	236
 997		P49427	UB2R1_HUMAN	reviewed	Ubiquitin-conjugating enzyme E2 R1 (EC 2.3.2.23) ((E3-independent) E2 ubiquitin-conjugating enzyme R1) (EC 2.3.2.24) (E2 ubiquitin-conjugating enzyme R1) (Ubiquitin-conjugating enzyme E2-32 kDa complementing) (Ubiquitin-conjugating enzyme E2-CDC34) (Ubiquitin-protein ligase R1)	CDC34 UBCH3 UBE2R1	Homo sapiens (Human)	236
 9972		P49790	NU153_HUMAN	reviewed	Nuclear pore complex protein Nup153 (153 kDa nucleoporin) (Nucleoporin Nup153)	NUP153	Homo sapiens (Human)	1475
@@ -3612,13 +3611,11 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 2703401		B9VQJ7	B9VQJ7_HHV11	unreviewed	Serine/threonine protein kinase US3 (EC 2.7.11.1)	US3	Human herpesvirus 1 (strain 17) (HHV-1) (Human herpes simplex virus 1)	481
 2703401		P04413	US03_HHV11	reviewed	Serine/threonine-protein kinase US3 (EC 2.7.11.1)	US3	Human herpesvirus 1 (strain 17) (HHV-1) (Human herpes simplex virus 1)	481
 852822		P06104	UBC2_YEAST	reviewed	Ubiquitin-conjugating enzyme E2 2 (EC 2.3.2.23) (E2 ubiquitin-conjugating enzyme 2) (Radiation sensitivity protein 6) (Ubiquitin carrier protein UBC2) (Ubiquitin-protein ligase UBC2)	RAD6 UBC2 YGL058W	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	172
-155459		A0A076PX61	A0A076PX61_HV1H2	unreviewed	Virion infectivity factor	vif	Human immunodeficiency virus type 1 group M subtype B (isolate HXB2) (HIV-1)	192
 155459		P69720	VIF_HV1B1	reviewed	Virion infectivity factor (Vif) (SOR protein) [Cleaved into: p17; p7]	vif	Human immunodeficiency virus type 1 group M subtype B (isolate BH10) (HIV-1)	192
 155459		P69721	VIF_HV1BR	reviewed	Virion infectivity factor (Vif) (SOR protein) [Cleaved into: p17; p7]	vif	Human immunodeficiency virus type 1 group M subtype B (isolate BRU/LAI) (HIV-1)	192
 155459		P69722	VIF_HV112	reviewed	Virion infectivity factor (Vif) (SOR protein) [Cleaved into: p17; p7]	vif	Human immunodeficiency virus type 1 group M subtype B (isolate PCV12) (HIV-1)	192
 155459		P69723	VIF_HV1H2	reviewed	Virion infectivity factor (Vif) (SOR protein) [Cleaved into: p17; p7]	vif	Human immunodeficiency virus type 1 group M subtype B (isolate HXB2) (HIV-1)	192
 155459		Q77YG0	Q77YG0_9HIV1	unreviewed	Virion infectivity factor	vif	Human immunodeficiency virus 1	192
-155030		A5JP19	A5JP19_HV1H2	unreviewed	Gag polyprotein	gag	Human immunodeficiency virus type 1 group M subtype B (isolate HXB2) (HIV-1)	500
 155030		P04591	GAG_HV1H2	reviewed	Gag polyprotein (Pr55Gag) [Cleaved into: Matrix protein p17 (MA); Capsid protein p24 (CA); Spacer peptide 1 (SP1) (p2); Nucleocapsid protein p7 (NC); Spacer peptide 2 (SP2) (p1); p6-gag]	gag	Human immunodeficiency virus type 1 group M subtype B (isolate HXB2) (HIV-1)	500
 155030		Q77YG1	Q77YG1_9HIV1	unreviewed	Gag polyprotein	gag	Human immunodeficiency virus 1	500
 850620		P0CG63	UBI4P_YEAST	reviewed	Polyubiquitin [Cleaved into: Ubiquitin]	UBI4 SCD2 YLL039C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	381
@@ -3633,9 +3630,9 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 855991		Q02969	PEX25_YEAST	reviewed	Peroxisomal membrane protein PEX25 (Peroxin-25)	PEX25 YPL112C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	394
 851651		P38958	PT100_YEAST	reviewed	Protein PET100, mitochondrial	PET100 YDR079W D4441	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	111
 856786		Q02771	PT117_YEAST	reviewed	Protein PET117, mitochondrial	PET117 YER058W	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	107
-155945		Q9WB91	Q9WB91_HV1H2	unreviewed	Protein Vpu (U ORF protein) (Viral protein U)	vpu	Human immunodeficiency virus type 1 group M subtype B (isolate HXB2) (HIV-1)	82
+155945		Q9WB91	Q9WB91_9HIV1	unreviewed	Protein Vpu (U ORF protein) (Viral protein U)	vpu	Human immunodeficiency virus 1	82
 155908		P04618	REV_HV1H2	reviewed	Protein Rev (ART/TRS) (Anti-repression transactivator) (Regulator of expression of viral proteins)	rev	Human immunodeficiency virus type 1 group M subtype B (isolate HXB2) (HIV-1)	116
-155908		Q77YF8	Q77YF8_HV1H2	unreviewed	Protein Rev (Regulator of expression of viral proteins)	rev	Human immunodeficiency virus type 1 group M subtype B (isolate HXB2) (HIV-1)	116
+155908		Q77YF8	Q77YF8_9HIV1	unreviewed	Protein Rev (Regulator of expression of viral proteins)	rev	Human immunodeficiency virus 1	116
 2703458		G8HBE3	G8HBE3_HHV1	unreviewed	Major DNA-binding protein	UL29 DBP	Human herpesvirus 1 (HHV-1) (Human herpes simplex virus 1)	1196
 2703458		P04296	DNBI_HHV11	reviewed	Major DNA-binding protein	DBP ICP8 UL29	Human herpesvirus 1 (strain 17) (HHV-1) (Human herpes simplex virus 1)	1196
 852059		Q02336	ADA2_YEAST	reviewed	Transcriptional adapter 2	ADA2 YDR448W D9461.33	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	434
@@ -3652,7 +3649,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 855836		P02829	HSP82_YEAST	reviewed	ATP-dependent molecular chaperone HSP82 (82 kDa heat shock protein) (Heat shock protein Hsp90 heat-inducible isoform)	HSP82 HSP90 YPL240C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	709
 3077449		F5HIB9	F5HIB9_HCMV	unreviewed	Protein UL27	UL27	Human cytomegalovirus (HHV-5) (Human herpesvirus 5)	608
 3077449		Q6SWA4	UL27_HCMVM	reviewed	Protein UL27	UL27	Human cytomegalovirus (strain Merlin) (HHV-5) (Human herpesvirus 5)	608
-155807		A0A076PTX2	A0A076PTX2_HV1H2	unreviewed	Protein Vpr (Viral protein R)	vpr	Human immunodeficiency virus type 1 group M subtype B (isolate HXB2) (HIV-1)	78
+155807		Q77YF9	Q77YF9_9HIV1	unreviewed	Protein Vpr (Viral protein R)	vpr	Human immunodeficiency virus 1	78
 2542112		O42832	SPB1_SCHPO	reviewed	AdoMet-dependent rRNA methyltransferase spb1 (EC 2.1.1.-) (2'-O-ribose RNA methyltransferase) (S-adenosyl-L-methionine-dependent methyltransferase)	spb1 pmt2 SPAC1687.11	Schizosaccharomyces pombe (strain 972 / ATCC 24843) (Fission yeast)	802
 1724713		P18098	TAT_HV2BE	reviewed	Protein Tat (Transactivating regulatory protein)	tat	Human immunodeficiency virus type 2 subtype A (isolate BEN) (HIV-2)	130
 2540589		O14417	MAD2_SCHPO	reviewed	Mitotic spindle checkpoint component mad2	mad2 SPBC20F10.06	Schizosaccharomyces pombe (strain 972 / ATCC 24843) (Fission yeast)	203
@@ -3849,7 +3846,6 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 856570		P33334	PRP8_YEAST	reviewed	Pre-mRNA-splicing factor 8	PRP8 DBF3 DNA39 RNA8 SLT21 USA2 YHR165C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	2413
 856870		P32598	PP12_YEAST	reviewed	Serine/threonine-protein phosphatase PP1-2 (EC 3.1.3.16)	GLC7 CID1 DIS2 YER133W	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	312
 853768		P28321	MGLL_YEAST	reviewed	Monoglyceride lipase (MGL) (EC 3.1.1.23) (Monoacylglycerol hydrolase) (MAG hydrolase) (MGH) (Monoacylglycerol lipase) (MAG lipase) (MAGL) (Serine hydrolase YJU3)	YJU3 YKL094W YKL441	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	313
-1487325		A0A1U9ZDM0	A0A1U9ZDM0_HHV2	unreviewed	Ribonucleoside-diphosphate reductase large subunit (R1) (EC 1.17.4.1) (Ribonucleotide reductase large subunit)	UL39 RIR1	Human herpesvirus 2 (HHV-2) (Human herpes simplex virus 2)	1141
 1487325		G9I261	G9I261_HHV2	unreviewed	Ribonucleoside-diphosphate reductase large subunit (R1) (EC 1.17.4.1) (Ribonucleotide reductase large subunit)	UL39 RIR1	Human herpesvirus 2 (HHV-2) (Human herpes simplex virus 2)	1142
 1487325		P89462	RIR1_HHV2H	reviewed	Ribonucleoside-diphosphate reductase large subunit (R1) (EC 1.17.4.1) (Ribonucleotide reductase large subunit)	RIR1 UL39	Human herpesvirus 2 (strain HG52) (HHV-2) (Human herpes simplex virus 2)	1142
 855224		P15108	HSC82_YEAST	reviewed	ATP-dependent molecular chaperone HSC82 (82 kDa heat shock cognate protein) (Heat shock protein Hsp90 constitutive isoform)	HSC82 YMR186W YM8010.16	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	705
@@ -4092,7 +4088,6 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 850349		P25604	STP22_YEAST	reviewed	Suppressor protein STP22 of temperature-sensitive alpha-factor receptor and arginine permease (ESCRT-I complex subunit VPS23) (Vacuolar protein sorting-associated protein 23)	STP22 VPS23 YCL008C YCL8C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	385
 855739		P40343	VPS27_YEAST	reviewed	Vacuolar protein sorting-associated protein 27 (Golgi retention defective protein 11)	VPS27 DID7 GRD11 SSV17 VPL23 VPT27 YNR006W N2038	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	622
 851975		P33301	XRS2_YEAST	reviewed	DNA repair protein XRS2	XRS2 YDR369C D9481.13	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	854
-1487345		A0A109R1B7	A0A109R1B7_HHV2	unreviewed	Membrane protein UL56 (UL56)	UL56	Human herpesvirus 2 (HHV-2) (Human herpes simplex virus 2)	235
 1487345		G9I279	G9I279_HHV2	unreviewed	Membrane protein UL56	UL56	Human herpesvirus 2 (HHV-2) (Human herpes simplex virus 2)	235
 1487345		P28282	UL56_HHV2H	reviewed	Protein UL56	UL56	Human herpesvirus 2 (strain HG52) (HHV-2) (Human herpes simplex virus 2)	235
 853848		P35210	SPT23_YEAST	reviewed	Protein SPT23	SPT23 YKL020C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	1082
@@ -4269,7 +4264,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 853219		P32800	PEX2_YEAST	reviewed	Peroxisomal biogenesis factor 2 (Peroxin-2) (Peroxisomal protein PAS5) (Protein CRT1)	PEX2 CRT1 PAS5 YJL210W HRA271 J0240	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	271
 850938		Q05998	THI7_YEAST	reviewed	Thiamine transporter	THI7 THI10 YLR237W L8083.2	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	598
 850385		P25619	HSP30_YEAST	reviewed	30 kDa heat shock protein	HSP30 YCR021C YCR21C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	332
-854142		Q08144	TLG2_YEAST	reviewed	T-SNARE affecting a late Golgi compartment protein 2 (Syntaxin TLG2)	TLG2 YOL018C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	397
+854142		Q08144	TLG2_YEAST	reviewed	t-SNARE affecting a late Golgi compartment protein 2 (Syntaxin TLG2)	TLG2 YOL018C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	397
 856249		Q06504	NAT3_YEAST	reviewed	N-terminal acetyltransferase B complex catalytic subunit NAT3 (NatB complex subunit NAT3) (EC 2.3.1.254) (NatB Nalpha terminal acetyltransferase 3)	NAT3 YPR131C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	195
 853893		P36119	YK03_YEAST	reviewed	Uncharacterized protein YKR023W	YKR023W	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	530
 851997		P17121	SAC7_YEAST	reviewed	GTPase-activating protein SAC7	SAC7 YDR389W	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	654
@@ -4292,7 +4287,7 @@ yourlist:M20171022A7434721E10EE6586998A056CCD0537E189CD35	isomap:M20171022A74347
 852587		P38150	YB9Z_YEAST	reviewed	Inactive deaminase YBR284W	YBR284W YBR2021	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	797
 854466		Q12697	YPK9_YEAST	reviewed	Vacuolar cation-transporting ATPase YPK9 (EC 3.6.3.-) (PARK9 homolog)	YPK9 YOR291W	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	1472
 856056		Q02804	ARL3_YEAST	reviewed	ADP-ribosylation factor-like protein 3 (Arf-like GTPase 3)	ARL3 ARP1 YPL051W	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	198
-853316		P47016	NIT2_YEAST	reviewed	Probable hydrolase NIT2 (EC 3.5.-.-)	NIT2 YJL126W J0706	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	307
+853316		P47016	NIT2_YEAST	reviewed	Deaminated glutathione amidase (dGSH amidase) (EC 3.5.1.-) (Nitrilase homolog 1)	NIT2 YJL126W J0706	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	307
 856606		P38885	AIM46_YEAST	reviewed	Altered inheritance of mitochondria protein 46, mitochondrial (Found in mitochondrial proteome protein 34)	AIM46 FMP34 YHR199C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	310
 852622		P53036	SAP4_YEAST	reviewed	SIT4-associating protein SAP4	SAP4 YGL229C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	818
 851705		P08566	ARO1_YEAST	reviewed	Pentafunctional AROM polypeptide [Includes: 3-dehydroquinate synthase (DHQS) (EC 4.2.3.4); 3-phosphoshikimate 1-carboxyvinyltransferase (EC 2.5.1.19) (5-enolpyruvylshikimate-3-phosphate synthase) (EPSP synthase) (EPSPS); Shikimate kinase (SK) (EC 2.7.1.71); 3-dehydroquinate dehydratase (3-dehydroquinase) (EC 4.2.1.10); Shikimate dehydrogenase (EC 1.1.1.25)]	ARO1 AROM YDR127W YD9302.02	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	1588
