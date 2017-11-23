@@ -505,8 +505,8 @@ if __name__ == '__main__':
     # ignore_index=True).str.extract('^.*:(\w*)-?',expand=False).unique())
 
     # Get set of unique ACs
-    unique_ac = set(pd.unique(df_concat['xref_B'].str.extract('^.*:(\w*)-?', expand=False).append(
-        df_concat['xref_A'].str.extract('^.*:(\w*)-?', expand=False), ignore_index=True)))
+    unique_ac = set(pd.unique(df_herpes['xref_B'].str.extract('^.*:(\w*)-?', expand=False).append(
+        df_herpes['xref_A'].str.extract('^.*:(\w*)-?', expand=False), ignore_index=True)))
 
     # Add InterPro labels
     print('Adding InterPro annotations...')
