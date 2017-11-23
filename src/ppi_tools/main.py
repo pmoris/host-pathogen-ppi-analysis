@@ -606,4 +606,38 @@ if __name__ == '__main__':
 
         df_herpes.to_csv(str(output_directory) + r'/ppi_network.csv', sep=';', index=False)
 
+        # output for subgraph mining
+        df_host = df_herpes.drop_duplicates('xref_A')[['xref_A', 'xref_A_GO', 'interpro_A']]
+
+        df_host_go = df_host['xref_A_GO'].str.split(',', expand=True)
+        df_host_go['xref_A'] = df_host.xref_A
+        df_host_go = pd.melt(df_host_go, id_vars=['xref_A'], value_name='label').drop('variable', axis=1).dropna()
+
+        df_host_ip = df_host['interpro_A'].str.split(',', expand=True)
+        df_host_ip['xref_A'] = df_host.xref_A
+        df_host_ip = pd.melt(df_host_ip, id_vars=['xref_A'], value_name='label').drop('variable', axis=1).dropna()
+
+        df_virus = df_herpes.drop_duplicates('xref_B')[['xref_B', 'xref_B_GO', 'interpro_B']]
+
+        df_virus_go = df_virus['xref_B_GO'].str.split(',', expand=True)
+        df_virus_go['xref_B'] = df_virus.xref_B
+        df_virus_go = pd.melt(df_virus_go, id_vars=['xref_B'], value_name='label').drop('variable', axis=1).dropna()
+
+        df_virus_ip = df_virus['interpro_B'].str.split(',', expand=True)
+        df_virus_ip['xref_B'] = df_virus.xref_B
+        df_virus_ip = pd.melt(df_virus_ip, id_vars=['xref_B'], value_name='label').drop('variable', axis=1).dropna()
+
+        pd_host_label = pd.concat([df_host_go, df_host_ip])
+        pd_host_label.columns = ['protein', 'label']
+        pd_virus_label = pd.concat([df_virus_ip, df_virus_go])
+        pd_virus_label.columns = ['protein', 'label']
+
+        df_labels = pd.concat([pd_host_label, pd_virus_label])
+
+        output_directory = output_directory.resolve().parent / 'network'
+        output_directory.mkdir(exist_ok=True)
+        print('Saving network for subgraph discovery to', output_directory.resolve())
+        df_labels.to_csv(output_directory / 'labels.csv', sep='\t')
+        df_herpes[['xref_A', 'xref_B']].to_csv(output_directory / 'network.csv', sep='\t')
+
 # TODO: create taxid-pair identifier
