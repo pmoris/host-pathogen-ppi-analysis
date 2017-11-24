@@ -505,6 +505,8 @@ if __name__ == '__main__':
     # ignore_index=True).str.extract('^.*:(\w*)-?',expand=False).unique())
 
     # Get set of unique ACs
+    # note that this regex doesn't capture post translational modification id's such as uniprotkb:P04294-PRO_0000115690
+    # in order to not upset the GO dictionary
     unique_ac = set(pd.unique(df_herpes['xref_B'].str.extract('^.*:(\w*)-?', expand=False).append(
         df_herpes['xref_A'].str.extract('^.*:(\w*)-?', expand=False), ignore_index=True)))
 
@@ -633,11 +635,17 @@ if __name__ == '__main__':
         pd_virus_label.columns = ['protein', 'label']
 
         df_labels = pd.concat([pd_host_label, pd_virus_label])
+        df_labels['protein'] = df_labels['protein'].str.split(':').str.get(1)
+
+        df_network = df_herpes.loc[:,['xref_A', 'xref_B']]
+        df_network['xref_A'] = df_network['xref_A'].str.split(':').str.get(1)
+        df_network['xref_B'] = df_network['xref_B'].str.split(':').str.get(1)
 
         output_directory = output_directory.resolve().parent / 'network'
         output_directory.mkdir(exist_ok=True)
         print('Saving network for subgraph discovery to', output_directory.resolve())
-        df_labels.to_csv(output_directory / 'labels.csv', sep='\t')
-        df_herpes[['xref_A', 'xref_B']].to_csv(output_directory / 'network.csv', sep='\t')
+        df_labels.to_csv(output_directory / 'labels.csv', sep='\t', index=False, header=False)
+        df_network.to_csv(output_directory / 'network.csv', sep='\t', index=False, header=False)
+        pd.Series(list(unique_ac)).to_csv(output_directory / 'all_nodes.csv', index=False)
 
 # TODO: create taxid-pair identifier
