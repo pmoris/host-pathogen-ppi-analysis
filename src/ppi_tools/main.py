@@ -12,10 +12,11 @@ Paths are hard-coded relative to the repository.
 # TODO: mutuable list default values should be changed to tuples or if None, set to list
 
 import os, sys
-sys.path.append(os.path.abspath('..'))
-# or Path('.').parent
-
 from pathlib import Path
+sys.path.append(str(Path(__file__).parents[1].resolve()))
+# os.path.abspath(__file__ + "/../../")
+# os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+# os.path.dirname(os.path.dirname(__file__))
 
 import argparse
 import numpy as np
