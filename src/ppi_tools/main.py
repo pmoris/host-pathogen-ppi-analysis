@@ -577,8 +577,10 @@ if __name__ == '__main__':
     # Save output
     if not args.dry:
         # Note: Pathlib functionality is broken in Pandas 0.20!
-        output_directory = Path(args.output)
-        output_directory.mkdir(exist_ok=True)
+
+        # Save transaction datasets
+        output_directory = Path(args.output) / 'transaction_datasets'
+        output_directory.mkdir(exist_ok=True, parents=True)
         output_path = output_directory / 'ppi_transactions.csv'
         print('Saving labelled PPI datasets to', output_directory.resolve())
         df_output = df_herpes[['xref_partners_sorted', 'GO', 'interpro']]
@@ -610,9 +612,10 @@ if __name__ == '__main__':
         # df_herpes[['xref_A_GO', 'xref_B_GO']].notnull().all(axis=1)
         # TODO: EBI-intact identifiers?
 
+        # Save full dataset
         df_herpes.to_csv(str(output_directory) + r'/ppi_network.csv', sep=';', index=False)
 
-        # output for subgraph mining
+        # Save output suited for subgraph mining
         df_host = df_herpes.drop_duplicates('xref_A')[['xref_A', 'xref_A_GO', 'interpro_A']]
 
         df_host_go = df_host['xref_A_GO'].str.split(',', expand=True)
@@ -645,8 +648,8 @@ if __name__ == '__main__':
         df_network['xref_A'] = df_network['xref_A'].str.split(':').str.get(1)
         df_network['xref_B'] = df_network['xref_B'].str.split(':').str.get(1)
 
-        output_directory = output_directory.resolve().parent / 'network'
-        output_directory.mkdir(exist_ok=True)
+        output_directory = output_directory.parent / 'network'
+        output_directory.mkdir(exist_ok=True, parents=True)
         print('Saving network for subgraph discovery to', output_directory.resolve())
         df_labels.to_csv(output_directory / 'labels.csv', sep='\t', index=False, header=False)
         df_network.to_csv(output_directory / 'network.csv', sep='\t', index=False, header=False)
