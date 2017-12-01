@@ -81,7 +81,7 @@ def create_mapping_files(interaction_dataframe, from_id, description, savepath, 
           'in the data sets.\nStored in', str(savepath.resolve()) + '.')
 
 
-def map2uniprot(interaction_dataframe, filepath=r'../../data/interim/mappings/', columns=None):
+def map2uniprot(interaction_dataframe, filepath='data/interim/mappings/', columns=None):
     """ Remap identifiers to UniProt AC's.
 
     Replaces non-UniProt AC's for the specified columns of a pandas DataFrame.

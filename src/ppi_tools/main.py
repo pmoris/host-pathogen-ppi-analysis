@@ -254,29 +254,32 @@ def pathogen_group_mapper(taxid, pathogen_group_dict):
 
 
 if __name__ == '__main__':
+    # set directory to repository base path
+    repo_source_path = Path(os.path.abspath(__file__)).parents[2]
+    os.chdir(str(repo_source_path))
+
     # Check provided arguments
     parser = argparse.ArgumentParser(
         description='Script to filter and annotate PPI databases into a dataset suitable for itemset mining.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-d', '--dry', action="store_true", help='Perform dry run without saving output.')
-    parser.add_argument('-o', '--output', type=str, default=r'../../data/processed/transaction_datasets/',
+    parser.add_argument('-o', '--output', type=str, default='data/processed/parsed_ppi/',
                         help='Output file or path')
     # TODO: add arguments for every type of input data source instead of hardcoding directory structure.
     args = parser.parse_args()
 
     # Read in PPI datasets
-    df_virhost = ppi_import.read_mitab_virhost(r'../../data/raw/ppi_data/VirHostNet_January_2017.txt')
-
-    df_hpidb2 = ppi_import.read_mitab_hpidb2(r'../../data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt')
-
-    df_phisto = ppi_import.read_mitab_phisto(r'../../data/raw/ppi_data/phisto_Jan19_2017.csv',
-                                             r'../../data/raw/ppi_data/mi.obo')
+    df_virhost = ppi_import.read_mitab_virhost('data/raw/ppi_data/VirHostNet_January_2017.txt')
+    df_hpidb2 = ppi_import.read_psi_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
+    df_phisto = ppi_import.read_mitab_phisto('data/raw/ppi_data/phisto_Jan19_2017.csv',
+                                             'data/raw/ppi_data/mi.obo')
+    df_intact = ppi_import.read_psi_mi_tab('data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
 
     # Concatenate the different sources
     print('Concatenating PPI datasets...')
-    df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto])
+    df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto, df_intact])
 
     # Map non-UniProt entries to UniProt ACs
-    id_mapper.map2uniprot(df_concat, filepath=r'../../data/interim/mappings/')
+    id_mapper.map2uniprot(df_concat, filepath='data/interim/mappings/')
     # TODO: no intact-EBI mapping...
     # Remove PPIs with multiple id mappings because otherwise this would artificially inflate their numbers during
     # frequent item set mining
@@ -339,9 +342,9 @@ if __name__ == '__main__':
     # TODO: and a host list or default to all hosts
     # TODO: note that this filtering will generally result in intra-host interactions being omitted,
     # TODO: while retaining intra-viral ones
-    with Path(r'../../data/interim/child_taxids_of_10292.txt').open() as taxid_file:
+    with Path('data/interim/child_taxids_of_10292.txt').open() as taxid_file:
         herpes_taxids = [str('taxid:' + line.split('|')[0]) for line in taxid_file]
-    print(r'Retrieving Herpes taxids from ../../data/interim/child_taxids_of_10292.txt')
+    print(r'Retrieving Herpes taxids from data/interim/child_taxids_of_10292.txt')
 
     # Extract Herpesviridae interactions
     # This omits all human-human interactions, but not intra-virus interactions
@@ -388,7 +391,7 @@ if __name__ == '__main__':
     all_taxids = df_herpes['taxid_A'].append(df_herpes['taxid_B']).unique()
     host_taxids = list(np.setdiff1d(all_taxids, herpes_taxids))
 
-    taxid_names_path = Path(r'../../data/raw/taxdump/names.dmp')
+    taxid_names_path = Path('data/raw/taxdump/names.dmp')
     name2taxid, taxid2name = retrieve_taxids.parse_taxid_names(str(taxid_names_path))
 
     for i in host_taxids:
@@ -397,7 +400,7 @@ if __name__ == '__main__':
         print(taxid, taxid2name[taxid], count)
 
     # Create taxid dictionaries
-    taxid_nodes_path = Path(r'../../data/raw/taxdump/nodes.dmp')
+    taxid_nodes_path = Path('data/raw/taxdump/nodes.dmp')
     taxid2parent, taxid2rank = retrieve_taxids.parse_taxid_nodes(str(taxid_nodes_path))
     parent2child = retrieve_taxids.create_parent2child_dict(taxid2parent)
 
@@ -412,7 +415,7 @@ if __name__ == '__main__':
     # Create Gene Ontology dictionaries
     print('Creating Gene Ontology dictionaries...')
     # TODO: create quickGO query using host list + herpesviridae
-    go_dict = obo_tools.importOBO(r'../../data/raw/go_data/go.obo')
+    go_dict = obo_tools.importOBO(r'data/raw/go_data/go.obo')
     # TODO: allow selection of GO namespaces
     obo_tools.buildGOtree(go_dict, root_nodes=['GO:0008150', 'GO:0005575', 'GO:0003674'])
 
@@ -420,7 +423,7 @@ if __name__ == '__main__':
     # Needs special extract pattern because of PTM processing id's e.g. P04295-PRO_0000115940
     protein_set = set(df_herpes.xref_A.append(df_herpes.xref_B, ignore_index=True).str.extract('^.*:(\w*)-?',
                                                                                                expand=False).unique())
-    gaf_dict = gaf_parser.importGAF(r'../../data/raw/go_data/gene_association_hosts_10292.goa', protein_set)
+    gaf_dict = gaf_parser.importGAF(r'data/raw/go_data/gene_association_hosts_10292.goa', protein_set)
 
     # Number of proteins without GO annotation
     print('\nNumber of proteins without GO annotation')
@@ -513,7 +516,7 @@ if __name__ == '__main__':
     # Add InterPro labels
     print('Adding InterPro annotations...')
     uniprot2interpro = label_interpro.create_uniprot2interpro_dict(unique_ac,
-                                                                   filepath=r'../../data/interim/interpro_data'
+                                                                   filepath=r'data/interim/interpro_data'
                                                                             r'/protein2ipr_filtered.txt')
     label_interpro.annotate_interpro(df_herpes, uniprot2interpro)
     label_host_pathogen(df_herpes, herpes_taxids, columns=['interpro_A', 'interpro_B'],

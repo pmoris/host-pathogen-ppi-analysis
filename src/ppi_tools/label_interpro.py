@@ -7,13 +7,12 @@ Module to add GO annotations and re-map them to a desired depth.
 import collections
 
 import numpy as np
-import pandas as pd
 
 from pathlib import Path
 
 
 def create_uniprot2interpro_dict(uniprot_ac_list,
-                                 filepath=r'../../data/interim/interpro_data/protein2ipr_filtered.txt'):
+                                 filepath='data/interim/interpro_data/protein2ipr_filtered.txt'):
     """
     Creates a dictionary mapping UniProt ACs to InterPro domains.
 
