@@ -1,0 +1,115 @@
+[ {
+  "format_version" : "1.0",
+  "generated_by" : "cytoscape-3.4.0",
+  "target_cytoscapejs_version" : "~2.1",
+  "title" : "PPI_POSTER",
+  "style" : [ {
+    "selector" : "node",
+    "css" : {
+      "font-size" : 24,
+      "height" : 40.0,
+      "border-opacity" : 1.0,
+      "text-valign" : "bottom",
+      "text-halign" : "right",
+      "width" : 40.0,
+      "font-family" : "Dialog.plain",
+      "font-weight" : "normal",
+      "shape" : "ellipse",
+      "color" : "rgb(90,90,90)",
+      "text-opacity" : 1.0,
+      "border-color" : "rgb(255,255,255)",
+      "background-opacity" : 1.0,
+      "background-color" : "rgb(0,160,130)",
+      "border-width" : 6.0,
+      "content" : "data(name)"
+    }
+  }, {
+    "selector" : "node[host_virus]",
+    "css" : {
+      "background-color" : "rgb(6,142,108)"
+    }
+  }, {
+    "selector" : "node[!host_virus]",
+    "css" : {
+      "background-color" : "rgb(181,209,65)"
+    }
+  }, {
+    "selector" : "node:selected",
+    "css" : {
+      "background-color" : "rgb(255,255,0)"
+    }
+  }, {
+    "selector" : "edge",
+    "css" : {
+      "target-arrow-color" : "rgb(255,255,255)",
+      "source-arrow-color" : "rgb(255,255,255)",
+      "line-style" : "solid",
+      "font-family" : "SansSerif.plain",
+      "font-weight" : "normal",
+      "target-arrow-shape" : "triangle",
+      "font-size" : 10,
+      "line-color" : "rgb(255,255,255)",
+      "source-arrow-shape" : "none",
+      "width" : 4.0,
+      "color" : "rgb(102,102,102)",
+      "opacity" : 1.0,
+      "content" : "",
+      "text-opacity" : 1.0
+    }
+  }, {
+    "selector" : "edge[freq_sum > 170,128]",
+    "css" : {
+      "width" : 1.0
+    }
+  }, {
+    "selector" : "edge[freq_sum = 170,128]",
+    "css" : {
+      "width" : 25.096940280945322
+    }
+  }, {
+    "selector" : "edge[freq_sum > 320][freq_sum < 170,128]",
+    "css" : {
+      "width" : "mapData(freq_sum,320,170,128,4.2056804750023815,25.096940280945322)"
+    }
+  }, {
+    "selector" : "edge[freq_sum = 320]",
+    "css" : {
+      "width" : 4.2056804750023815
+    }
+  }, {
+    "selector" : "edge[freq_sum < 320]",
+    "css" : {
+      "width" : 1.0
+    }
+  }, {
+    "selector" : "edge[max_confidence > 0.9097]",
+    "css" : {
+      "opacity" : 0.00392156862745098
+    }
+  }, {
+    "selector" : "edge[max_confidence = 0.9097]",
+    "css" : {
+      "opacity" : 1.5137254901960784
+    }
+  }, {
+    "selector" : "edge[max_confidence > 0.75][max_confidence < 0.9097]",
+    "css" : {
+      "opacity" : "mapData(max_confidence,0.75,0.9097,93,386)"
+    }
+  }, {
+    "selector" : "edge[max_confidence = 0.75]",
+    "css" : {
+      "opacity" : 0.36470588235294116
+    }
+  }, {
+    "selector" : "edge[max_confidence < 0.75]",
+    "css" : {
+      "opacity" : 0.00392156862745098
+    }
+  }, {
+    "selector" : "edge:selected",
+    "css" : {
+      "line-color" : "rgb(255,0,0)"
+    }
+  } ]
+} ]
