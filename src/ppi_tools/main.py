@@ -151,8 +151,8 @@ def reorder_pathogen_host_entries(interaction_dataframe, host_list=list('taxid:9
                                                                                                columns_after_swap].values
 
 
-def label_host_pathogen(interaction_dataframe, pathogen_set, columns=list(('xref_A_GO', 'xref_B_GO')),
-                        taxid_columns=list(('taxid_A', 'taxid_B'))):
+def label_host_pathogen(interaction_dataframe, pathogen_set, columns=None,
+                        taxid_columns=None):
     """ Adds virus/host label to selected columns in DataFrame.
 
     The columns and taxid lists should be of equal length and ordered in the same manner. E.g. for each position
@@ -176,6 +176,10 @@ def label_host_pathogen(interaction_dataframe, pathogen_set, columns=list(('xref
     None
         Modifies the pandas DataFrame inplace.
     """
+    if not columns:
+        columns = ['xref_A_GO', 'xref_B_GO']
+    if not taxid_columns:
+        taxid_columns = ['taxid_A', 'taxid_B']
     if not len(columns) == len(taxid_columns):
         raise ValueError("Lists of columns to label should match taxid columns.")
 
