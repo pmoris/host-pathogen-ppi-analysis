@@ -70,7 +70,7 @@ from pathlib import Path
 
 import pandas as pd
 
-def read_mitab_hpidb2(filepath):
+def read_psi_mi_tab(filepath, name):
     """Read HPIDB2 data set into pandas DataFrame.
 
     Renames headers to standard format used by this module.
@@ -78,7 +78,7 @@ def read_mitab_hpidb2(filepath):
 
     Parameters
     ----------
-    filepath : string
+    filepath : string or Pathlib object
         file path to HPIDB2 data set.
 
     Returns
@@ -100,8 +100,8 @@ def read_mitab_hpidb2(filepath):
     df.taxid_A = df.taxid_A.str.split('(').str.get(0)
     df.taxid_B = df.taxid_B.str.split('(').str[0]
     # name dataframe
-    df.name = 'HPIDB2'
-    print('Read PPI data set', df.name, 'from', filepath + '.')
+    df.name = name
+    print('Read PPI data set', df.name, 'from', str(filepath) + '.')
     return df
 
 
@@ -112,7 +112,7 @@ def read_mitab_virhost(filepath):
 
     Parameters
     ----------
-    filepath : string
+    filepath : string or Pathlib object
         file path to VirHost data set.
 
     Returns
@@ -131,7 +131,7 @@ def read_mitab_virhost(filepath):
     df.source_database_ids = df.source_database_ids.str.replace('"', '')
     # name dataframe
     df.name = 'VirHostNet2'
-    print('Read PPI data set', df.name, 'from', filepath + '.')
+    print('Read PPI data set', df.name, 'from', str(filepath) + '.')
     return df
 
 
@@ -145,7 +145,7 @@ def read_mitab_phisto(mitab_filepath, mi_filepath):
     ----------
     mitab_filepath : string
         file path to PHISTO data set.
-    mi_filepath : string
+    mi_filepath : string or Pathlib object
         file path to psi-mi .obo file.
 
     Returns
@@ -176,7 +176,7 @@ def read_mitab_phisto(mitab_filepath, mi_filepath):
     df['taxid_A'] = 'taxid:9606'
     # name dataframe
     df.name = 'PHISTO'
-    print('Read PPI data set', df.name, 'from', mitab_filepath + '.')
+    print('Read PPI data set', df.name, 'from', str(mitab_filepath) + '.')
     return df
 
 
