@@ -1,24 +1,9 @@
-*.goa
-*.obo
+# ignore large raw data files
+data/raw/go_data/*
+data/raw/ppi_data/*
+data/raw/taxdump/*
 
-\.idea/
-*/__pycache__/
-
-domain-motif/
-
-MiningPatterns1.0/
-
-docs/\.ipynb_checkpoints/
-
-data/raw/*
-
-src/data_prep/__pycache__/
-src/go_tools/__pycache__/
-src/ppi_tools/__pycache__/
-src/mining/MiningPattern2.0b
-
-notebooks/\.ipynb_checkpoints/
-
-notes-to-do\.txt
-
+todo.md
+meeting-pointers.txt
+test
 pattern_mining_tool/
