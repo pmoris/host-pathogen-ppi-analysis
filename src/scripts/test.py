@@ -4,11 +4,11 @@ from ..phppipy.ppi_tools import import
 #     first_line = f.readline()
 #     print(first_line)
 
-# df = import.read_mi_tab('data/raw/ppi_data/VirHostNet_January_2017.txt')
+# df = ppi_import.read_mi_tab('data/raw/ppi_data/VirHostNet_January_2017.txt')
 # print(df.head())
-# df = import.read_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab.txt')
+# df = ppi_import.read_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab.txt')
 # print(df.head())
-df = import.read_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt')
+df = ppi_import.read_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt')
 print(df.head())
 
 print(df.columns.values)

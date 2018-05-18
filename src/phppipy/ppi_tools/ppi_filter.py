@@ -21,14 +21,14 @@ def annotate_inter_intra_species(interaction_dataframe):
     """
     interaction_dataframe['inter-intra-species'] = np.where(
         interaction_dataframe.taxid_A == interaction_dataframe.taxid_B,
-        'intra-species', 'inter-species')
+        'intra', 'inter')
 
 
 def annotate_inter_intra_pathogen(interaction_dataframe, pathogen_taxa):
     """Adds column to DataFrame specifying whether interaction is between
     pathogens or between pathogens and hosts.
 
-    The added column is named "inter-intra-species".
+    The added column is named "inter-intra-pathogen".
 
     Parameters
     ----------
@@ -45,5 +45,5 @@ def annotate_inter_intra_pathogen(interaction_dataframe, pathogen_taxa):
     """
     interaction_dataframe['inter-intra-pathogen'] = np.where(
         interaction_dataframe.taxid_A.isin(pathogen_taxa) &
-        interaction_dataframe.taxid_B.isin(pathogen_taxa), 'intra-pathogen',
+        interaction_dataframe.taxid_B.isin(pathogen_taxa), 'intra',
         'inter')

@@ -23,18 +23,18 @@ from ppi_tools import import
 
 repo_source_path = Path(os.path.abspath(__file__)).parents[2]
 
-df_virhost = import.read_mitab_virhost(repo_source_path / 'data/raw/ppi_data/VirHostNet_January_2017.txt')
+df_virhost = ppi_import.read_mitab_virhost(repo_source_path / 'data/raw/ppi_data/VirHostNet_January_2017.txt')
     # r'../ppi_data/VirHostNet_January_2017.txt')
 
-df_hpidb2 = import.read_psi_mi_tab(repo_source_path / 'data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
+df_hpidb2 = ppi_import.read_psi_mi_tab(repo_source_path / 'data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
     # r'../ppi_data/hpidb2_March14_2017_mitab_plus.txt')
 
-df_phisto = import.read_mitab_phisto(repo_source_path / 'data/raw/ppi_data/phisto_Jan19_2017.csv',
+df_phisto = ppi_import.read_mitab_phisto(repo_source_path / 'data/raw/ppi_data/phisto_Jan19_2017.csv',
                                         repo_source_path / 'data/raw/ppi_data/mi.obo')
     # r'../ppi_data/phisto_Jan19_2017.csv',
     #                           r'../ppi_data/mi.obo')
 
-df_intact = import.read_psi_mi_tab(repo_source_path / 'data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
+df_intact = ppi_import.read_psi_mi_tab(repo_source_path / 'data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
 
 
 df_concat = main.concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto, df_intact])

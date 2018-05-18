@@ -272,11 +272,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Read in PPI datasets
-    df_virhost = import.read_mitab_virhost('data/raw/ppi_data/VirHostNet_January_2017.txt')
-    df_hpidb2 = import.read_psi_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
-    df_phisto = import.read_mitab_phisto('data/raw/ppi_data/phisto_Jan19_2017.csv',
+    df_virhost = ppi_import.read_mitab_virhost('data/raw/ppi_data/VirHostNet_January_2017.txt')
+    df_hpidb2 = ppi_import.read_psi_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
+    df_phisto = ppi_import.read_mitab_phisto('data/raw/ppi_data/phisto_Jan19_2017.csv',
                                              'data/raw/ppi_data/mi.obo')
-    df_intact = import.read_psi_mi_tab('data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
+    df_intact = ppi_import.read_psi_mi_tab('data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
 
     # Concatenate the different sources
     print('Concatenating PPI datasets...')

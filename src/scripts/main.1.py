@@ -268,14 +268,14 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Read in PPI datasets
-    # df_virhost = import.read_mi_tab('data/raw/ppi_data/VirHostNet_January_2017.txt')
-    # df_hpidb2 = import.read_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt')
-    df_virhost = import.read_mitab_virhost('data/raw/ppi_data/VirHostNet_January_2017.txt')
-    df_hpidb2 = import.read_psi_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
-    df_phisto = import.read_mitab_phisto('data/raw/ppi_data/phisto_Jan19_2017.csv',
+    # df_virhost = ppi_import.read_mi_tab('data/raw/ppi_data/VirHostNet_January_2017.txt')
+    # df_hpidb2 = ppi_import.read_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt')
+    df_virhost = ppi_import.read_mitab_virhost('data/raw/ppi_data/VirHostNet_January_2017.txt')
+    df_hpidb2 = ppi_import.read_psi_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
+    df_phisto = ppi_import.read_mitab_phisto('data/raw/ppi_data/phisto_Jan19_2017.csv',
                                              'data/raw/ppi_data/mi.obo')
-    df_intact = import.read_psi_mi_tab('data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
-    # df_intact = import.read_mi_tab('data/raw/ppi_data/intact_virus_2017_12_1.txt')
+    df_intact = ppi_import.read_psi_mi_tab('data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
+    # df_intact = ppi_import.read_mi_tab('data/raw/ppi_data/intact_virus_2017_12_1.txt')
 
     # Concatenate the different sources
     print('Concatenating PPI datasets...')
@@ -417,11 +417,11 @@ if __name__ == '__main__':
             herpes_taxids = [str('taxid:' + line.split('|')[0]) for line in taxid_file]
 
     # Import PPI datasets
-    df_virhost = import.read_mitab_virhost(r'data/raw/ppi_data/VirHostNet_January_2017.txt')
-    df_hpidb2 = import.read_psi_mi_tab(r'data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
-    df_phisto = import.read_mitab_phisto(r'data/raw/ppi_data/phisto_Jan19_2017.csv',
+    df_virhost = ppi_import.read_mitab_virhost(r'data/raw/ppi_data/VirHostNet_January_2017.txt')
+    df_hpidb2 = ppi_import.read_psi_mi_tab(r'data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
+    df_phisto = ppi_import.read_mitab_phisto(r'data/raw/ppi_data/phisto_Jan19_2017.csv',
                                             r'data/raw/ppi_data/mi.obo')
-    df_intact = import.read_psi_mi_tab(r'data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
+    df_intact = ppi_import.read_psi_mi_tab(r'data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
     df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto, df_intact])
 
     # filter on Herpesviridae
@@ -448,11 +448,11 @@ if __name__ == '__main__':
 
     input_dir = Path('/media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/raw(copy)/ppi_data')
     mitab_files = input_dir.glob('*.mitab')
-    ppi_dfs = [import.read_mi_tab(i) for i in mitab_files if i.is_file()]
+    ppi_dfs = [ppi_import.read_mi_tab(i) for i in mitab_files if i.is_file()]
     phisto_files = input_dir.glob('phi*.csv')
     mi_file = input_dir / 'mi.obo'
     ppi_dfs.extend(
-        [import.read_mitab_phisto(i, mi_file) for i in phisto_files])
+        [ppi_import.read_mitab_phisto(i, mi_file) for i in phisto_files])
     for i in ppi_dfs:
         i['origin'] = i.name
     ppi_df = pd.concat(ppi_dfs, axis=0, join='outer', ignore_index=True)
@@ -481,11 +481,11 @@ if __name__ == '__main__':
 
     input_dir = Path('/media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/raw-new/ppi_data')
     mitab_files = input_dir.glob('*.mitab')
-    ppi_dfs = [import.read_mi_tab(i) for i in mitab_files if i.is_file()]
+    ppi_dfs = [ppi_import.read_mi_tab(i) for i in mitab_files if i.is_file()]
     phisto_files = input_dir.glob('phi*.csv')
     mi_file = input_dir / 'mi.obo'
     ppi_dfs.extend(
-        [import.read_mitab_phisto(i, mi_file) for i in phisto_files])
+        [ppi_import.read_mitab_phisto(i, mi_file) for i in phisto_files])
     for i in ppi_dfs:
         i['origin'] = i.name
     ppi_df = pd.concat(ppi_dfs, axis=0, join='outer', ignore_index=True)
