@@ -5,13 +5,12 @@ Module to add GO annotations and re-map them to a desired depth.
 """
 
 import numpy as np
-import pandas as pd
 
 def annotate_GO(interaction_dataframe, gaf_dict):
     """ Adds Gene Ontology terms to interaction dataset.
 
         Creates separate columns with Gene Ontology terms for both interaction partner in the interaction DataFrame.
-        Note that the UniProt AC's need to be formatted to remove potential PTM labels, e.g. P04295-PRO_0000115940.
+        Note that the UniProt ACs need to be formatted to remove potential PTM labels, e.g. P04295-PRO_0000115940.
 
         Parameters
         ----------
@@ -19,7 +18,7 @@ def annotate_GO(interaction_dataframe, gaf_dict):
             The pandas DataFrame containing the protein-protein interactions to be labelled.
 
         gaf_dict : dictionary
-            A dictionary mapping UniProt AC's to Gene Ontology terms.
+            A dictionary mapping UniProt ACs to Gene Ontology terms.
 
         Returns
         -------
@@ -36,7 +35,7 @@ def annotate_GO(interaction_dataframe, gaf_dict):
         lambda x: gaf_dict.get(x, np.NaN))
 
 
-def remap_GO_depth(interaction_dataframe, depth, go_dict, exception_list=None, GO_columns=None):
+def remap_GO_depth(interaction_dataframe, depth, go_dict, test_set_not, test_set_in, exception_list=None, GO_columns=None):
     """Remaps the GO terms in an interaction dataframe to their ancestor terms of the desired depth of the GO hierarchy.
 
     Goes through the GO term sets in the provided columns (default "xref_A_GO" and "xref_B_GO") of an interaction
@@ -75,10 +74,10 @@ def remap_GO_depth(interaction_dataframe, depth, go_dict, exception_list=None, G
     for i in GO_columns:
         interaction_dataframe.loc[interaction_dataframe[i].notnull(), i] = \
             interaction_dataframe.loc[interaction_dataframe[i].notnull()].apply(
-                lambda x: remap_GO_apply_row_operation(x[i], depth, go_dict, exception_list), axis=1)
+                lambda x: _remap_GO_apply_row_operation(x[i], depth, go_dict, exception_list, test_set_not, test_set_in), axis=1)
 
 
-def remap_GO_apply_row_operation(GO_set, depth, go_dict, exception_list):
+def _remap_GO_apply_row_operation(GO_set, depth, go_dict, exception_list, test_set_not, test_set_in):
     """Remaps all the GO terms in a set to their ancestors of the specified depth.
 
     All the GO terms in a set, e.g. those in a specific row of a pandas Series accessed through apply, are mapped to
@@ -106,6 +105,7 @@ def remap_GO_apply_row_operation(GO_set, depth, go_dict, exception_list):
         A set of GO terms of the specified depth that are ancestors of the initial terms in the set.
 
     """
+
     # Define a new set to collect all remapped terms of the desired depth.
     remapped_nodes = set()
     # For each GO term on the current row, i.e. associated with the protein in the corresponding xref column
@@ -117,19 +117,24 @@ def remap_GO_apply_row_operation(GO_set, depth, go_dict, exception_list):
                 # ...and add it to the remapped set if this is the case. Removing this line would omit the term.
                 # unless it is in the exception list
                 if GO_term not in exception_list:
-                    remapped_nodes.add(GO_term)
+                    print('GO term {} was not in the exception list and will be added as is due to lower depth!'.format(GO_term))
+                    remapped_nodes.add(GO_term) # these terms make up a substantial amount of terms, depending on the depth limit
+                    test_set_not.append(GO_term) # but they are relatively uninformative and will likely be filtered out later...again depending on the depth
                     # Note that without the 'if not in exclusion' check this might add a term in the exclusion list,
                     # but there is no way to remap it back to a more specific term since it's the base call prior
                     # to any recursive climb...
+                else:
+                    print('GO term {} was in the exception list and won\' be mapped upwards!'.format(GO_term))
+                    test_set_in.append(GO_term)
             # retrieve all parent terms of the desired depth
-            map_node_to_depth(GO_term, depth, go_dict, remapped_nodes, exception_list)
+            _map_node_to_depth(GO_term, depth, go_dict, remapped_nodes, exception_list)
             # remapped_nodes.update(map_to_depth(GO_term, depth, go_dict, None))
         else:
             print(f'WARNING: {GO_term} not found in GO dictionary.')
     return remapped_nodes
 
 
-def map_node_to_depth(node, depth, go_dict, found_nodes, exception_list=None, tracker=None):
+def _map_node_to_depth(node, depth, go_dict, found_nodes, exception_list=None, tracker=None):
     """Remaps a GO term to its ancestor terms of the specified depth using recursion.
 
     Starting from the supplied node, a recursive search will collect the ancestral nodes of the desired depth and
@@ -190,9 +195,9 @@ def map_node_to_depth(node, depth, go_dict, found_nodes, exception_list=None, tr
     if node in exception_list:
         if tracker:
             found_nodes.add(tracker)
-        # else:
-        #     found_nodes.add(node)
-        return None
+        # else: # if there is no tracker, don't add the note itself since it's in the exclusion list
+        #     found_nodes.add(node) # however, due to the frequent item set mining it wouldn't matter much
+        return None # since it's likely a rare term...
     else:
         # If the current node has the specified depth (for its namespace), add it to the new set of nodes.
         if go_term.depth == depth.get(go_term.namespace):
@@ -201,7 +206,7 @@ def map_node_to_depth(node, depth, go_dict, found_nodes, exception_list=None, tr
         # Don't use else clause because some nodes might have the same depth as their parents.
         # An else clause would stop the recursion prematurely and omit these ancestors from the final set.
         for parent in go_term.parents:
-            map_node_to_depth(parent, depth, go_dict, found_nodes, exception_list, node)
+            _map_node_to_depth(parent, depth, go_dict, found_nodes, exception_list, node)
             # # Return the set of remapped terms after recursion is finished.
             # return found_nodes
 

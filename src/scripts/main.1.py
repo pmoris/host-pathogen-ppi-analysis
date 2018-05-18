@@ -13,24 +13,20 @@ Paths are hard-coded relative to the repository.
 
 import os, sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parents[1].resolve()))
-# os.path.abspath(__file__ + "/../../")
-# os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
-# os.path.dirname(os.path.dirname(__file__))
 
 import argparse
 import numpy as np
 import pandas as pd
 
-import id_mapper
-import label_go
-import label_interpro
-import ppi_import
+from phppipy.ppi_tools import id_mapper
+from phppipy.ppi_tools import label_go
+from phppipy.ppi_tools import label_interpro
+from phppipy.ppi_tools import import
 
-from data_prep import retrieve_taxids
+from phppipy.dataprep import taxonid
 
-from go_tools import gaf_parser
-from go_tools import obo_tools
+from goscripts import gaf_parser
+from goscripts import obo_tools
 
 # import statements for interactive console
 # import sys
@@ -267,17 +263,19 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Script to filter and annotate PPI databases into a dataset suitable for itemset mining.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-d', '--dry', action="store_true", help='Perform dry run without saving output.')
-    parser.add_argument('-o', '--output', type=str, default='data/processed/parsed_ppi/',
-                        help='Output file or path')
+    parser.add_argument('-o', '--output', type=str, default='data/processed/parsed_ppi/', help='Output file or path')
     # TODO: add arguments for every type of input data source instead of hardcoding directory structure.
     args = parser.parse_args()
 
     # Read in PPI datasets
-    df_virhost = ppi_import.read_mitab_virhost('data/raw/ppi_data/VirHostNet_January_2017.txt')
-    df_hpidb2 = ppi_import.read_psi_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
-    df_phisto = ppi_import.read_mitab_phisto('data/raw/ppi_data/phisto_Jan19_2017.csv',
+    # df_virhost = import.read_mi_tab('data/raw/ppi_data/VirHostNet_January_2017.txt')
+    # df_hpidb2 = import.read_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt')
+    df_virhost = import.read_mitab_virhost('data/raw/ppi_data/VirHostNet_January_2017.txt')
+    df_hpidb2 = import.read_psi_mi_tab('data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
+    df_phisto = import.read_mitab_phisto('data/raw/ppi_data/phisto_Jan19_2017.csv',
                                              'data/raw/ppi_data/mi.obo')
-    df_intact = ppi_import.read_psi_mi_tab('data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
+    df_intact = import.read_psi_mi_tab('data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
+    # df_intact = import.read_mi_tab('data/raw/ppi_data/intact_virus_2017_12_1.txt')
 
     # Concatenate the different sources
     print('Concatenating PPI datasets...')
@@ -288,7 +286,7 @@ if __name__ == '__main__':
     # TODO: no intact-EBI mapping...
     # Remove PPIs with multiple id mappings because otherwise this would artificially inflate their numbers during
     # frequent item set mining
-    df_concat = id_mapper.remove_mult(df_concat)
+    # df_concat = id_mapper.remove_mult(df_concat)
 
     # Add unique identifier for interaction pairs
     # note: absolutely critical to have index from 0 to n here!
@@ -300,6 +298,7 @@ if __name__ == '__main__':
     # Label interactions as being within or between species.
     annotate_inter_intra(df_concat)
 
+    '''
     # Filter out intra-species interactions
     print('Omitting intra-species interactions...')
     df_concat = df_concat[df_concat['inter-intra'] == 'inter-species']
@@ -340,23 +339,25 @@ if __name__ == '__main__':
     # Which is not the case here, since both are human herpesvirus 1 strains
     # Similar issue for pubmed ID, method, etc.
     print('\nOmitting duplicates as defined by UniProt ACs and taxids.')
-
-    # Retrieve Herpesviridae (taxid:10292) list, see retrieve_taxids.py script to generate child taxids
-    # TODO: import from retrieve_Taxids and create on the spot
+    '''
+    # Retrieve Herpesviridae (taxid:10292) list, see taxonid.py script to generate child taxids
+    # TODO: import from taxonid and create on the spot
     # TODO: then combine this code into a function to subset a given dataframe for a given taxid and its children
     # TODO: and a host list or default to all hosts
     # TODO: note that this filtering will generally result in intra-host interactions being omitted,
     # TODO: while retaining intra-viral ones
+    
     with Path('data/interim/child_taxids_of_10292.txt').open() as taxid_file:
         herpes_taxids = [str('taxid:' + line.split('|')[0]) for line in taxid_file]
     print(r'Retrieving Herpes taxids from data/interim/child_taxids_of_10292.txt')
 
     # Extract Herpesviridae interactions
     # This omits all human-human interactions, but not intra-virus interactions
-    df_herpes = df_concat_dedup.loc[(df_concat_dedup.taxid_A.isin(herpes_taxids)) |
-                                    df_concat_dedup.taxid_B.isin(herpes_taxids)]
+    df_herpes = df_concat.loc[(df_concat.taxid_A.isin(herpes_taxids)) |
+                                    df_concat.taxid_B.isin(herpes_taxids)]
     df_herpes = df_herpes.reset_index(drop=True)
     print('Omitting all non-Herpes interactions.')
+    '''
 
     # Check how many non-UniProt interactions are left
     print('\nNumber of non-UniProt AC interactions for Herpes interactions')
@@ -390,24 +391,158 @@ if __name__ == '__main__':
     print('\nNumber of interactions without UniProt AC')
     print(df_herpes.loc[(~df_herpes.xref_A.str.contains('uniprot')) |
                         (~df_herpes.xref_B.str.contains('uniprot'))].shape)
-
+    '''
     # Check which hosts are present
     print('\nNumber of interactions per host')
     all_taxids = df_herpes['taxid_A'].append(df_herpes['taxid_B']).unique()
     host_taxids = list(np.setdiff1d(all_taxids, herpes_taxids))
+    print('hosttaxids', host_taxids)
 
     taxid_names_path = Path('data/raw/taxdump/names.dmp')
-    name2taxid, taxid2name = retrieve_taxids.parse_taxid_names(str(taxid_names_path))
+    name2taxid, taxid2name = taxonid.parse_taxid_names(str(taxid_names_path))
 
     for i in host_taxids:
         taxid = i.split(':')[1]
         count = df_herpes['xref_partners_sorted'].loc[(df_herpes['taxid_A'] == i) | (df_herpes['taxid_B'] == i)].shape
         print(taxid, taxid2name[taxid], count)
 
+
+    print(df_herpes.groupby('origin').size())
+
+
+    print('done\n\n\n\n\n\n')
+
+    name2taxid, taxid2name = taxonid.parse_taxid_names(r'data/raw/taxdump/names.dmp')
+    with Path(r'data/interim/child_taxids_of_10292.txt').open() as taxid_file:
+            herpes_taxids = [str('taxid:' + line.split('|')[0]) for line in taxid_file]
+
+    # Import PPI datasets
+    df_virhost = import.read_mitab_virhost(r'data/raw/ppi_data/VirHostNet_January_2017.txt')
+    df_hpidb2 = import.read_psi_mi_tab(r'data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
+    df_phisto = import.read_mitab_phisto(r'data/raw/ppi_data/phisto_Jan19_2017.csv',
+                                            r'data/raw/ppi_data/mi.obo')
+    df_intact = import.read_psi_mi_tab(r'data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
+    df_concat = concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto, df_intact])
+
+    # filter on Herpesviridae
+    df_herpes = df_concat.loc[(df_concat.taxid_A.isin(herpes_taxids)) | df_concat.taxid_B.isin(herpes_taxids)]
+    df_herpes = df_herpes.reset_index(drop=True)
+
+    print('size of df_herpes', df_herpes.shape)
+
+    # create combined identifier
+    xref_partners_sorted_array = np.sort(np.stack((df_herpes.xref_A, df_herpes.xref_B), axis=1), axis=1)
+    xref_partners_df = pd.DataFrame(xref_partners_sorted_array, columns=['A', 'B'])
+    df_herpes['xref_partners_sorted'] = xref_partners_df['A'] + '%' + xref_partners_df['B']
+
+    print(df_herpes.groupby('origin').size())
+    all_taxids = df_herpes['taxid_A'].append(df_herpes['taxid_B']).unique()
+    host_taxids = list(np.setdiff1d(all_taxids, herpes_taxids))
+
+    for i in host_taxids:
+        taxid = i.split(':')[1]
+        count = df_herpes.loc[(df_herpes['taxid_A'] == i) | (df_herpes['taxid_B'] == i)].shape
+        print(taxid, taxid2name[taxid], count)
+
+    print('done\n\n\n\n\n\n')
+
+    input_dir = Path('/media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/raw(copy)/ppi_data')
+    mitab_files = input_dir.glob('*.mitab')
+    ppi_dfs = [import.read_mi_tab(i) for i in mitab_files if i.is_file()]
+    phisto_files = input_dir.glob('phi*.csv')
+    mi_file = input_dir / 'mi.obo'
+    ppi_dfs.extend(
+        [import.read_mitab_phisto(i, mi_file) for i in phisto_files])
+    for i in ppi_dfs:
+        i['origin'] = i.name
+    ppi_df = pd.concat(ppi_dfs, axis=0, join='outer', ignore_index=True)
+    # children = set(['taxid:' + i for i in children])
+    children = herpes_taxids
+    ppi_df = ppi_df.loc[(ppi_df.taxid_A.isin(children))
+                        | (ppi_df.taxid_B.isin(children))]
+    ppi_df = ppi_df.reset_index(drop=True)
+
+    print('size of herpes df', ppi_df.shape)
+    print(ppi_df.groupby('origin').size())
+
+    host_ids = [
+    # i.lstrip('taxid:')
+    i
+    for i in pd.unique(ppi_df[['taxid_A', 'taxid_B']].values.ravel('K'))
+    if i not in children
+    ]
+
+    for i in host_ids:
+        taxid = i.split(':')[1]
+        count = ppi_df.loc[(ppi_df['taxid_A'] == i) | (ppi_df['taxid_B'] == i)].shape
+        print(taxid, taxid2name[taxid], count)
+
+    print('done-new-starts-here\n\n\n\n\n\n')
+
+    input_dir = Path('/media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/raw-new/ppi_data')
+    mitab_files = input_dir.glob('*.mitab')
+    ppi_dfs = [import.read_mi_tab(i) for i in mitab_files if i.is_file()]
+    phisto_files = input_dir.glob('phi*.csv')
+    mi_file = input_dir / 'mi.obo'
+    ppi_dfs.extend(
+        [import.read_mitab_phisto(i, mi_file) for i in phisto_files])
+    for i in ppi_dfs:
+        i['origin'] = i.name
+    ppi_df = pd.concat(ppi_dfs, axis=0, join='outer', ignore_index=True)
+    # children = set(['taxid:' + i for i in children])
+
+
+
+try:
+    taxdump_dir = Path('/media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/raw/taxdump')
+except IndexError:
+    print('Incorrect path provided.')
+else:
+    print('Parsing taxdump files...')
+    names = taxdump_dir / 'names.dmp'
+    name2taxid, taxid2name = taxonid.parse_taxid_names(names)
+    nodes = taxdump_dir / 'nodes.dmp'
+    taxid2parent, taxid2rank = taxonid.parse_taxid_nodes(nodes)
+    parent2child = taxonid.create_parent2child_dict(taxid2parent)
+
+    taxid = '10292'
+    print('Retrieving all child taxa of', taxid)
+    children = taxonid.get_children(taxid, parent2child)
+
+    children = set(['taxid:' + i for i in children])
+
+
+    # children = herpes_taxids
+
+
+
+    ppi_df = ppi_df.loc[(ppi_df.taxid_A.isin(children))
+                        | (ppi_df.taxid_B.isin(children))]
+    ppi_df = ppi_df.reset_index(drop=True)
+
+    print('size of herpes df', ppi_df.shape)
+    print(ppi_df.groupby('origin').size())
+
+    host_ids3 = [
+    # i.lstrip('taxid:')
+    i
+    for i in pd.unique(ppi_df[['taxid_A', 'taxid_B']].values.ravel('K'))
+    if i not in children
+    ]
+
+    for i in host_ids3:
+        taxid = i.split(':')[1]
+        count = ppi_df.loc[(ppi_df['taxid_A'] == i) | (ppi_df['taxid_B'] == i)].shape
+        print(taxid, taxid2name[taxid], count)
+    import pdb
+
+    pdb.set_trace()
+
+'''
     # Create taxid dictionaries
     taxid_nodes_path = Path('data/raw/taxdump/nodes.dmp')
-    taxid2parent, taxid2rank = retrieve_taxids.parse_taxid_nodes(str(taxid_nodes_path))
-    parent2child = retrieve_taxids.create_parent2child_dict(taxid2parent)
+    taxid2parent, taxid2rank = taxonid.parse_taxid_nodes(str(taxid_nodes_path))
+    parent2child = taxonid.create_parent2child_dict(taxid2parent)
 
     # Move all host partners in xref_B to xref_A (only an issue for VirHostNet)
     # Note, also move ALL other associated labels...
@@ -438,6 +573,7 @@ if __name__ == '__main__':
     # Add GO annotations
     label_go.annotate_GO(df_herpes, gaf_dict)
 
+
     # Re-map GO depth
     # TODO: if part_of relations are allowed, nodes are connected across ontologies.
     # TODO: either label ontologies or keep them all separated?
@@ -447,11 +583,23 @@ if __name__ == '__main__':
                  'GO:0044422': 'organelle part', 'GO:0044464': 'cell part', 'GO:0033643': 'host cell part',
                  'GO:0033646': 'host intracellular part', 'GO:0043656': 'intracellular region of host',
                  'GO:0043657': 'host cell', 'GO:0018995': 'host', 'GO:0044424': 'intracellular part',
-                 'GO:0016032': 'viral process', 'GO:0044215': 'other organism',
+                 'GO:0016032': 'viral process', 'GO:0019058': 'viral life cycle',
+                 'GO:0044215': 'other organism',
                  'GO:0050789': 'regulation of biological process', 'GO:0005515': 'protein binding',
-                 'GO:0019012': 'virion', 'GO:0044423': 'virion part', 'GO:0039642': 'virion nucleoid',
-                 'GO:0019028': 'viral capsid', 'GO:0055036': 'virion membrane', 'GO:0036338': 'viral membrane',
-                 'GO:0098015': 'virus tail'}
+                 'GO:0009987': 'cellular process',
+                 'GO:0052173': 'response to defenses of other organism involved in symbiotic interaction'}
+                 # avoid losing https://www.ebi.ac.uk/QuickGO/term/GO:0039504 evasion by virus of host adaptive is
+
+
+                 # 'GO:0019012': 'virion', 'GO:0044423': 'virion part', 'GO:0039642': 'virion nucleoid',
+                 # 'GO:0019028': 'viral capsid', 'GO:0055036': 'virion membrane', 'GO:0036338': 'viral membrane',
+                 # 'GO:0098015': 'virus tail', 'GO:0019042': 'viral latency', 'GO:0019075': 'virus maturation',
+                 # 'GO:0019079': 'viral genome replication', 'GO:0019076': 'viral release from host cell',
+                 # 'GO:0019046': 'release from viral latency', 'GO:0019044': 'maintenance of viral latency',
+                 # 'GO:0046786': 'viral replication complex formation and maintenance'}
+    # probably best to include part_of relations because of odd things like latent virus replication being part of viral latency, but not is_a
+    # https://www.ebi.ac.uk/QuickGO/term/GO:0019045
+
     # np.sum(df_herpes1.loc[df_herpes1['xref_A_GO'].notnull(), 'xref_A_GO'].apply(lambda x: True if 'GO:0043657' in x else False))
     # regulation of biological process: 5108 and 2929 in A/B
     # cell part 6827 and 1
@@ -467,8 +615,17 @@ if __name__ == '__main__':
     # virion part 92 and 1456
     # 1456 virus child terms, 92 host
 
+    test_set_not = []
+    test_set_in = []
     print('Remapping GO terms to desired depth', depth)
-    label_go.remap_GO_depth(df_herpes, depth, go_dict, list(exclusion))
+    label_go.remap_GO_depth(df_herpes, depth, go_dict, test_set_not, test_set_in, list(exclusion))
+    print('test_set_not', set(test_set_not))
+    print('test_set_in', set(test_set_in))
+    from collections import Counter
+    print(Counter(test_set_not))
+    print(Counter(test_set_in))
+    print([(i, go_dict[i].name) for i in set(test_set_in)])
+    print([(i, go_dict[i].name) for i in set(test_set_not)])
 
 
     # depth = {'biological_process': 2, 'molecular_function': 1, 'cellular_component': 2}
@@ -501,7 +658,7 @@ if __name__ == '__main__':
                            'papiine_gv1': '106332', 'suid_av1': '10345'}
 
     for i, j in pathogen_group_dict.items():
-        pathogen_group_dict[i] = [j] + retrieve_taxids.get_children(j, parent2child)
+        pathogen_group_dict[i] = [j] + taxonid.get_children(j, parent2child)
 
     df_herpes['pathogen_groups'] = df_herpes.apply(lambda x: pathogen_group_mapper(x['taxid_B'].split(':')[1],
                                                                                    pathogen_group_dict), axis=1)
@@ -578,6 +735,8 @@ if __name__ == '__main__':
     #
     # combine_terms_for_export(df_herpes)
 
+    print('{} unique labels were annotated to the interactions.'.format(pd.unique(df_herpes[['xref_A_GO', 'xref_B_GO', 'interpro_A', 'interpro_B']].values.ravel()).shape[0]))
+
     # Save output
     if not args.dry:
         # Note: Pathlib functionality is broken in Pandas 0.20!
@@ -596,8 +755,6 @@ if __name__ == '__main__':
             no_quotes = data.replace('"', '')
         with Path(output_path).open("w") as target:
             target.write(no_quotes)
-
-
         # optional: expand each label into its own column, but introduces a lot of empty columns
         # df_output = pd.concat([df_output['xref_partners_sorted'],
         #                        df_output['GO'].str.split(';', expand=True),
@@ -660,3 +817,4 @@ if __name__ == '__main__':
         pd.Series(list(unique_ac)).to_csv(output_directory / 'all_nodes.csv', index=False)
 
 # TODO: create taxid-pair identifier
+'''

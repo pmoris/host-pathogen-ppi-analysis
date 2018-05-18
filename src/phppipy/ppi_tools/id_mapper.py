@@ -3,8 +3,9 @@
 """
 Module to create protein id mappings and apply them to a dataframe.
 """
-import urllib.request;
-urllib.parse
+
+import urllib.request
+import urllib.parse
 import numpy as np
 import pandas as pd
 
@@ -12,7 +13,7 @@ from pathlib import Path
 
 
 def create_mapping_files(interaction_dataframe, from_id, description, savepath, columns):
-    """Create mapping files between uniprot AC's and other identifiers.
+    """Create mapping files between uniprot ACs and other identifiers.
 
     Queries the UniProt mapping service to retrieve mappings for all non-UniProt identifiers found in the dataset.
 
@@ -119,7 +120,7 @@ def map2uniprot(interaction_dataframe, filepath='data/interim/mappings/', column
         columns = ['xref_A', 'xref_B']
 
     identifiers = {'ddbj/embl/genbank:': 'EMBL_ID', 'ensembl:': 'ENSEMBL_ID', 'ensemblgenomes:': 'ENSEMBLGENOME_ID',
-                   'entrez gene/locuslink:': 'P_ENTREZGENEID', 'refseq:': 'P_REFSEQ_AC'}
+                   'entrez gene/locuslink:': 'P_ENTREZGENEID', 'refseq:': 'P_REFSEQ_AC', 'dip': 'DIP_ID'}
     #NOTE: UniProt REST API does not support intact EBI:identifiers.
 
     for db_tag, id_abbreviation in identifiers.items():

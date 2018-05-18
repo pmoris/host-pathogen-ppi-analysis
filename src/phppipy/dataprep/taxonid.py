@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
-
 """
 Module to parse NCBI taxon ID database.
-Can be run as a script by providing the taxdump directory and desired parent taxid as arguments.
+
+Can also be run as a stand-alone script to generate all child taxon IDs by
+providing the taxdump directory and desired parent taxid as arguments.
+
+Usage: python3 src/dataprep/taxonid.py data/raw/taxdump/ 10292 output-file
 """
 
 import os
 import sys
 from pathlib import Path
 
+
 def parse_taxid_names(file_path):
     """
-    Parse the names.dmp file and output a dictionary mapping names to taxids 
+    Parse the names.dmp file and output a dictionary mapping names to taxids
     (multiple different keys) and taxids to scientific names.
 
     Parameters
@@ -35,14 +39,15 @@ def parse_taxid_names(file_path):
         taxid2name = {}
         for line in f:
             lines_processed += 1
-            # if lines_processed % 100000 == 0:
-                # print('processing line', str(lines_processed))
+            if lines_processed % 1000000 == 0:
+                print('processing line', str(lines_processed))
             entries = [entry.strip() for entry in line.split('|')]
             name2taxid[entries[1]] = entries[0]
             if 'scientific name' in line:
                 taxid2name[entries[0]] = entries[1]
 
     return name2taxid, taxid2name
+
 
 def parse_taxid_nodes(file_path):
     nodes = Path(file_path)
@@ -53,20 +58,26 @@ def parse_taxid_nodes(file_path):
         taxid2rank = {}
         for line in f:
             lines_processed += 1
-            # if lines_processed % 100000 == 0:
-                # print('processing line', str(lines_processed))
+            if lines_processed % 1000000 == 0:
+                print('processing line', str(lines_processed))
             entries = [entry.strip() for entry in line.split('|')]
             taxid2parent[entries[0]] = entries[1]
             taxid2rank[entries[0]] = entries[2]
 
     return taxid2parent, taxid2rank
 
+
 def name_search(partial_name, name2taxid):
-    return [taxid for key, taxid in name2taxid.items() if partial_name.lower() in key.lower()]
+    return [
+        taxid for key, taxid in name2taxid.items()
+        if partial_name.lower() in key.lower()
+    ]
 
 
 def find_rank(species, rank):
     return find_rank_recursive(name2taxid[species], rank)
+
+
 def find_rank_recursive(taxid, rank):
     # if the taxid in the argument is the order, then return the name
     if taxid2rank[taxid] == rank:
@@ -102,7 +113,7 @@ def find_lca_group(taxid_list):
     # first loop ensures order...
     for i in parent_list[0]:
         if all(i in j for j in parent_list[1:]):
-            return(i)
+            return (i)
 
 
 def create_parent2child_dict(taxid2parent_dict):
@@ -149,34 +160,41 @@ def get_children(taxid, parent2child):
 #
 
 
-def save_children(children, out_file):
+def write_taxids(taxid_list, taxid2name_dict, out_file):
     with open(Path(out_file), 'w') as out:
-        for child in children:
-            out.write(str(child) + '|' + taxid2name[child] + '\n')
+        for i in taxid_list:
+            out.write(str(i) + '|' + taxid2name_dict[i] + '\n')
 
-if __name__ == "__main__":
-    try:
-        taxdump_dir = Path(sys.argv[1])
-    except IndexError:
-        print('Incorrect path provided.')
-    else:
-        names = taxdump_dir / 'names.dmp'
-        name2taxid, taxid2name = parse_taxid_names(str(names))
-        nodes = taxdump_dir / 'nodes.dmp'
-        taxid2parent, taxid2rank = parse_taxid_nodes(str(nodes))
-        parent2child = create_parent2child_dict(taxid2parent)
 
-        taxid = sys.argv[2]
-        print('Retrieving all child taxa of', taxid)
-        children = get_children(taxid, parent2child)
-        if len(sys.argv) > 3:
-            out_path = sys.argv[3]
-        else:
-            out_name = 'child_taxids_of_' + str(taxid) + '.txt'
-            out_path = Path(os.path.abspath(__file__)).parents[2] / 'data/interim' / out_name
-            print('Saving output as', out_path)
-        save_children(children, str(out_path))
+# if __name__ == "__main__":
+#     '''
+#     Generate all child taxon IDs by providing the taxdump directory and
+#     desired parent taxid as arguments.
+#     '''
+#     try:
+#         taxdump_dir = Path(sys.argv[1])
+#     except IndexError:
+#         print('Incorrect path provided.')
+#     else:
+#         print('Parsing taxdump files...')
+#         names = taxdump_dir / 'names.dmp'
+#         name2taxid, taxid2name = parse_taxid_names(str(names))
+#         nodes = taxdump_dir / 'nodes.dmp'
+#         taxid2parent, taxid2rank = parse_taxid_nodes(str(nodes))
+#         parent2child = create_parent2child_dict(taxid2parent)
 
+#         taxid = sys.argv[2]
+#         print('Retrieving all child taxa of', taxid)
+#         children = get_children(taxid, parent2child)
+#         if len(sys.argv) > 3:
+#             out_path = sys.argv[3]
+#         else:
+#             out_name = 'child_taxids_of_' + str(taxid) + '.txt'
+#             out_path = Path(os.path.abspath(__file__)).parents[
+#                 2] / 'data/interim' / out_name
+#             print('Saving output as', out_path)
+#         save_children(children, str(out_path)) #changed to write_taxids()
+#         print('Saved output to', str(out_path))
 
         # except IndexError:
         #     print('No taxid was provided.')
@@ -185,8 +203,7 @@ if __name__ == "__main__":
         # except LookupError:
         #     print('Taxid was not found.')
 
-
-                # #
+        # #
         # parent2child = {taxid: get_children(taxid) for taxid in
         #                 [6278, 6296, 6295, 6274, 119089, 6231, 1206794, 33317, 33213, 6072, 33208, 33154, 2759, 131567,
         #                  1]}
@@ -215,9 +232,6 @@ if __name__ == "__main__":
     # print(find_lca_group([6239,6279,135651]))
     # print(retrieve_parents(10090))
     # print(find_lca_group([6239,6279,135651]) in retrieve_parents(10090))
-
-
-
 
     #
     # print('testing')

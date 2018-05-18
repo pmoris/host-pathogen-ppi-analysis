@@ -16,25 +16,25 @@ from pathlib import Path
 import pandas as pd
 
 from ppi_tools import main
-from ppi_tools import ppi_import
+from ppi_tools import import
 
 # https://stackoverflow.com/questions/8951255/import-script-from-a-parent-directory
 # http://python-notes.curiousefficiency.org/en/latest/python_concepts/import_traps.html
 
 repo_source_path = Path(os.path.abspath(__file__)).parents[2]
 
-df_virhost = ppi_import.read_mitab_virhost(repo_source_path / 'data/raw/ppi_data/VirHostNet_January_2017.txt')
+df_virhost = import.read_mitab_virhost(repo_source_path / 'data/raw/ppi_data/VirHostNet_January_2017.txt')
     # r'../ppi_data/VirHostNet_January_2017.txt')
 
-df_hpidb2 = ppi_import.read_psi_mi_tab(repo_source_path / 'data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
+df_hpidb2 = import.read_psi_mi_tab(repo_source_path / 'data/raw/ppi_data/hpidb2_March14_2017_mitab_plus.txt', 'hpidb2')
     # r'../ppi_data/hpidb2_March14_2017_mitab_plus.txt')
 
-df_phisto = ppi_import.read_mitab_phisto(repo_source_path / 'data/raw/ppi_data/phisto_Jan19_2017.csv',
+df_phisto = import.read_mitab_phisto(repo_source_path / 'data/raw/ppi_data/phisto_Jan19_2017.csv',
                                         repo_source_path / 'data/raw/ppi_data/mi.obo')
     # r'../ppi_data/phisto_Jan19_2017.csv',
     #                           r'../ppi_data/mi.obo')
 
-df_intact = ppi_import.read_psi_mi_tab(repo_source_path / 'data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
+df_intact = import.read_psi_mi_tab(repo_source_path / 'data/raw/ppi_data/intact_virus_2017_12_1.txt', 'intact')
 
 
 df_concat = main.concat_interaction_datasets([df_hpidb2, df_virhost, df_phisto, df_intact])
@@ -61,10 +61,10 @@ with protein2ipr_file.open('r') as protein2ipr:
         inner_counter = 0
         for line in protein2ipr:
             if outer_counter % 10000000 == 0:
-                print('Processed',outer_counter,'lines')
+                print('Processed', outer_counter,'lines')
             if line.split('\t')[0] in unique_ac:
                 inner_counter += 1
                 protein2ipr_reduced.write(line)
                 if inner_counter % 1000 == 0:
-                    print('Written',inner_counter,'lines.')
+                    print('Written', inner_counter,'lines.')
             outer_counter += 1
