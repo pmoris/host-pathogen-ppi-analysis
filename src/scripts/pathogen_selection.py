@@ -54,7 +54,8 @@ parser.add_argument(
     dest='output',
     type=str,
     required=True,
-    help='Output directory for saving child/host taxon ID and filtered PPI files.')
+    help=
+    'Output directory for saving child/host taxon ID and filtered PPI files.')
 args = parser.parse_args()
 
 # Retrieve child taxon IDs
@@ -76,7 +77,7 @@ else:
 
     # set output directory, suffixed with the pathogen taxid
     out_dir = Path(args.output) / pathogen_taxid
-    out_path = out_dir / 'taxonid' / (pathogen_taxid + '-child-taxid.txt')
+    out_path = out_dir / 'taxonid' / (pathogen_taxid + '-child-taxids.txt')
     out_path.parent.mkdir(parents=True, exist_ok=True)
     taxonid.write_taxids(pathogen_child_ids, taxid2name, out_path)
     print('Saved output to', str(out_path), '\n')
@@ -101,10 +102,6 @@ ppi_df = ppi_df.loc[(ppi_df.taxid_A.isin(pathogen_child_ids_lookup))
                     | (ppi_df.taxid_B.isin(pathogen_child_ids_lookup))]
 ppi_df = ppi_df.reset_index(drop=True)
 
-# Size information about dataset
-print('\nSize of dataframe', ppi_df.shape)
-print(ppi_df.groupby('origin').size())
-
 # Extract host taxids
 host_ids = {
     i
@@ -113,14 +110,19 @@ host_ids = {
 }
 # all_taxids = ppi_df['taxid_A'].append(ppi_df['taxid_B']).unique()
 # host_ids = set(np.setdiff1d(all_taxids, list(pathogen_child_ids_lookup))) # don't forget to turn set back into list here
-out_path = out_dir / 'taxonid' / 'host-taxid.txt'
+out_path = out_dir / 'taxonid' / 'interacting-taxids.txt'
 taxonid.write_taxids([i.split(':')[1] for i in host_ids], taxid2name, out_path)
 print('\nSaved host taxon IDs to', str(out_path))
 
 # Print information about dataset
 
+# Size information about dataset
+print('\nSize of dataframe', ppi_df.shape)
+print(ppi_df.groupby('origin').size())
+
 ## List associated taxon ids
-print('\nThe following taxon IDs were found associated with {}'.format(pathogen_taxid))
+print('\nThe following taxon IDs were found associated with {}:'.format(
+    pathogen_taxid))
 for i in host_ids:
     taxid = i.split(':')[1]
     count = ppi_df.loc[(ppi_df['taxid_A'] == i)
@@ -138,7 +140,7 @@ for i in ppi_df.origin.unique():
               pathogen_child_ids_lookup)))
 
 ## Check the intra-pathogen interaction counts
-print('\n Count of intra-pathogen interactions\n', ppi_df.loc[
+print('\n Count of intra-pathogen interactions within species\n', ppi_df.loc[
     ppi_df.taxid_A.isin(pathogen_child_ids_lookup)
     & ppi_df.taxid_B.isin(pathogen_child_ids_lookup)].groupby('origin').size())
 
@@ -155,19 +157,33 @@ ppi_df['taxid_A_name'] = ppi_df['taxid_A'].apply(
     lambda x: taxid2name.get(x.split(':')[1], 'missing name'))
 ppi_df['taxid_B_name'] = ppi_df['taxid_B'].apply(
     lambda x: taxid2name.get(x.lstrip('taxid:'), 'missing name'))
+# print(
+#     'The following interactions are between different pathogen or host species'
+# )
+### print entries
+# print(ppi_df.loc[
+#     ppi_df['inter-intra-species'] != ppi_df['inter-intra-pathogen'], [
+#         'taxid_A_name', 'taxid_B_name', 'inter-intra-pathogen',
+#         'inter-intra-species', 'publication'
+#     ]].drop_duplicates())
+### Counts per dataset
+print('\nCount of intra-pathogen interactions across species per dataset')
 print(
-    'The following interactions are between different pathogen or host species'
-)
-print(ppi_df.loc[
-    ppi_df['inter-intra-species'] != ppi_df['inter-intra-pathogen'], [
-        'taxid_A_name', 'taxid_B_name', 'inter-intra-pathogen', 'inter-intra-species',
-        'publication'
-    ]].drop_duplicates())
+    'intra-species != intra-path',
+    ppi_df.loc[ppi_df['inter-intra-species'] != ppi_df['inter-intra-pathogen']]
+    .groupby('origin').size())
+# print('a=path & b=path & a!=b', ppi_df.loc[
+#     (ppi_df.taxid_A != ppi_df.taxid_B)
+#     & (ppi_df.taxid_A.isin(pathogen_child_ids_lookup)) &
+#     (ppi_df.taxid_B.isin(pathogen_child_ids_lookup))].groupby('origin').size())
+# print(ppi_df.loc[ (ppi_df['inter-intra-pathogen'] == 'intra') & (ppi_df.taxid_A !=
+#                  ppi_df.taxid_B)].groupby('origin').size())
 
 # save merged PPI dataset
-out_path = out_dir / 'ppi' / (pathogen_taxid + '-ppi-merged')
+out_path = out_dir / 'ppi_data' / (pathogen_taxid + '-ppi-merged')
 out_path.parent.mkdir(parents=True, exist_ok=True)
 ppi_df.to_csv(out_path, sep='\t', index=False, header=True)
+print('\nSaved merged PPI dataset to {}'.format(out_path))
 
 # import ipdb
 # ipdb.set_trace()

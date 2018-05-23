@@ -166,6 +166,14 @@ def write_taxids(taxid_list, taxid2name_dict, out_file):
             out.write(str(i) + '|' + taxid2name_dict[i] + '\n')
 
 
+def read_taxids(in_file):
+    with Path(in_file).open('r') as taxid_file:
+        pathogen_taxids = [
+            str('taxid:' + line.split('|')[0]) for line in taxid_file
+        ]
+    return pathogen_taxids
+
+
 # if __name__ == "__main__":
 #     '''
 #     Generate all child taxon IDs by providing the taxdump directory and
@@ -196,65 +204,65 @@ def write_taxids(taxid_list, taxid2name_dict, out_file):
 #         save_children(children, str(out_path)) #changed to write_taxids()
 #         print('Saved output to', str(out_path))
 
-        # except IndexError:
-        #     print('No taxid was provided.')
-        # except ValueError:
-        #     print('Taxids should be provided as integers')
-        # except LookupError:
-        #     print('Taxid was not found.')
+# except IndexError:
+#     print('No taxid was provided.')
+# except ValueError:
+#     print('Taxids should be provided as integers')
+# except LookupError:
+#     print('Taxid was not found.')
 
-        # #
-        # parent2child = {taxid: get_children(taxid) for taxid in
-        #                 [6278, 6296, 6295, 6274, 119089, 6231, 1206794, 33317, 33213, 6072, 33208, 33154, 2759, 131567,
-        #                  1]}
-        #
-        # # print(parent2child[6274])
+# #
+# parent2child = {taxid: get_children(taxid) for taxid in
+#                 [6278, 6296, 6295, 6274, 119089, 6231, 1206794, 33317, 33213, 6072, 33208, 33154, 2759, 131567,
+#                  1]}
+#
+# # print(parent2child[6274])
 
-    #
-    #
-    # print(find_rank('Panagrolobus vanmegenae', 'family'))
-    #
-    #
-    #
-    # print(retrieve_parents(6279))
-    #
-    #
-    #
-    # print('lca6279,6239',find_lca(6279,6239))
-    # # print('lca,6239,6279',find_lca(6239,6279))
-    # # print('find_lca(6279,find_lca(6239,135651))',find_lca(6279,find_lca(6239,135651)))
-    # # print('find_lca(6239,find_lca(6279,135651))',find_lca(6239,find_lca(6279,135651)))
-    # # print('find_lca(135651,find_lca(6279,6239))',find_lca(135651,find_lca(6279,6239)))
-    # # print('find_lca(135651,find_lca(6239,6279))',find_lca(135651,find_lca(6239,6279)))
-    #
-    #
-    #
-    # print(find_lca_group([6239,6279,135651]))
-    # print(retrieve_parents(10090))
-    # print(find_lca_group([6239,6279,135651]) in retrieve_parents(10090))
+#
+#
+# print(find_rank('Panagrolobus vanmegenae', 'family'))
+#
+#
+#
+# print(retrieve_parents(6279))
+#
+#
+#
+# print('lca6279,6239',find_lca(6279,6239))
+# # print('lca,6239,6279',find_lca(6239,6279))
+# # print('find_lca(6279,find_lca(6239,135651))',find_lca(6279,find_lca(6239,135651)))
+# # print('find_lca(6239,find_lca(6279,135651))',find_lca(6239,find_lca(6279,135651)))
+# # print('find_lca(135651,find_lca(6279,6239))',find_lca(135651,find_lca(6279,6239)))
+# # print('find_lca(135651,find_lca(6239,6279))',find_lca(135651,find_lca(6239,6279)))
+#
+#
+#
+# print(find_lca_group([6239,6279,135651]))
+# print(retrieve_parents(10090))
+# print(find_lca_group([6239,6279,135651]) in retrieve_parents(10090))
 
-    #
-    # print('testing')
-    # print(taxid2parent)
-    # if 10296 in taxid2parent.items():
-    #     print('yes')
-    #
-    # parent2child = create_parent2child_dict(taxid2parent)
-    #
-    #     # print(parent2child[parent])
-    #
-    # print(taxid2parent[1982744])
-    # print(taxid2parent[1982743])
-    # print('parent2child', parent2child[35247])
-    #
-    #
-    # print('p2c',parent2child[10292])
-    #
-    # print('taxid2p',taxid2parent[10296])
-    # # print('pare2chil',parent2child[10296])
-    #
-    # print('get',get_children(10292))
-    #
-    # # parent2child = {taxid: get_children(taxid) for taxid in [6278, 6296, 6295, 6274, 119089, 6231, 1206794, 33317, 33213, 6072, 33208, 33154, 2759, 131567, 1]}
-    #
-    # # print(parent2child[6274])
+#
+# print('testing')
+# print(taxid2parent)
+# if 10296 in taxid2parent.items():
+#     print('yes')
+#
+# parent2child = create_parent2child_dict(taxid2parent)
+#
+#     # print(parent2child[parent])
+#
+# print(taxid2parent[1982744])
+# print(taxid2parent[1982743])
+# print('parent2child', parent2child[35247])
+#
+#
+# print('p2c',parent2child[10292])
+#
+# print('taxid2p',taxid2parent[10296])
+# # print('pare2chil',parent2child[10296])
+#
+# print('get',get_children(10292))
+#
+# # parent2child = {taxid: get_children(taxid) for taxid in [6278, 6296, 6295, 6274, 119089, 6231, 1206794, 33317, 33213, 6072, 33208, 33154, 2759, 131567, 1]}
+#
+# # print(parent2child[6274])
