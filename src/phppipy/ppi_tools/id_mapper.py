@@ -12,75 +12,83 @@ import pandas as pd
 from pathlib import Path
 
 
-def create_mapping_files(interaction_dataframe, from_id, description, savepath, columns):
+def _create_mapping_files(array, from_id, description, savepath):
     """Create mapping files between uniprot ACs and other identifiers.
 
-    Queries the UniProt mapping service to retrieve mappings for all non-UniProt identifiers found in the dataset.
+    Queries the UniProt mapping service to retrieve mappings for all
+    non-UniProt identifiers found in the dataset.
 
     Parameters
     ----------
-    interaction_dataframe : DataFrame
-        DataFrame containing protein identifiers that need to be remapped to UniProt Accesion Numbers.
+    array : array-like
+        List of all identifiers that need to be remapped to
+        UniProt Accession Numbers. Obtained from the pandas DataFrame and
+        column list that is passed to the map2uniprot() function.
+        E.g. [refseq:NP_001179, uniprotkb:Q16611, ...]
     from_id : string
-        The database abbreviations used by UniProt's mapping service, as described here:
-        http://www.uniprot.org/help/api_idmapping
+        The database abbreviations used by UniProt's mapping service, as
+        described here: http://www.uniprot.org/help/api_idmapping
     description : string
-        The naming convention used in the interaction datasets to describe the protein identifier source database.
-        E.g. Entrez, ensemblgenomes, etc.
+        The naming tag convention used in the interaction datasets to describe
+        the protein identifier source database.
+        E.g. entrez, ensemblgenomes, etc.
     savepath : string
-        Filepath where to write the mapping files. (The default, defined by map2uniprot(), is a mapping directory in
-        the ppi_data directory in the parent directory relative to where the script is called.)
-    columns : list
-        The names of the columns containing the identifiers that need to be remapped.
-        (The defaults, defined by map2uniprot, are xref_A and xref_B).
+        Filepath where to write the mapping file, passed along by the
+        map2uniprot() function.
 
     Returns
     -------
     None
-        Writes mapping files to data directory.
+        Writes mapping files to savepath directory.
 
     """
     # create space-separated id string
-    ids = pd.Series()
-    for col in columns:
-        # note: use startswith to avoid mixing ensembl and embl ids...
-        to_map = interaction_dataframe.loc[interaction_dataframe[col].str.startswith(description), col]
-        ids = ids.append(to_map)
-    ids = ids.reset_index(drop=True)
-    ids = ids.str.split(':').str[1].unique()
-    ids_str = ' '.join(np.char.mod('%s', ids))
+    identifier_series = pd.Series(array)
+    # note: use startswith to avoid mixing ensembl and embl ids...
+    ids = identifier_series[identifier_series.str.startswith(description)]
 
-    # http://www.uniprot.org/help/api_idmapping#id_mapping_python_example
-    # https://docs.python.org/3/howto/urllib2.html
-    # https://www.biostars.org/p/66904/
+    if ids.empty:
+        print('No {} identifiers found in dataset.\n'.format(description))
 
-    url = 'http://www.uniprot.org/uploadlists/'
+    else:
+        ids = ids.reset_index(drop=True)
+        ids = ids.str.split(':').str[1].unique()
+        ids_str = ' '.join(np.char.mod('%s', ids))
 
-    params = {
-        'from': from_id,
-        'to': 'ACC',
-        'format': 'tab',
-        'query': ids_str
-    }
+        # http://www.uniprot.org/help/api_idmapping#id_mapping_python_example
+        # https://docs.python.org/3/howto/urllib2.html
+        # https://www.biostars.org/p/66904/
 
-    data = urllib.parse.urlencode(params)
-    data = data.encode('ascii')
+        url = 'https://www.uniprot.org/uploadlists/'
 
-    request = urllib.request.Request(url, data)
+        params = {
+            'from': from_id,
+            'to': 'ACC',
+            'format': 'tab',
+            'query': ids_str
+        }
 
-    contact = "pieter.moris@uantwerpen.be"
-    request.add_header('User-Agent', 'Python %s' % contact)
+        data = urllib.parse.urlencode(params)
+        data = data.encode('ascii')
 
-    with urllib.request.urlopen(request) as response:
-        mapping = response.read()
+        request = urllib.request.Request(url, data)
 
-    savepath = Path(savepath)
-    savepath.parent.mkdir(parents=True, exist_ok=True)
-    savepath.write_bytes(mapping)
+        contact = "pieter.moris@uantwerpen.be"
+        request.add_header('User-Agent', 'Python %s' % contact)
 
-    print('Created mapping files between UniProt ACs and', ids_str,
-          'in the data sets.\nStored in', str(savepath.resolve()) + '.')
+        with urllib.request.urlopen(request) as response:
+            mapping = response.read()
 
+        print('{} {} identifiers found in dataset.'.format(
+            description, ids.size))
+
+        savepath = Path(savepath)
+        savepath.parent.mkdir(parents=True, exist_ok=True)
+        savepath.write_bytes(mapping)
+
+        print(
+            'Created mapping file between UniProt ACs and {} in: {}.\n'.format(
+                description.strip(':'), savepath.resolve()))
 
 def map2uniprot(interaction_dataframe, filepath='data/interim/mappings/', columns=None):
     """ Remap identifiers to UniProt AC's.
