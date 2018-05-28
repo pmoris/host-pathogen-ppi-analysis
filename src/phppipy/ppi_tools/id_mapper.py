@@ -254,3 +254,63 @@ def remove_mult(interaction_dataframe, columns=None):
 #                                 interaction_dataframe[col_lookup].str.contains('uniprot', case=False))
 #         interaction_dataframe.loc[mapping_selection, col_xref] = \
 #             interaction_dataframe[mapping_selection, col_lookup].apply(lambda x: x)
+
+
+def check_unique_identifier(interaction_dataframe, columns=None):
+    """
+    Check, attempt to fix and report on whether the unique identifier column of
+    a PSI-MITAB dataset is correct.
+
+    E.g. HPDIB contains a few entries such as:
+    dip:DIP-10051N|refseq:NP_285937
+    where two identifiers are separated by a pipe symbol.
+
+    Parameters
+    ----------
+    interaction_dataframe : DataFrame
+        DataFrame containing psi-mitab protein-protein interactions.
+    columns : list
+        The names of the columns containing the unique identifiers.
+        (The defaults are xref_A and xref_B).
+
+    Returns
+    -------
+    None
+        Modifies the supplied DataFrame in-place.
+    """
+
+    if not columns:
+        columns = ['xref_A', 'xref_B']
+
+    def lambda_helper(row_entry):
+        split_entry = row_entry.split('|')
+        uni_id = [x for x in split_entry if 'uniprot' in x]
+        xref_id = [x for x in split_entry if 'refseq' in x]
+        first_id = split_entry[0]
+        if uni_id:
+            if len(uni_id) != 1:
+                print(
+                    'WARNING: the interaction involving {} contains unresolvable interaction identifiers.'.
+                    format(row_entry))
+            new_id = uni_id[0]
+        elif xref_id:
+            if len(xref_id) != 1:
+                print(
+                    'WARNING: the interaction involving {} contains unresolvable interaction identifiers.'.
+                    format(row_entry))
+            new_id = xref_id[0]
+        else:
+            new_id = first_id
+        return new_id
+
+    for i in columns:
+        non_unique_mask = interaction_dataframe[i].str.contains('\|')
+
+        if any(non_unique_mask):
+            interaction_dataframe.loc[non_unique_mask, i] = \
+                interaction_dataframe.loc[non_unique_mask, i].apply(lambda_helper)
+            print(
+                '{} unique identifiers in column {} did not conform to the PSI-MITAB format (multiple identifiers were present) and a fix was attempted.'.
+                format(len(non_unique_mask), i))
+
+    # TODO: Find a way to monitor how many of the bad identifiers can be remapped to uniprot/refseq/other.
