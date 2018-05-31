@@ -116,7 +116,7 @@ def _create_mapping_dict(path, reviewed_only):
     Create a dictionary mapping a given type of identifiers to another one,
     based on a file created through the EBI mapping services (see
     _create_mapping_files()).
-    
+
     Parameters
     ----------
     path : str
@@ -363,13 +363,15 @@ def remove_mult(interaction_dataframe, columns=None):
     interaction_dataframe : DataFrame
         DataFrame containing protein identifiers for PPIs.
     columns : list
-        The names of the columns containing the identifiers that need to be removed.
+        The names of the columns containing the identifiers that need to be
+        removed.
         (The defaults are xref_A and xref_B).
 
     Returns
     -------
     None
-        The subset of the DataFrame with PPIs whose partners have 1 unique mapping to UniProt ACs.
+        The subset of the DataFrame with PPIs whose partners have 1 unique
+        mapping to UniProt ACs.
     """
     if not columns:
         columns = ['xref_A', 'xref_B']
@@ -380,9 +382,10 @@ def remove_mult(interaction_dataframe, columns=None):
     print(
         'Omitted {} PPIs due to the existance of multiple mappings.\n'.format(
             np.sum(~selection)))
-    interaction_dataframe = interaction_dataframe.loc[selection].apply(
-        lambda x: x)  # TODO: fix this?
+
+    interaction_dataframe = interaction_dataframe.loc[selection]
     interaction_dataframe = interaction_dataframe.reset_index(drop=True)
+
     return interaction_dataframe
 
 
