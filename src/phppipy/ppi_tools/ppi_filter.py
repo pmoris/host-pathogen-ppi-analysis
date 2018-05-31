@@ -47,3 +47,36 @@ def annotate_inter_intra_pathogen(interaction_dataframe, pathogen_taxa):
         interaction_dataframe.taxid_A.isin(pathogen_taxa) &
         interaction_dataframe.taxid_B.isin(pathogen_taxa), 'intra',
         'inter')
+
+
+def unique_identifier(df, column_name='xref_partners_sorted', columns=None):
+    """ Creates a new column containing a sorted string of two
+    identifiers found in the supplied columns, i.e. a unique
+    reference identifier for an association pair.
+
+    Parameters
+    ----------
+    df : [type]
+        [description]
+    column_name : str
+        The name of the new column.
+    columns : list
+        The columns to use for the creation of a new unique identifier.
+        Must contain exactly two columns.
+
+    Returns
+    -------
+    None
+        Modifies DataFrame in-place by adding the unique identifier column.
+    """
+
+    if not columns:
+        columns = ['xref_A', 'xref_B']
+
+    xref_partners_sorted_array = np.sort(
+        np.stack((df.xref_A, df.xref_B), axis=1), axis=1)
+
+    xref_partners_df = pd.DataFrame(
+        xref_partners_sorted_array, columns=['A', 'B'])
+
+    df[column_name] = xref_partners_df['A'] + '%' + xref_partners_df['B']
