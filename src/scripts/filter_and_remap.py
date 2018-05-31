@@ -1,6 +1,6 @@
 '''
 Script to perform protein identifier remapping and various filtering steps
-(e.g. intra-species and intra-pathogen ppi removal, redundancy, 
+(e.g. intra-species and intra-pathogen ppi removal, redundancy,
 onlt reviewed identifiers, etc.).
 
 Input:
@@ -51,20 +51,6 @@ parser.add_argument(
     type=str,
     required=True,
     help='Path to directory with taxonID lists.')
-# parser.add_argument(
-#     '-o',
-#     '--gene-ontology',
-#     dest='go',
-#     type=str,
-#     required=False,
-#     help='Gene ontology directory with .obo and .gaf files.')
-# parser.add_argument(
-#     '-i',
-#     '--interpro',
-#     dest='interpro',
-#     type=str,
-#     required=False,
-#     help='Directory with InterPro-Uniprot associations.')
 parser.add_argument(
     '-o',
     '--output',
@@ -200,6 +186,10 @@ ppi_df = ppi_df.loc[(ppi_df.xref_A.str.contains('uniprot'))
 ppi_df = ppi_df.reset_index(drop=True)
 print('Omitted {} non-UniProt AC entries, leaving {} PPIs.'.format(
     size - ppi_df.shape[0], ppi_df.shape[0]))
+
+# Move all host partners in xref_B to xref_A (only an issue for VirHostNet)
+# Note, also move ALL other associated labels...
+ppi_filter.reorder_pathogen_host_entries(ppi_df, host_taxonids)
 
 # save new ppi dataset
 out_ppi = out_path / 'ppi_data/ppi-filter-remap.tsv'

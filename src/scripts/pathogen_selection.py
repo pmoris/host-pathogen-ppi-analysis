@@ -157,9 +157,9 @@ print('\nCount of intra-host interactions\n',
 ## Counts of inter-intra species and host-pathogen per data source
 ppi_filter.annotate_inter_intra_species(ppi_df)
 ppi_filter.annotate_inter_intra_pathogen(ppi_df, pathogen_child_ids_lookup)
-ppi_df['taxid_A_name'] = ppi_df['taxid_A'].apply(
+ppi_df['taxid_name_A'] = ppi_df['taxid_A'].apply(
     lambda x: taxid2name.get(x.split(':')[1], 'missing name'))
-ppi_df['taxid_B_name'] = ppi_df['taxid_B'].apply(
+ppi_df['taxid_name_B'] = ppi_df['taxid_B'].apply(
     lambda x: taxid2name.get(x.lstrip('taxid:'), 'missing name'))
 # print(
 #     'The following interactions are between different pathogen or host species'
