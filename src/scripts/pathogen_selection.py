@@ -12,6 +12,8 @@ a phi*.csv and mi.obo file.
 
 All files matching the extensions in the given directory are imported,
 in a non-recursive manner (i.e. sub-folders are not checked).
+
+Output is saved to a directory named after the pathogen taxonid.
 '''
 
 import argparse
@@ -96,13 +98,15 @@ for i in ppi_df_list:
     i['origin'] = i.name
 ppi_df = pd.concat(ppi_df_list, axis=0, join='outer', ignore_index=True)
 
-# Filter on pathogens
+# Filter on pathogen of choice
 pathogen_child_ids_lookup = set(['taxid:' + i for i in pathogen_child_ids])
 ppi_df = ppi_df.loc[(ppi_df.taxid_A.isin(pathogen_child_ids_lookup))
                     | (ppi_df.taxid_B.isin(pathogen_child_ids_lookup))]
 ppi_df = ppi_df.reset_index(drop=True)
 
 # Extract host taxids
+# Remove ids already in pathogen id list, because the ppi datasets may contain
+# intra-pathogen interactions too.
 host_ids = {
     i
     for i in pd.unique(ppi_df[['taxid_A', 'taxid_B']].values.ravel('K'))
@@ -126,7 +130,7 @@ print('\nThe following taxon IDs were found associated with {}:'.format(
 for i in host_ids:
     taxid = i.split(':')[1]
     count = ppi_df.loc[(ppi_df['taxid_A'] == i)
-                       | (ppi_df['taxid_B'] == i)].shape
+                       | (ppi_df['taxid_B'] == i)].shape[0]
     print(taxid, taxid2name.get(taxid, 'not found'), count)
 
 ## Check in which column pathogens occur
@@ -180,7 +184,7 @@ print(
 #                  ppi_df.taxid_B)].groupby('origin').size())
 
 # save merged PPI dataset
-out_path = out_dir / 'ppi_data' / (pathogen_taxid + '-ppi-merged')
+out_path = out_dir / 'ppi_data' / (pathogen_taxid + '-ppi-merged.tsv')
 out_path.parent.mkdir(parents=True, exist_ok=True)
 ppi_df.to_csv(out_path, sep='\t', index=False, header=True)
 print('\nSaved merged PPI dataset to {}'.format(out_path))
