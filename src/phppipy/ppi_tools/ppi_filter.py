@@ -96,7 +96,7 @@ def reorder_pathogen_host_entries(interaction_dataframe, host_list):
     interaction_dataframe : DataFrame
         The pandas DataFrame containing the protein-protein interactions that need to be sorted.
     host_list : list
-        List of host taxid's to look for in the B column.
+        List of host taxonids to look for in the B column.
 
     Returns
     -------
