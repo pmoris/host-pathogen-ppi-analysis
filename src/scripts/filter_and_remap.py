@@ -196,3 +196,11 @@ out_ppi = out_path / 'ppi_data/ppi-filter-remap.tsv'
 out_ppi.parent.mkdir(parents=True, exist_ok=True)
 ppi_df.to_csv(out_ppi, sep='\t', index=False, header=True)
 print('\nSaved filtered and remapped PPI dataset to {}'.format(out_ppi))
+
+# save protein list for filtering gaf/interpro files
+all_identifiers = pd.Series(pd.unique(ppi_df[['xref_A', 'xref_B']].values.ravel('K'))).str.split(':').str.get(1)
+out_identifiers = out_path / 'ppi_data/uniprot_identifiers.txt'
+with out_identifiers.open('w') as out:
+    for i in all_identifiers:
+        out.write("{}\n".format(i))
+print('\nSaved list of all UniProtACs to {}'.format(out_identifiers))
