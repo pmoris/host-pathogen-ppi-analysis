@@ -27,7 +27,8 @@ from phppipy.dataprep import taxonid
 from phppipy.ppi_tools import ppi_filter
 
 parser = argparse.ArgumentParser(
-    description='Script to extract taxon ids from ppi files.',
+    description=
+    'Script to extract taxon ids and extract relevant entries from ppi files.',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument(
     '-i',

@@ -11,7 +11,7 @@ import argparse
 from pathlib import Path
 
 parser = argparse.ArgumentParser(
-    description='Script to add annotations to PPI dataset.',
+    description='Script to filter InterPro files (protein2ipr).',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument(
     '-i',

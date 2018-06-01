@@ -35,7 +35,7 @@ from phppipy.ppi_tools import ppi_filter
 
 
 parser = argparse.ArgumentParser(
-    description='Script to add annotations to PPI dataset.',
+    description='Script to filter and remap PPI datasets.',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument(
     '-i',
