@@ -55,7 +55,7 @@ with protein2ipr_file.open('r') as protein2ipr:
         outer_counter = 0
         inner_counter = 0
         for line in protein2ipr:
-            if outer_counter % 1000000 == 0:
+            if outer_counter % 10000000 == 0:
                 print('Processed', outer_counter, 'lines')
             if line.split('\t')[0] in identifiers:
                 inner_counter += 1

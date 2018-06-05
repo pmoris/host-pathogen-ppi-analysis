@@ -26,13 +26,13 @@ will not overlap with the default ones used by the previous script.
 import argparse
 import numpy as np
 import pandas as pd
+import sys
 
 from pathlib import Path
 
 from phppipy.dataprep import taxonid
 from phppipy.ppi_tools import id_mapper
 from phppipy.ppi_tools import ppi_filter
-
 
 parser = argparse.ArgumentParser(
     description='Script to filter and remap PPI datasets.',
@@ -51,6 +51,14 @@ parser.add_argument(
     type=str,
     required=True,
     help='Path to directory with taxonID lists.')
+parser.add_argument(
+    '-l',
+    '--local',
+    dest='local',
+    type=str,
+    required=False,
+    help=
+    'Path to file for local remapping. Leave this out to use online service.')
 parser.add_argument(
     '-o',
     '--output',
@@ -122,12 +130,26 @@ print(
     'By removing/fixing protein identifiers that consisted of multiple entries, the following duplicates were introduced in the dataset:\n'
 )
 print(ppi_df.loc[(ppi_df.original_unique)
-                 & ~(ppi_df.checker_unique)].groupby('origin').size(),'\n')
+                 & ~(ppi_df.checker_unique)].groupby('origin').size(), '\n')
 
 # create UniProt mapping files and remap identifiers
-out_mappings = out_path / 'mapping'
-out_mappings.parent.mkdir(parents=True, exist_ok=True)
-id_mapper.map2uniprot(ppi_df, out_mappings, reviewed_only=True)
+try:
+    out_mappings = out_path / 'mapping'
+    out_mappings.mkdir(parents=True, exist_ok=False)
+except FileExistsError:
+    print(
+        'Warning: supplied output directory already contains a "mapping" directory, aborting operation.'
+    )
+    sys.exit(1)
+if args.local:
+    full_mapping_file = Path(args.local)
+    id_mapper.map2uniprot(
+        ppi_df,
+        out_mappings,
+        reviewed_only=True,
+        full_mapping_file=full_mapping_file)
+else:
+    id_mapper.map2uniprot(ppi_df, out_mappings, reviewed_only=True)
 
 # remove multiple mappings
 ppi_df = id_mapper.remove_mult(ppi_df)
@@ -139,28 +161,26 @@ print(
     'The act of remapping protein identifiers to UniProt AC, introduced the following duplicates:\n'
 )
 print(ppi_df.loc[(ppi_df.checker_unique)
-                 & ~(ppi_df.remap_unique)].groupby('origin').size(),'\n')
+                 & ~(ppi_df.remap_unique)].groupby('origin').size(), '\n')
 
 # check if remapping creates new unique values (should never happen)
-assert ppi_df.loc[
-    ~(ppi_df.original_unique) & (ppi_df.remap_unique), [
-        'xref_partners_sorted', 'original_unique', 'remap_unique',
-        'checker_unique'
-    ]].shape[0] == 0
+assert ppi_df.loc[~(ppi_df.original_unique) & (ppi_df.remap_unique), [
+    'xref_partners_sorted', 'original_unique', 'remap_unique', 'checker_unique'
+]].shape[0] == 0
 
 # report information about duplicates
 print('Number of unique interactions per raw dataset:')
-print(ppi_df.groupby('origin')['xref_partners_sorted'].nunique(),'\n')
+print(ppi_df.groupby('origin')['xref_partners_sorted'].nunique(), '\n')
 print('Total dataset size:')
-print(ppi_df.groupby('origin')['xref_partners_sorted'].size(),'\n')
-print('Total number of unique interactions out of {}'.format(
-    ppi_df.shape[0]))
-print(np.sum(~ppi_df.duplicated(subset=['xref_partners_sorted'])),'\n')
+print(ppi_df.groupby('origin')['xref_partners_sorted'].size(), '\n')
+print('Total number of unique interactions out of {}'.format(ppi_df.shape[0]))
+print(np.sum(~ppi_df.duplicated(subset=['xref_partners_sorted'])), '\n')
 print(
     'Total number of unique interactions out of {}, where publications are considered unique:'.
     format(ppi_df.shape[0]))
 print(
-    np.sum(~ppi_df.duplicated(subset=['xref_partners_sorted', 'publication'])),'\n')
+    np.sum(~ppi_df.duplicated(subset=['xref_partners_sorted', 'publication'])),
+    '\n')
 ppi_df.drop(
     ['original_unique', 'checker_unique', 'remap_unique'],
     axis=1,
@@ -184,7 +204,7 @@ size = ppi_df.shape[0]
 ppi_df = ppi_df.loc[(ppi_df.xref_A.str.contains('uniprot'))
                     & (ppi_df.xref_B.str.contains('uniprot'))]
 ppi_df = ppi_df.reset_index(drop=True)
-print('Omitted {} non-UniProt AC entries, leaving {} PPIs.'.format(
+print('Omitted {} non-UniProt AC interactions, leaving {} PPIs.'.format(
     size - ppi_df.shape[0], ppi_df.shape[0]))
 
 # Move all host partners in xref_B to xref_A (only an issue for VirHostNet)
@@ -198,7 +218,9 @@ ppi_df.to_csv(out_ppi, sep='\t', index=False, header=True)
 print('\nSaved filtered and remapped PPI dataset to {}'.format(out_ppi))
 
 # save protein list for filtering gaf/interpro files
-all_identifiers = pd.Series(pd.unique(ppi_df[['xref_A', 'xref_B']].values.ravel('K'))).str.split(':').str.get(1)
+all_identifiers = pd.Series(
+    pd.unique(ppi_df[['xref_A',
+                      'xref_B']].values.ravel('K'))).str.split(':').str.get(1)
 out_identifiers = out_path / 'ppi_data/uniprot_identifiers.txt'
 with out_identifiers.open('w') as out:
     for i in all_identifiers:
