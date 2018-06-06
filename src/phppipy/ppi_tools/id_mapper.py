@@ -182,11 +182,17 @@ def _create_mapping_dict(path, reviewed_only):
 def map2uniprot(interaction_dataframe,
                 filepath,
                 columns=None,
-                reviewed_only=True):
+                reviewed_only=True,
+                full_mapping_file=None,
+                skip_creation=False):
     """ Remap identifiers in specific columns of a DataFrame to UniProt ACs.
 
     Replaces non-UniProt ACs for the specified columns of a pandas DataFrame.
     Identifiers that could not be mapped are left unchanged.
+
+    Can use the online UniProt remapping service
+    (https://www.uniprot.org/help/api_idmapping) or a local database
+    (ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/).
 
     NOTE: Only reviewed identifiers are used by default.
     NOTE: Identifiers that map to multiple UniProt ACs are concatenated into a
@@ -194,6 +200,9 @@ def map2uniprot(interaction_dataframe,
           The reason being: passing a list or tuple would upset any
           str.contains() or str.startswith() lookups from that point onwards
           (i.e. the boolean array would contain NaNs).
+    NOTE: If the online remapping services are used, existing files in the
+          output folder will NOT be overwritten.
+    NOTE: The local remapping cannot discern between reviewed and unreviewed entries.
 
     Parameters
     ----------
@@ -209,6 +218,11 @@ def map2uniprot(interaction_dataframe,
     reviewed_only : boolean
         Specifies whether or not unreviewed mappings should be retained.
         (Default: True)
+    full_mapping_file : str
+        If supplied, this local database will be used for remapping instead
+        of the online service.
+    skip_creation : bool
+        Allows to skip the creation of mapping files and use the existing ones.
 
     Returns
     -------
@@ -252,25 +266,41 @@ def map2uniprot(interaction_dataframe,
                 'WARNING: interaction dataset contains "{}" entries, which could not be remapped to UniProt AC (check all possible mappings at https://www.uniprot.org/help/api_idmapping .\n'.
                 format(i))
 
+    if not skip_creation:
+        # local run
+        if full_mapping_file:
+            print(
+                'Creating mapping files derived from local mapping database {}...\n'.
+                format(full_mapping_file))
+            _create_mapping_files_local(merged_columns, full_mapping_file,
+                                        Path(filepath))
+
     # for each non-uniprotac identifier defined in the dictionary:
     for db_tag, id_abbreviation in identifier_dict.items():
-
         # Define filepath (without forward slashes)
         path = Path(filepath) / (
             db_tag.replace('/', '-').strip(':') + r'2uniprot.txt')
 
-        # create a mapping file using the uniprot mapping service
-        # NOTE: does not create a file if the remapping is empty
-        # Skip if file already exists TODO: add options to force re-run
-        if not path.is_file():
-            _create_mapping_files(merged_columns, id_abbreviation, db_tag,
-                                  path)
-        else:
-            print(
-                '{} mapping file already exists, not regenerating...\n'.format(
-                    path.resolve()))
 
-        # if a mapping file was created
+        if not skip_creation:
+            # online remapping
+            if not full_mapping_file:
+
+                # create a mapping file using the uniprot mapping service
+                # NOTE: does not create a file if the remapping is empty
+                # Skip if file already exists TODO: add options to force re-run
+                # if local_run:
+                #     print('Parsing local idmappings file {}'.format(full_mapping_file))
+                #     _create_mapping_files_local(merged_columns, full_mapping_file, db_tag, path)
+
+                if not path.is_file():
+                    _create_mapping_files(merged_columns, id_abbreviation, db_tag,
+                                        path)
+                else:
+                    print('{} mapping file already exists, not regenerating...\n'.
+                        format(path.resolve()))
+
+        # if a mapping file was created (i.e. non-empty)
         if Path(path).is_file():
 
             # create dictionaries for current identifier remapping file

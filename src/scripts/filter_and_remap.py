@@ -21,6 +21,8 @@ Input:
 The output is saved to a directory of choice (preferably the one mentioned
 for the input files, which is named after the pathogen taxonid). The file names
 will not overlap with the default ones used by the previous script.
+
+NOTE: the local remapping option cannot discern between reviewed and unreviewed entries.
 '''
 
 import argparse
@@ -59,6 +61,13 @@ parser.add_argument(
     required=False,
     help=
     'Path to file for local remapping. Leave this out to use online service.')
+parser.add_argument(
+    '-s',
+    '--skip',
+    action='store_true',
+    help=
+    'Allows user to skip the creation of mapping files and use existing ones.'
+)
 parser.add_argument(
     '-o',
     '--output',
@@ -147,9 +156,10 @@ if args.local:
         ppi_df,
         out_mappings,
         reviewed_only=True,
-        full_mapping_file=full_mapping_file)
+        full_mapping_file=full_mapping_file,
+        skip_creation=args.skip)
 else:
-    id_mapper.map2uniprot(ppi_df, out_mappings, reviewed_only=True)
+    id_mapper.map2uniprot(ppi_df, out_mappings, reviewed_only=True, skip_creation=args.skip)
 
 # remove multiple mappings
 ppi_df = id_mapper.remove_mult(ppi_df)
