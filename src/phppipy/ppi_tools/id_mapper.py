@@ -3,6 +3,7 @@
 Module to create protein id mappings and apply them to a dataframe.
 """
 
+import time
 import urllib.request
 import urllib.parse
 import numpy as np
@@ -11,11 +12,126 @@ import pandas as pd
 from pathlib import Path
 
 
+def _create_mapping_files_local(array, mapping_file, savepath):
+    """Create mapping files between uniprot ACs and other identifiers using
+    a local database.
+
+    Queries a local UniProt mapping database (idmappings.dat), available from
+    http://www.uniprot.org/downloads, and extracts the identifiers that are
+    present in the protein-protein interactions dataset.
+
+    Parameters
+    ----------
+    array : array-like
+        List of all identifiers that need to be remapped to
+        UniProt Accession Numbers. Obtained from the pandas DataFrame and
+        column list that is passed to the map2uniprot() function.
+        E.g. [refseq:NP_001179, uniprotkb:Q16611, ...]
+    mapping_file : str
+        Path to the local mapping file.
+    savepath : string
+        Filepath where to write the mapping file, passed along by the
+        map2uniprot() function.
+
+    Returns
+    -------
+    None
+        Writes mapping files to savepath directory.
+    """
+
+    identifier_dict = {
+        'EMBL': 'ddbj/embl/genbank:',
+        'Ensembl': 'ensembl:',
+        'EnsemblGenome': 'ensemblgenomes:',
+        'GeneID': 'entrez gene/locuslink:',
+        'RefSeq': 'refseq:',
+        'DIP': 'dip:'
+    }
+
+    ids = pd.Series(array)
+    ids = ids.str.split(':').str[1].unique()
+    ids = set(ids)
+
+    full_mapping_path = Path(mapping_file)
+    with full_mapping_path.open('r') as full_mapping:
+
+        dict_of_mapping_dicts = {i: {} for i, j in identifier_dict.items()}
+
+        counter = 0
+        skipped_lines = []
+
+        for line in full_mapping:
+            counter += 1
+            if counter % 10000000 == 0:
+                print('Processed', counter, 'lines')
+
+            split = line.split()  # NOTE: don't split on tab, some lines use \s
+
+            if len(
+                    split
+            ) < 3:  # <3 rather != because some indentifiers contain a space in the third column
+                skipped_lines.append(line)
+                continue
+
+            # check if current database should be saved
+            if split[1] in identifier_dict:
+
+                # check if identifier is present in ppi ids
+                # NOTE: if there are overlapping identifiers, this could
+                #       create mapping files for absent identifiers
+                #       however, they won't be wrongly attributed
+                #       in the subsequent steps because the corresponding
+                #       mapping file will be selected, whereas in this step
+                #       the original identifier information is lost in the
+                #       merged input array.
+                if split[2] in ids:
+                    # check if another remap already exists for id
+                    if split[2] not in dict_of_mapping_dicts[split[1]]:
+                        dict_of_mapping_dicts[split[1]][split[2]] = [split[0]]
+                    else:  # if so, append uniprot ac to list for this id
+                        dict_of_mapping_dicts[split[1]][split[2]].append(
+                            split[0])
+
+    print(
+        'Skipped the following lines due to non-conforming format: {}\n'.format(
+            skipped_lines))
+
+    # write a mapping file for each of the created dictionaries
+    for mapping_id, mapping_dict in dict_of_mapping_dicts.items():
+        # skip empty dictionaries
+        if not mapping_dict:
+            print('No {} identifiers found in dataset.\n'.format(
+                identifier_dict[mapping_id]))
+        else:
+            path = Path(savepath) / (identifier_dict[mapping_id].replace(
+                '/', '-').strip(':') + r'2uniprot.txt')
+            path.parent.mkdir(parents=True, exist_ok=True)
+            print('Created mapping file between UniProt ACs and {} in: {}.\n'.
+                  format(identifier_dict[mapping_id], path.resolve()))
+            with path.open('w') as mapping_out:
+                for ident, uniac in mapping_dict.items():
+                    if len(uniac) > 1:
+                        # print(
+                        # 'WARNING: multiple remapping options were found for {}: {}\n'.
+                        # format(ident, uniac))
+                        for i in uniac:
+                            mapping_out.write(ident + '\t' + '\t' + i + '\t' +
+                                              'reviewed' + '\n')
+                    else:
+                        mapping_out.write(ident + '\t' + '\t' + uniac[0] +
+                                          '\t' + 'reviewed' + '\n')
+
+
 def _create_mapping_files(array, from_id, description, savepath):
     """Create mapping files between uniprot ACs and other identifiers.
 
     Queries the UniProt mapping service to retrieve mappings for all
     non-UniProt identifiers found in the dataset.
+
+    See:
+        http://www.uniprot.org/help/api_idmapping#id_mapping_python_example
+        https://docs.python.org/3/howto/urllib2.html
+        https://www.biostars.org/p/66904/
 
     Parameters
     ----------
@@ -39,7 +155,6 @@ def _create_mapping_files(array, from_id, description, savepath):
     -------
     None
         Writes mapping files to savepath directory.
-
     """
     # create space-separated id string
     identifier_series = pd.Series(array)
@@ -50,40 +165,49 @@ def _create_mapping_files(array, from_id, description, savepath):
         print('No {} identifiers found in dataset.\n'.format(description))
 
     else:
-        ids = ids.reset_index(drop=True)
-        ids = ids.str.split(':').str[1].unique()
-        ids_str = ' '.join(np.char.mod('%s', ids))
-
-        # http://www.uniprot.org/help/api_idmapping#id_mapping_python_example
-        # https://docs.python.org/3/howto/urllib2.html
-        # https://www.biostars.org/p/66904/
-
-        url = 'https://www.uniprot.org/uploadlists/'
-
-        params = {
-            'from': from_id,
-            'to': 'ACC',
-            'format': 'tab',
-            'query': ids_str
-        }
-
-        data = urllib.parse.urlencode(params)
-        data = data.encode('ascii')
-
-        request = urllib.request.Request(url, data)
-
-        contact = "pieter.moris@uantwerpen.be"
-        request.add_header('User-Agent', 'Python %s' % contact)
-
-        with urllib.request.urlopen(request) as response:
-            mapping = response.read()
-
         print('{} {} identifiers found in dataset.'.format(
             description, ids.size))
 
+        # create output file
         savepath = Path(savepath)
         savepath.parent.mkdir(parents=True, exist_ok=True)
-        savepath.write_bytes(mapping)
+
+        # parse input identifiers
+        ids = ids.reset_index(drop=True)
+        ids = ids.str.split(':').str[1].unique()
+
+        mapping_list = []
+
+        # split request into 1000 sized chunks
+        for i in [ids[j:j+1000] for j in range(0, len(ids), 1000)]:
+
+            # cast object array to string
+            ids_str = ' '.join(np.char.mod('%s', i))
+
+            url = 'https://www.uniprot.org/uploadlists/'
+
+            params = {
+                'from': from_id,
+                'to': 'ACC',
+                'format': 'tab',
+                'query': ids_str
+            }
+
+            data = urllib.parse.urlencode(params)
+            data = data.encode('ascii')
+
+            request = urllib.request.Request(url, data)
+
+            contact = "pieter.moris@uantwerpen.be"
+            request.add_header('User-Agent', 'Python %s' % contact)
+
+            with urllib.request.urlopen(request) as response:
+                mapping = response.read()
+            time.sleep(2)
+
+            mapping_list.append(mapping)
+
+        savepath.write_bytes(b''.join(mapping_list))
 
         print(
             'Created mapping file between UniProt ACs and {} in: {}.\n'.format(
@@ -116,6 +240,9 @@ def _create_mapping_dict(path, reviewed_only):
     Create a dictionary mapping a given type of identifiers to another one,
     based on a file created through the EBI mapping services (see
     _create_mapping_files()).
+
+    Format: { '4961527': ['uniprotkb:Q9QR71'], '36288': ['uniprotkb:P32234'],
+            '2703389,2703390': ['uniprotkb:P08393'] }
 
     Parameters
     ----------
@@ -163,7 +290,7 @@ def _create_mapping_dict(path, reviewed_only):
         mapping_dict = {**unreviewed_mapping_dict, **reviewed_mapping_dict}
         # action = 'included in'
         # total = len(mapping_dict)
-        #TODO check overlap!
+        # TODO check overlap!
     else:
         mapping_dict = reviewed_mapping_dict
         # action = 'excluded from'
@@ -334,32 +461,38 @@ def map2uniprot(interaction_dataframe,
                     db_tag)
 
                 # keep track of total (unique) identifier count
-                total_series.append(interaction_dataframe.loc[mapping_selection,col])
+                total_series.append(
+                    interaction_dataframe.loc[mapping_selection, col])
+                # NOTE: this creates a copy, not a view, so the df is not being modified
 
                 interaction_dataframe.loc[mapping_selection, col] = \
-                    interaction_dataframe.loc[mapping_selection, col].apply(func=lambda_helper, args=(mapping_dict,))
+                    interaction_dataframe.loc[mapping_selection, col].apply(
+                        func=lambda_helper, args=(mapping_dict,))
 
                 # count how many (unique) identifiers were remapped
-                success_series.append(interaction_dataframe.loc[mapping_selection & ~interaction_dataframe[col].str.startswith(db_tag), col])
+                success_series.append(interaction_dataframe.loc[
+                    mapping_selection &
+                    ~interaction_dataframe[col].str.startswith(db_tag), col])
 
             # find unique identifiers in total and successful remapped series
             success_count = pd.concat(success_series).unique().size
             total_count = pd.concat(total_series).unique().size
 
             print(
-                '{} {} out of identifiers {} were succesfully remapped to UniProt accession numbers.\n'.
+                '{} {} out of {} identifiers were succesfully remapped to UniProt accession numbers.\n'.
                 format(db_tag, success_count, total_count))
 
     # report how many identifiers had multiple possible remappings
     mult_map_counts = pd.Series(
         pd.unique(interaction_dataframe[columns].values.ravel(
             'K'))).str.contains('MULT_MAP').sum()
-    mult_map_interaction_count = interaction_dataframe.loc[interaction_dataframe[columns[0]].str.contains('MULT_MAP') | interaction_dataframe[columns[1]].str.contains('MULT_MAP')].shape[0]
+    mult_map_interaction_count = interaction_dataframe.loc[
+        interaction_dataframe[columns[0]].str.contains('MULT_MAP')
+        | interaction_dataframe[columns[1]].str.contains('MULT_MAP')].shape[0]
 
     print(
-        '{} identifiers were be remapped to multiple UniProt accession numbers (denoted by the prefix "MULT_MAP" in the dataset) for a total of {} interactions.\n'.
+        '{} identifiers were remapped to multiple UniProt accession numbers (denoted by the prefix "MULT_MAP" in the dataset) for a total of {} interactions.\n'.
         format(mult_map_counts, mult_map_interaction_count))
-
     '''
     # cat <(cut -f1 hpidb2_March14_2017_mitab.txt) <(cut -f2 hpidb2_March14_2017_mitab.txt) | grep entrez | sort -u |
     # sed -rn 's/^.*:(.*)/\1/p' | wc -l
@@ -507,4 +640,4 @@ def check_unique_identifier(interaction_dataframe, columns=None):
                 '{} unique identifiers in column {} did not conform to the PSI-MITAB format (multiple identifiers were present) and a fix was attempted.\n'.
                 format(len(non_unique_mask), i))
 
-    # TODO: Find a way to monitor how many of the bad identifiers can be remapped to uniprot/refseq/other.
+    # TODO: Find a way to monitor how many of the bad identifiers can/can't be remapped to uniprot/refseq/other.
