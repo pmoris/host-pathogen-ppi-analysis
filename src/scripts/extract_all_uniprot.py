@@ -1,3 +1,12 @@
+"""Script to extract all identifiers from a set of PPI files and convert them
+to UniProt ACs.
+
+NOTE: the local mapping option cannot discern between reviewed and unreviewed
+      entries!
+
+"""
+
+
 import argparse
 import numpy as np
 import pandas as pd
@@ -24,15 +33,15 @@ parser.add_argument(
     '--mapping',
     dest='mapping',
     type=str,
-    required=True,
-    help='Full mapping file from EBI GOA.')
+    required=False,
+    help='Full mapping file from EBI GOA. Omitting this will default to the online UniProt mapping service.')
 parser.add_argument(
     '-o',
     '--output',
     dest='output',
     type=str,
     required=True,
-    help='Output path.')
+    help='Output directory.')
 args = parser.parse_args()
 
 # Import PPI files
@@ -52,10 +61,14 @@ ppi_df = pd.concat(ppi_df_list, axis=0, join='outer', ignore_index=True)
 # remap to UniProt AC
 id_mapper.check_unique_identifier(ppi_df)
 out_mappings_dir = Path(args.output) / 'mapping'
-full_mapping_file = Path(args.mapping)
+if args.mapping:
+    full_mapping_path = Path(args.mapping)
+else:
+    full_mapping_path = None
 try:
     out_mappings_dir.mkdir(parents=True, exist_ok=False)
-    id_mapper.map2uniprot(ppi_df, out_mappings_dir, reviewed_only=True, full_mapping_file=full_mapping_file)
+    # omitting args.mapping defaults it to None, which prompts the map2uniprot function to use the online service
+    id_mapper.map2uniprot(ppi_df, out_mappings_dir, reviewed_only=True, full_mapping_file=full_mapping_path)
 except FileExistsError:
     print(
         'Warning: supplied output directory already contains a "mapping" directory, aborting operation.'
