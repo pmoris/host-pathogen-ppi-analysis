@@ -57,7 +57,7 @@ with gaf_file.open('r') as gaf:
         for line in gaf:
             if line.startswith('!'):
                 continue
-            if outer_counter % 1000000 == 0:
+            if outer_counter % 10000000 == 0:
                 print('Processed', outer_counter, 'lines')
             if line.split('\t')[1] in identifiers:
                 inner_counter += 1
