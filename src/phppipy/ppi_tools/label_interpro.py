@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """
 Module to add GO annotations and re-map them to a desired depth.
 """
@@ -11,17 +10,15 @@ import numpy as np
 from pathlib import Path
 
 
-def create_uniprot2interpro_dict(
-        uniprot_ac_list,
-        filepath='data/interim/interpro_data/protein2ipr_filtered.txt'):
+def create_uniprot2interpro_dict(filepath, uniprot_ac_list):
     """
     Creates a dictionary mapping UniProt ACs to InterPro domains.
 
     Parameters
     ----------
+    filepath : the file path to a (filtered) InterPro map file.
     uniprot_ac_list : list
         A list of unique UniProt ACs present in the dataframe.
-    filepath : the file path to a (filtered) InterPro map file.
 
     Returns
     -------
@@ -44,13 +41,15 @@ def create_uniprot2interpro_dict(
 
 def annotate_interpro(interaction_dataframe,
                       uniprot2interpro_dict,
-                      xref_columns=list(('xref_A', 'xref_B'))):
-    interaction_dataframe['interpro_A'] = interaction_dataframe.apply(
-        lambda x: uniprot2interpro_dict.get(x['xref_A'].split(':')[1], np.nan),
-        axis=1)
-    interaction_dataframe['interpro_B'] = interaction_dataframe.apply(
-        lambda x: uniprot2interpro_dict.get(x['xref_B'].split(':')[1], np.nan),
-        axis=1)
+                      columns=None):
+    if not columns:
+        columns = ['xref_A', 'xref_B']
+
+    for i in columns:
+        interaction_dataframe['interpro_' + i] = interaction_dataframe.apply(
+            lambda x: uniprot2interpro_dict.get(x[i].split(':')[1], np.nan),
+            axis=1)
+
 
 #
 # # Retrieve interpro domains
@@ -112,6 +111,6 @@ def annotate_interpro(interaction_dataframe,
 #     interaction_dataframe['xref_A_interpro'] = interaction_dataframe['xref_A'].str.extract('^.*:(\w*)-?',
 #                                                                                      expand=False).apply(
 #         lambda x: gaf_dict.get(x, np.NaN))
-#     interaction_dataframe['xref_B_GO'] = interaction_dataframe['xref_B'].str.extract('^.*:(\w*)-?',
+#     interaction_dataframe['GO_B'] = interaction_dataframe['xref_B'].str.extract('^.*:(\w*)-?',
 #                                                                                      expand=False).apply(
 #         lambda x: gaf_dict.get(x, np.NaN))
