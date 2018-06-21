@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 
-
 def annotate_inter_intra_species(interaction_dataframe):
     """Adds column to DataFrame specifying whether interaction is
     inter- or intra-species.

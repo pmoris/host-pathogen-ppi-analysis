@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cd $(dirname "$0")
-cd ../..
+cd ../../..
 
 python src/scripts/pathogen_selection.py -i data/raw/ppi_data/ -n data/raw/taxdump/ -t 10292 -o data/interim/ 2>&1 | tee $(dirname "$0")/10292_output_pathogen_selection.log
 
@@ -24,3 +24,6 @@ python src/scripts/filter_gaf.py -i /media/pieter/Seagate\ Red\ Pieter\ Moris/wo
 
 # annotate ppi
 python src/scripts/annotate.py -i data/interim/10292/ppi_data/ppi-filter-remap.tsv -b data/raw/go_data/go.obo -g data/interim/10292/go_data/goa_uniprot.gaf -p data/interim/10292/interpro/protein2ipr.dat -o data/interim/10292/ppi_data/ppi-annotations.tsv 2>&1 | tee $(dirname "$0")/10292_output_annotate.log
+
+# pairwise mining (can take several hours)
+python src/scripts/pairwise_mining.py -i data/interim//10292/ppi_data/ppi-annotations.tsv -b data/raw/go_data/go.obo -o data/processed/10292/results-propagated.tsv 2>&1 | tee src/scripts/10292_output_pairwise_mining-propagated.log

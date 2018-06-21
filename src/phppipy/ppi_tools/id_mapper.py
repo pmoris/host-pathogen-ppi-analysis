@@ -532,7 +532,7 @@ def remove_mult(interaction_dataframe, columns=None):
 
     Returns
     -------
-    None
+    DataFrame
         The subset of the DataFrame with PPIs whose partners have 1 unique
         mapping to UniProt ACs.
     """
