@@ -19,7 +19,7 @@ from phppipy.ppi_tools import ppi_import
 from phppipy.ppi_tools import ppi_filter
 
 parser = argparse.ArgumentParser(
-    description='Script to extract taxon ids from ppi files.',
+    description='Script to extract all identifiers from a set of PPI files and convert them to UniProt ACs',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument(
     '-i',
@@ -41,7 +41,7 @@ parser.add_argument(
     dest='output',
     type=str,
     required=True,
-    help='Output directory.')
+    help='Output directory. File is saved as "all_identifiers.txt"')
 args = parser.parse_args()
 
 # Import PPI files
@@ -56,7 +56,7 @@ ppi_df_list.extend(
 # Merge PPI datasets
 for i in ppi_df_list:
     i['origin'] = i.name
-ppi_df = pd.concat(ppi_df_list, axis=0, join='outer', ignore_index=True)
+ppi_df = pd.concat(ppi_df_list, axis=0, join='outer', ignore_index=True, sort=True)
 
 # remap to UniProt AC
 id_mapper.check_unique_identifier(ppi_df)
