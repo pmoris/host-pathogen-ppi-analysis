@@ -100,10 +100,11 @@ def _create_dummies(interaction_dataframe, columns):
 
     Parameters
     ----------
-    interaction_dataframe : [type]
-        [description]
-    columns : [type]
-        [description]
+    interaction_dataframe : DataFrame
+        DataFrame containing protein-protein interactions and annotations.
+    columns : list
+        A list of annotation columns to merge. Expects the column contents to
+        be array-like, not strings.
     """
 
     # replace NaNs with empty sets
@@ -144,9 +145,15 @@ def find_pairwise(interaction_dataframe,
     ----------
     interaction_dataframe : DataFrame
         DataFrame containing protein-protein interactions and annotations.
-    columns : list
-        A list of annotation columns between which associations should be
-        found. Expects the column contents to be sets of annotations:
+    column_A : str
+        The name of the host annotation column.
+        Expects the column contents to be sets of annotations:
+            0       {p@GO:0019012, p@GO:0019031, p@GO:0055036, p@G...
+            1       {p@IPR013672, p@IPR001889, p@IPR027417, p@GO:0...
+            2       {p@IPR013672, p@IPR001889, p@IPR027417, p@GO:0...
+    column_B : str
+        The name of the pathogen annotation column.
+        Expects the column contents to be sets of annotations:
             0       {p@GO:0019012, p@GO:0019031, p@GO:0055036, p@G...
             1       {p@IPR013672, p@IPR001889, p@IPR027417, p@GO:0...
             2       {p@IPR013672, p@IPR001889, p@IPR027417, p@GO:0...
@@ -213,19 +220,6 @@ def find_pairwise(interaction_dataframe,
     # https://stackoverflow.com/questions/29034928/pandas-convert-a-column-of-list-to-dummies
     # dummies_df = _create_dummies(interaction_dataframe, columns)
 
-    # results_dict = {
-    #     pair: {
-    #         'jaccard': {},
-    #         'pmi': {},
-    #         'G': {},
-    #         'chi2': {},
-    #         'fisher': {},
-    #         'phi': {},
-    #         'min_count': {}
-    #     }
-    #     for pair in pairs
-    # }
-
     results_dict = {
         # 'jaccard': {},
         'pmi': {},
@@ -255,58 +249,6 @@ def find_pairwise(interaction_dataframe,
             pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count = count_presences(
                 pair, interaction_dataframe, 'annotation_pairs',
                 merged_annotations)
-
-            # results_dict[pair]['pmi'] = _calc_pmi(pair_count, label_one_count, label_two_count)
-            # results_dict[pair]['chi2'] = _calc_chi2(pair_count, label_one_count_exclusive, label_two_count_exclusive, absent_count)
-            # results_dict[pair]['G'] = _calc_G(pair_count, label_one_count_exclusive, label_two_count_exclusive, absent_count)
-            # results_dict[pair]['fisher'] = _calc_fisher(pair_count, label_one_count_exclusive, label_two_count_exclusive, absent_count)
-
-            results_dict['pmi'][pair] = _calc_pmi(pair_count, label_one_count,
-                                                  label_two_count, total_count)
-            results_dict['chi2'][pair] = _calc_chi2(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['G'][pair] = _calc_G(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['fisher'][pair] = _calc_fisher(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['min_count'][pair] = min([
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count
-            ])
-
-        df_list = [
-            pd.DataFrame.from_dict(d, orient='index').add_prefix(name + '_')
-            for name, d in results_dict.items()
-        ]
-        results = pd.concat(df_list, axis=1)
-
-        end = time.time()
-        print('Pairwise calculations took {}'.format(end - start))
-
-        return results
-
-    else:
-        pairs_dict = propagate_pairs(pairs, go_dict)
-
-        for pair, propagated_pair in pairs_dict.items():
-
-            counter += 1
-            if counter % 10000 == 0:
-                print('Processed {} lines out of {}'.format(
-                    counter, len(pairs)))
-
-            pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count = count_presences_propagated(
-                propagated_pair, interaction_dataframe, column_A, column_B,
-                merged_annotations)
-
-            # print(pair)
-            # print(np.array([[pair_count, label_one_count_exclusive],
-            #     [label_two_count_exclusive, absent_count]]))
-            # print('pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count')
-            # print(pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count)
 
             results_dict['pmi'][pair] = _calc_pmi(pair_count, label_one_count,
                                                   label_two_count, total_count)
@@ -339,25 +281,102 @@ def find_pairwise(interaction_dataframe,
                 go_dict[pair[1][2:]].depth if 'GO' in pair[1] else None
             }
 
-        df_list = [
-            pd.DataFrame.from_dict(d, orient='index').add_prefix(name + '_')
-            for name, d in results_dict.items()
-        ]
-        results = pd.concat(df_list, axis=1)
+    # if propagate option was selected, loop through pair-propagated_set dict
+    else:
+        pairs_dict = _propagate_pairs(pairs, go_dict)
 
-        end = time.time()
-        print('Pairwise calculations took {}'.format(end - start))
+        for pair, propagated_pair in pairs_dict.items():
 
-        return results
+            counter += 1
+            if counter % 10000 == 0:
+                print('Processed {} lines out of {}'.format(
+                    counter, len(pairs)))
+
+            pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count = count_presences_propagated(
+                propagated_pair, interaction_dataframe, column_A, column_B,
+                merged_annotations)
+
+            results_dict['pmi'][pair] = _calc_pmi(pair_count, label_one_count,
+                                                  label_two_count, total_count)
+            results_dict['chi2'][pair] = _calc_chi2(
+                pair_count, label_one_count_exclusive,
+                label_two_count_exclusive, absent_count)
+            results_dict['G'][pair] = _calc_G(
+                pair_count, label_one_count_exclusive,
+                label_two_count_exclusive, absent_count)
+            results_dict['fisher'][pair] = _calc_fisher(
+                pair_count, label_one_count_exclusive,
+                label_two_count_exclusive, absent_count)
+            results_dict['min_count'][pair] = min([
+                pair_count, label_one_count_exclusive,
+                label_two_count_exclusive, absent_count
+            ])
+            results_dict['counts'][pair] = {
+                'pair_count': pair_count,
+                'label_one_count_exclusive': label_one_count_exclusive,
+                'label_two_count_exclusive': label_two_count_exclusive,
+                'label_one_count': label_one_count,
+                'label_two_count': label_two_count,
+                'absent_count': absent_count,
+                'total_count': total_count
+            }
+            results_dict['depth'][pair] = {
+                'protein_A':
+                go_dict[pair[0][2:]].depth if 'GO' in pair[0] else None,
+                'protein_B':
+                go_dict[pair[1][2:]].depth if 'GO' in pair[1] else None
+            }
+
+    # Convert results dictionaries to a dataframe
+    df_list = [
+        pd.DataFrame.from_dict(d, orient='index').add_prefix(name + '_')
+        for name, d in results_dict.items()
+    ]
+    results = pd.concat(df_list, axis=1)
+
+    end = time.time()
+    print('Pairwise calculations took {}'.format(end - start))
+
+    return results
 
 
 def count_presences(pair, interaction_dataframe, pairs_column,
                     merged_annotations):
-    """
-    something
-    """
+    """Counts the number of PPIs where the annotation pair (partially) occurs.
 
-    #TODO: maps > apply! merge bool arrays > multiple queries!
+    Calculates how many times a complete annotation pair is present,
+    how many times only 1 term is present, at least 1 term is present and none
+    of the terms are present.
+
+    Parameters
+    ----------
+    pair : tuple
+        A tuple of annotation terms.
+        e.g. (h@GO:0017137, p@GO:0019012)
+    interaction_dataframe : DataFrame
+        DataFrame containing protein-protein interactions and annotations.
+    pairs_column : str
+        The name of the column containing the annotation pairs for each PPI.
+        e.g.
+            0       {(h@GO:0017137, p@GO:0019012), (h@GO:0005515, ...
+            1       {(h@GO:0008380, p@GO:0071897), (h@GO:0051219, ...
+    merged_annotations : Series
+        A pandas Series where each element is the set of annotations for a PPI,
+        covering both the pathogen and host protein.
+        e.g.
+            0       {h@GO:0017137, h@GO:2001136, p@GO:0019012, h@G...
+            1       {h@GO:0038023, h@GO:0005654, h@GO:0000381, p@I...
+    Returns
+    -------
+    pair_count : int
+    label_one_count_exclusive : int
+    label_two_count_exclusive : int
+    label_one_count : int
+    label_two_count : int
+    absent_count : int
+    total_count : int
+        The presence/absence counts of the annotation pair.
+    """
 
     # count all ppis where pair occurs
     presence_mask = interaction_dataframe[pairs_column].map(
@@ -389,25 +408,52 @@ def count_presences(pair, interaction_dataframe, pairs_column,
 
 def count_presences_propagated(pair_prop, interaction_dataframe, column_A,
                                column_B, merged_annotations):
-    """
-    columns must be host, pathogen order
-    """
-    """Comparison of methods
+    """Counts the number of PPIs where the annotation set pair (partially)
+    occurs.
 
-    ALL PAIRS
-    %time np.sum([np.sum(interaction_dataframe['annotation_pairs'].apply(lambda x: i in x)) for i in list(itertools.product(pair_prop[0], pair_prop[1]))])
-    %time np.sum(interaction_dataframe.apply(lambda x: not x['annotations_A'].isdisjoint(pair_prop[0]) and not x['annotations_B'].isdisjoint(pair_prop[1]), axis=1))
-    %time np.sum(merged_annotations.map(lambda x: not x.isdisjoint(pair_prop[0]) and not x.isdisjoint(pair_prop[1])))
+    Calculates how many times a complete annotation set pair is present,
+    how many times at least one of the set's terms is present in only 1 of
+    the proteins,
+    the set's terms is present in at least one of the interacting proteins,
+    and none of the terms are present in either protein's annotation list.
 
-    CPU times: user 138 ms, sys: 30 µs, total: 138 ms
-    Wall time: 136 ms
-    CPU times: user 105 ms, sys: 0 ns, total: 105 ms
-    Wall time: 105 ms
-    CPU times: user 8.65 ms, sys: 0 ns, total: 8.65 ms
-    Wall time: 8.46 ms
-
-    ONLY 1 LABEL
-
+    Parameters
+    ----------
+    pair_prop : tuple
+        A tuple containing two sets of annotation terms, where each set
+        represents an annotation term and all of its descendents.
+        These are the values of the dictionary created by
+        _propagate_pairs().
+    interaction_dataframe : DataFrame
+        DataFrame containing protein-protein interactions and annotations.
+    column_A : str
+        The name of the host annotation column.
+        Expects the column contents to be sets of annotations:
+            0       {p@GO:0019012, p@GO:0019031, p@GO:0055036, p@G...
+            1       {p@IPR013672, p@IPR001889, p@IPR027417, p@GO:0...
+            2       {p@IPR013672, p@IPR001889, p@IPR027417, p@GO:0...
+    column_B : str
+        The name of the pathogen annotation column.
+        Expects the column contents to be sets of annotations:
+            0       {p@GO:0019012, p@GO:0019031, p@GO:0055036, p@G...
+            1       {p@IPR013672, p@IPR001889, p@IPR027417, p@GO:0...
+            2       {p@IPR013672, p@IPR001889, p@IPR027417, p@GO:0...
+    merged_annotations : Series
+        A pandas Series where each element is the set of annotations for a PPI,
+        covering both the pathogen and host protein.
+        e.g.
+            0       {h@GO:0017137, h@GO:2001136, p@GO:0019012, h@G...
+            1       {h@GO:0038023, h@GO:0005654, h@GO:0000381, p@I...
+    Returns
+    -------
+    pair_count : int
+    label_one_count_exclusive : int
+    label_two_count_exclusive : int
+    label_one_count : int
+    label_two_count : int
+    absent_count : int
+    total_count : int
+        The presence/absence counts of the propagated annotation pair.
     """
 
     # count all ppis where any pair occurs
@@ -416,7 +462,7 @@ def count_presences_propagated(pair_prop, interaction_dataframe, column_A,
             lambda x: not x.isdisjoint(pair_prop[0]) and not x.isdisjoint(pair_prop[1])
         ))
 
-    # count ppis where only 1 label occurs: P(X | Y') or N10
+    # count ppis where only 1 label/annotation set occurs: P(X | Y') or N10
     label_one_count_exclusive = np.sum(interaction_dataframe[column_A].map(
         lambda x: not x.isdisjoint(pair_prop[0])
     ) & interaction_dataframe[column_B].map(
@@ -426,7 +472,8 @@ def count_presences_propagated(pair_prop, interaction_dataframe, column_A,
     ) & interaction_dataframe[column_B].map(
         lambda x: not x.isdisjoint(pair_prop[1])))
 
-    # count ppis where 1 label occurs, regardless of other label in pair:
+    # count ppis where 1 label/annotation set occurs,
+    # regardless of other label in set pair:
     # P(X) or N1+
     label_one_count = np.sum(
         merged_annotations.apply(lambda x: not x.isdisjoint(pair_prop[0])))
@@ -452,10 +499,6 @@ def count_presences_propagated(pair_prop, interaction_dataframe, column_A,
     total_count = interaction_dataframe.shape[0]
 
     return pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count
-
-
-# def _jaccard(a, b, c):
-#     return a / (a + b + c)
 
 
 def _calc_pmi(n11, n1plus, nplus1, nplusplus):
@@ -529,7 +572,7 @@ def multiple_testing_correction(results_dataframe,
         results_dataframe[i + '_' + method] = corrected_p[1]
 
 
-def propagate_pairs(pairs, go_dict):
+def _propagate_pairs(pairs, go_dict):
     """Propagates pairs of annotations.
 
     For each pair in an array of annotation pairs, the GO annotations will
@@ -552,7 +595,7 @@ def propagate_pairs(pairs, go_dict):
     propagated_pairs : dict
         A dictionary of sorted tuples of annotation sets, one for the host and
         one for the pathogen. Each element in the tuple consists of a set of
-        terms, e.g. a GO term and all of its descendants.
+        terms, e.g. the GO term itself and all of its descendants.
     """
 
     propagated_pairs = {}
@@ -599,5 +642,4 @@ CPU times: user 17.9 s, sys: 441 ms, total: 18.4 s
 Wall time: 17 s
 CPU times: user 13.6 s, sys: 5 ms, total: 13.6 s
 Wall time: 13.6 s
-
 """
