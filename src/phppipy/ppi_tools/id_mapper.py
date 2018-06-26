@@ -92,9 +92,8 @@ def _create_mapping_files_local(array, mapping_file, savepath):
                         dict_of_mapping_dicts[split[1]][split[2]].append(
                             split[0])
 
-    print(
-        'Skipped the following lines due to non-conforming format: {}\n'.format(
-            skipped_lines))
+    print('Skipped the following lines due to non-conforming format: {}\n'.
+          format(skipped_lines))
 
     # write a mapping file for each of the created dictionaries
     for mapping_id, mapping_dict in dict_of_mapping_dicts.items():
@@ -122,7 +121,11 @@ def _create_mapping_files_local(array, mapping_file, savepath):
                                           '\t' + 'reviewed' + '\n')
 
 
-def _create_mapping_files(array, from_id, description, savepath):
+def _create_mapping_files(array,
+                          from_id,
+                          description,
+                          savepath,
+                          query_chunk_size=1000):
     """Create mapping files between uniprot ACs and other identifiers.
 
     Queries the UniProt mapping service to retrieve mappings for all
@@ -150,6 +153,9 @@ def _create_mapping_files(array, from_id, description, savepath):
     savepath : string
         Filepath where to write the mapping file, passed along by the
         map2uniprot() function.
+    query_chunk_size : int
+        Size of the chunks that are submitted to the EBI mapping web service.
+        (Default=1000)
 
     Returns
     -------
@@ -179,7 +185,11 @@ def _create_mapping_files(array, from_id, description, savepath):
         mapping_list = []
 
         # split request into 1000 sized chunks
-        for i in [ids[j:j+1000] for j in range(0, len(ids), 1000)]:
+        progress_counter = 0
+        for i in [
+                ids[j:j + query_chunk_size]
+                for j in range(0, len(ids), query_chunk_size)
+        ]:
 
             # cast object array to string
             ids_str = ' '.join(np.char.mod('%s', i))
@@ -201,11 +211,36 @@ def _create_mapping_files(array, from_id, description, savepath):
             contact = "pieter.moris@uantwerpen.be"
             request.add_header('User-Agent', 'Python %s' % contact)
 
-            with urllib.request.urlopen(request) as response:
-                mapping = response.read()
-            time.sleep(2)
+            request_completed = False
+            n_tries = 0
+            while not request_completed:
+                if n_tries > 10:
+                    print(
+                        'WARNING: Not all identifiers were remapped. Please try again later.'
+                    )
+                    mapping = None
+                    break
+                n_tries += 1
+                try:
+                    with urllib.request.urlopen(request) as response:
+                        mapping = response.read()
+                except urllib.error.HTTPError:
+                    print('Encountered HTTP error, trying again...')
+                    time.sleep(5)
+                    pass
+                except http.client.RemoteDisconnected:
+                    print(
+                        'Encountered RemoteDisconnected error, trying again...'
+                    )
+                    time.sleep(5)
+                    pass
+                request_completed = True
+            time.sleep(5)
 
             mapping_list.append(mapping)
+
+            progress_counter += query_chunk_size
+            print('Queried first {} identifiers...'.format(progress_counter))
 
         savepath.write_bytes(b''.join(mapping_list))
 
@@ -408,7 +443,6 @@ def map2uniprot(interaction_dataframe,
         path = Path(filepath) / (
             db_tag.replace('/', '-').strip(':') + r'2uniprot.txt')
 
-
         if not skip_creation:
             # online remapping
             if not full_mapping_file:
@@ -421,10 +455,11 @@ def map2uniprot(interaction_dataframe,
                 #     _create_mapping_files_local(merged_columns, full_mapping_file, db_tag, path)
 
                 if not path.is_file():
-                    _create_mapping_files(merged_columns, id_abbreviation, db_tag,
-                                        path)
+                    _create_mapping_files(merged_columns, id_abbreviation,
+                                          db_tag, path)
                 else:
-                    print('{} mapping file already exists, not regenerating...\n'.
+                    print(
+                        '{} mapping file already exists, not regenerating...\n'.
                         format(path.resolve()))
 
         # if a mapping file was created (i.e. non-empty)
