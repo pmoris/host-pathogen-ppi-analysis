@@ -1,0 +1,49 @@
+PPIs were imported from data/interim/10292/ppi_data/ppi-annotations.tsv
+
+Processed 10000 lines out of 447228
+Processed 20000 lines out of 447228
+Processed 30000 lines out of 447228
+Processed 40000 lines out of 447228
+Processed 50000 lines out of 447228
+Processed 60000 lines out of 447228
+Processed 70000 lines out of 447228
+Processed 80000 lines out of 447228
+Processed 90000 lines out of 447228
+Processed 100000 lines out of 447228
+Processed 110000 lines out of 447228
+Processed 120000 lines out of 447228
+Processed 130000 lines out of 447228
+Processed 140000 lines out of 447228
+Processed 150000 lines out of 447228
+Processed 160000 lines out of 447228
+Processed 170000 lines out of 447228
+Processed 180000 lines out of 447228
+Processed 190000 lines out of 447228
+Processed 200000 lines out of 447228
+Processed 210000 lines out of 447228
+Processed 220000 lines out of 447228
+Processed 230000 lines out of 447228
+Processed 240000 lines out of 447228
+Processed 250000 lines out of 447228
+Processed 260000 lines out of 447228
+Processed 270000 lines out of 447228
+Processed 280000 lines out of 447228
+Processed 290000 lines out of 447228
+Processed 300000 lines out of 447228
+Processed 310000 lines out of 447228
+Processed 320000 lines out of 447228
+Processed 330000 lines out of 447228
+Processed 340000 lines out of 447228
+Processed 350000 lines out of 447228
+Processed 360000 lines out of 447228
+Processed 370000 lines out of 447228
+Processed 380000 lines out of 447228
+Processed 390000 lines out of 447228
+Processed 400000 lines out of 447228
+Processed 410000 lines out of 447228
+Processed 420000 lines out of 447228
+Processed 430000 lines out of 447228
+Processed 440000 lines out of 447228
+Pairwise calculations took 7004.292993068695
+
+Saved pairwise association results to data/processed/10292/results-index-pmi.tsv

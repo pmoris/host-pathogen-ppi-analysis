@@ -1,0 +1,13 @@
+PPIs were imported from data/interim/10292/ppi_data/ppi-filter-remap.tsv
+
+Creating Gene Ontology dictionaries...
+Retrieved 47179 GO terms from /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/raw/go_data/go.obo 
+
+Adding secondary GO identifiers...
+
+Retrieved 2995 annotated (background filtered) Uniprot AC's from /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/interim/10292/go_data/goa_uniprot.gaf
+
+Number of proteins without GO annotation: 116
+
+Saved annotated PPI dataset to data/interim/10292/ppi_data/ppi-annotations.tsv
+nan

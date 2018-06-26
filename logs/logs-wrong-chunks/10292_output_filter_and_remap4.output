@@ -1,0 +1,103 @@
+PPIs were imported from data/interim/10292-new/ppi_data/10292-ppi-merged.tsv
+
+TaxonIDs were read from data/interim/10292-new/taxonid/10292-child-taxids.txt and data/interim/10292-new/taxonid/interacting-taxids.txt
+
+All intra-species and intra-pathogen interactions were omitted.
+26273 unique identifiers in column xref_A did not conform to the PSI-MITAB format (multiple identifiers were present) and a fix was attempted.
+
+26273 unique identifiers in column xref_B did not conform to the PSI-MITAB format (multiple identifiers were present) and a fix was attempted.
+
+By removing/fixing protein identifiers that consisted of multiple entries, the following duplicates were introduced in the dataset:
+
+origin
+hpidb2-19.02.2018.mitab    298
+phi_data.csv                 8
+dtype: int64 
+
+WARNING: interaction dataset contains "intact" entries, which could not be remapped to UniProt AC (check all possible mappings at https://www.uniprot.org/help/api_idmapping .
+
+No ddbj/embl/genbank: identifiers found in dataset.
+
+No ensembl: identifiers found in dataset.
+
+No ensemblgenomes: identifiers found in dataset.
+
+entrez gene/locuslink: 1109 identifiers found in dataset.
+chunk ['2703399' '2703401' '3054' '2703462' '2703423' '2703416' '3783727'
+ '55729' '6667' '997' '2703389' '2703390' '2703358' '22034' '9759' '10014'
+ '9734' '856891' '6880' '2959' '11200' '3065' '9219' '3783761' '3783709'
+ '3783746' '6477' '2703392' '6672' '1616' '9063' '7341' '6613' '6612'
+ '4961494' '1487345' '4734' '6688' '3077449' '10524' '8295' '10197'
+ '3077532' '7874' '7321' '7324' '4961493' '5204' '3783763' '17494216'
+ '3077539' '6598' '4961462' '3066' '4961527' '3159' '3146' '7013' '5536'
+ '7507' '6117' '6714' '2534' '7525' '30011' '10969' '3148' '4961526'
+ '3276' '3275' '10196' '10498' '10419' '55170' '54496' '56341' '7128'
+ '3783750' '9025' '1453' '83737' '6921' '17494231' '1487968' '3077448'
+ '996' '7329' '29843' '1820' '5925' '5371' '3783704' '23471' '3077542'
+ '3077490' '4609' '3783726' '1497091' '1487705' '10482']
+chunk ['4848' '23019' '57472' '85456' '221935' '9933' '114294' '3692' '4931'
+ '9527' '10452' '5566' '23476' '6046' '28981' '114049' '63893' '9567'
+ '5780' '22930' '11196' '51255' '154807' '6908' '6838' '10250' '23133'
+ '23271' '10193' '114770' '4436' '64282' '84443' '5140' '1783' '1854'
+ '79672' '2879' '136319' '27430' '1487' '1488' '51108' '55920' '158'
+ '100272147' '5781' '122961' '80013' '5184' '9868' '92259' '8050' '1737'
+ '1743' '5160' '4967' '7298' '133686' '10910' '1021' '1017' '1020' '1027'
+ '1031' '7879' '10493' '1018' '3980' '26000' '51231' '7290' '8396' '92815'
+ '8334' '55775' '254048' '7515' '7508' '56652' '1809' '1386' '4204'
+ '23136' '6119' '94239' '2035' '3015' '10038' '84461' '10455' '5305'
+ '6596' '79837' '286205' '8924' '55818' '317772' '29855' '7095']
+Created mapping file between UniProt ACs and entrez gene/locuslink in: /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/interim/10292-4/mapping/entrez gene-locuslink2uniprot.txt.
+
+entrez gene/locuslink: 192 out of 1109 identifiers were succesfully remapped to UniProt accession numbers.
+
+refseq: 10 identifiers found in dataset.
+chunk ['NP_899152' 'XP_001723926' 'NP_037450' 'NP_044650' 'NP_044625'
+ 'NP_044639' 'NP_044629' 'NP_045311' 'YP_001129464' 'YP_214057']
+Created mapping file between UniProt ACs and refseq in: /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/interim/10292-4/mapping/refseq2uniprot.txt.
+
+refseq: 2 out of 10 identifiers were succesfully remapped to UniProt accession numbers.
+
+No dip: identifiers found in dataset.
+
+5 identifiers were remapped to multiple UniProt accession numbers (denoted by the prefix "MULT_MAP" in the dataset) for a total of 382 interactions.
+
+Omitted 382 PPIs due to the existance of multiple mappings.
+
+The act of remapping protein identifiers to UniProt AC, introduced the following duplicates:
+
+origin
+hpidb2-19.02.2018.mitab    41
+phi_data.csv               40
+dtype: int64 
+
+Number of unique interactions per raw dataset:
+origin
+BIOGRID-ALL-3.4.160.mitab        1008
+hpidb2-19.02.2018.mitab          7138
+intact-virus-22.03.2018.mitab    2954
+phi_data.csv                     6740
+virhostnet-01.2018.mitab         3715
+Name: xref_partners_sorted, dtype: int64 
+
+Total dataset size:
+origin
+BIOGRID-ALL-3.4.160.mitab        1208
+hpidb2-19.02.2018.mitab          8949
+intact-virus-22.03.2018.mitab    3288
+phi_data.csv                     8118
+virhostnet-01.2018.mitab         4328
+Name: xref_partners_sorted, dtype: int64 
+
+Total number of unique interactions out of 25891
+8323 
+
+Total number of unique interactions out of 25891, where publications are considered unique:
+12055 
+
+All duplicate interactions were removed, leaving 8323 out of 25891 PPIs.
+
+Omitted 961 non-UniProt AC interactions, leaving 7362 PPIs.
+
+Saved filtered and remapped PPI dataset to data/interim/10292-4/ppi_data/ppi-filter-remap.tsv
+
+Saved list of all UniProtACs to data/interim/10292-4/ppi_data/uniprot_identifiers.txt

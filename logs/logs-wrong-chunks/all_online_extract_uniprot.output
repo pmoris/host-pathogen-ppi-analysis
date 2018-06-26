@@ -1,0 +1,212 @@
+Read PPI data set BIOGRID-ALL-3.4.160.mitab from data/raw/ppi_data/BIOGRID-ALL-3.4.160.mitab
+Read PPI data set hpidb2-19.02.2018.mitab from data/raw/ppi_data/hpidb2-19.02.2018.mitab
+Read PPI data set intact-virus-22.03.2018.mitab from data/raw/ppi_data/intact-virus-22.03.2018.mitab
+Read PPI data set virhostnet-01.2018.mitab from data/raw/ppi_data/virhostnet-01.2018.mitab
+Read PPI data set phi_data.csv from data/raw/ppi_data/phi_data.csv
+1715433 unique identifiers in column xref_A did not conform to the PSI-MITAB format (multiple identifiers were present) and a fix was attempted.
+
+1715433 unique identifiers in column xref_B did not conform to the PSI-MITAB format (multiple identifiers were present) and a fix was attempted.
+
+WARNING: interaction dataset contains "intact" entries, which could not be remapped to UniProt AC (check all possible mappings at https://www.uniprot.org/help/api_idmapping .
+
+WARNING: interaction dataset contains "chebi" entries, which could not be remapped to UniProt AC (check all possible mappings at https://www.uniprot.org/help/api_idmapping .
+
+WARNING: interaction dataset contains "-" entries, which could not be remapped to UniProt AC (check all possible mappings at https://www.uniprot.org/help/api_idmapping .
+
+Creating mapping files derived from local mapping database /media/pieter/Seagate Red Pieter Moris/workdir/uniprot-GOA/idmapping.dat...
+
+Processed 10000000 lines
+Processed 20000000 lines
+Processed 30000000 lines
+Processed 40000000 lines
+Processed 50000000 lines
+Processed 60000000 lines
+Processed 70000000 lines
+Processed 80000000 lines
+Processed 90000000 lines
+Processed 100000000 lines
+Processed 110000000 lines
+Processed 120000000 lines
+Processed 130000000 lines
+Processed 140000000 lines
+Processed 150000000 lines
+Processed 160000000 lines
+Processed 170000000 lines
+Processed 180000000 lines
+Processed 190000000 lines
+Processed 200000000 lines
+Processed 210000000 lines
+Processed 220000000 lines
+Processed 230000000 lines
+Processed 240000000 lines
+Processed 250000000 lines
+Processed 260000000 lines
+Processed 270000000 lines
+Processed 280000000 lines
+Processed 290000000 lines
+Processed 300000000 lines
+Processed 310000000 lines
+Processed 320000000 lines
+Processed 330000000 lines
+Processed 340000000 lines
+Processed 350000000 lines
+Processed 360000000 lines
+Processed 370000000 lines
+Processed 380000000 lines
+Processed 390000000 lines
+Processed 400000000 lines
+Processed 410000000 lines
+Processed 420000000 lines
+Processed 430000000 lines
+Processed 440000000 lines
+Processed 450000000 lines
+Processed 460000000 lines
+Processed 470000000 lines
+Processed 480000000 lines
+Processed 490000000 lines
+Processed 500000000 lines
+Processed 510000000 lines
+Processed 520000000 lines
+Processed 530000000 lines
+Processed 540000000 lines
+Processed 550000000 lines
+Processed 560000000 lines
+Processed 570000000 lines
+Processed 580000000 lines
+Processed 590000000 lines
+Processed 600000000 lines
+Processed 610000000 lines
+Processed 620000000 lines
+Processed 630000000 lines
+Processed 640000000 lines
+Processed 650000000 lines
+Processed 660000000 lines
+Processed 670000000 lines
+Processed 680000000 lines
+Processed 690000000 lines
+Processed 700000000 lines
+Processed 710000000 lines
+Processed 720000000 lines
+Processed 730000000 lines
+Processed 740000000 lines
+Processed 750000000 lines
+Processed 760000000 lines
+Processed 770000000 lines
+Processed 780000000 lines
+Processed 790000000 lines
+Processed 800000000 lines
+Processed 810000000 lines
+Processed 820000000 lines
+Processed 830000000 lines
+Processed 840000000 lines
+Processed 850000000 lines
+Processed 860000000 lines
+Processed 870000000 lines
+Processed 880000000 lines
+Processed 890000000 lines
+Processed 900000000 lines
+Processed 910000000 lines
+Processed 920000000 lines
+Processed 930000000 lines
+Processed 940000000 lines
+Processed 950000000 lines
+Processed 960000000 lines
+Processed 970000000 lines
+Processed 980000000 lines
+Processed 990000000 lines
+Processed 1000000000 lines
+Processed 1010000000 lines
+Processed 1020000000 lines
+Processed 1030000000 lines
+Processed 1040000000 lines
+Processed 1050000000 lines
+Processed 1060000000 lines
+Processed 1070000000 lines
+Processed 1080000000 lines
+Processed 1090000000 lines
+Processed 1100000000 lines
+Processed 1110000000 lines
+Processed 1120000000 lines
+Processed 1130000000 lines
+Processed 1140000000 lines
+Processed 1150000000 lines
+Processed 1160000000 lines
+Processed 1170000000 lines
+Processed 1180000000 lines
+Processed 1190000000 lines
+Processed 1200000000 lines
+Processed 1210000000 lines
+Processed 1220000000 lines
+Processed 1230000000 lines
+Processed 1240000000 lines
+Processed 1250000000 lines
+Processed 1260000000 lines
+Processed 1270000000 lines
+Processed 1280000000 lines
+Processed 1290000000 lines
+Processed 1300000000 lines
+Processed 1310000000 lines
+Processed 1320000000 lines
+Processed 1330000000 lines
+Processed 1340000000 lines
+Processed 1350000000 lines
+Processed 1360000000 lines
+Processed 1370000000 lines
+Processed 1380000000 lines
+Processed 1390000000 lines
+Processed 1400000000 lines
+Processed 1410000000 lines
+Processed 1420000000 lines
+Processed 1430000000 lines
+Processed 1440000000 lines
+Processed 1450000000 lines
+Processed 1460000000 lines
+Processed 1470000000 lines
+Processed 1480000000 lines
+Processed 1490000000 lines
+Processed 1500000000 lines
+Processed 1510000000 lines
+Processed 1520000000 lines
+Processed 1530000000 lines
+Processed 1540000000 lines
+Processed 1550000000 lines
+Processed 1560000000 lines
+Processed 1570000000 lines
+Processed 1580000000 lines
+Processed 1590000000 lines
+Processed 1600000000 lines
+Processed 1610000000 lines
+Processed 1620000000 lines
+Processed 1630000000 lines
+Processed 1640000000 lines
+Processed 1650000000 lines
+Processed 1660000000 lines
+Skipped the following lines due to non-conforming format: []
+
+Created mapping file between UniProt ACs and ddbj/embl/genbank: in: /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/interim/all/mapping/ddbj-embl-genbank2uniprot.txt.
+
+Created mapping file between UniProt ACs and ensembl: in: /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/interim/all/mapping/ensembl2uniprot.txt.
+
+Created mapping file between UniProt ACs and ensemblgenomes: in: /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/interim/all/mapping/ensemblgenomes2uniprot.txt.
+
+Created mapping file between UniProt ACs and entrez gene/locuslink: in: /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/interim/all/mapping/entrez gene-locuslink2uniprot.txt.
+
+Created mapping file between UniProt ACs and refseq: in: /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/interim/all/mapping/refseq2uniprot.txt.
+
+No dip: identifiers found in dataset.
+
+ddbj/embl/genbank: 3 out of 4 identifiers were succesfully remapped to UniProt accession numbers.
+
+ensembl: 2 out of 2 identifiers were succesfully remapped to UniProt accession numbers.
+
+ensemblgenomes: 1 out of 1 identifiers were succesfully remapped to UniProt accession numbers.
+
+entrez gene/locuslink: 61263 out of 68167 identifiers were succesfully remapped to UniProt accession numbers.
+
+refseq: 1 out of 198 identifiers were succesfully remapped to UniProt accession numbers.
+
+23399 identifiers were remapped to multiple UniProt accession numbers (denoted by the prefix "MULT_MAP" in the dataset) for a total of 463806 interactions.
+
+Omitted 463806 PPIs due to the existance of multiple mappings.
+
+Saved list of all UniProtACs to data/interim/all/all_identifiers.txt

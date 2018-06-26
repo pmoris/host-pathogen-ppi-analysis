@@ -1,0 +1,96 @@
+pieter@pieter-XPS-15-9560 /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis $ python src/scripts/filter_and_remap.py -i data/interim/10292-local/ppi_data/10292-ppi-merged.tsv -t data/interim/10292-local/taxonid/ -o data/interim/10292-local/ -l /media/pieter/Seagate\ Red\ Pieter\ Moris/workdir/uniprot-GOA/idmapping.dat
+PPIs were imported from data/interim/10292-local/ppi_data/10292-ppi-merged.tsv
+
+TaxonIDs were read from data/interim/10292-local/taxonid/10292-child-taxids.txt and data/interim/10292-local/taxonid/interacting-taxids.txt
+
+All intra-species and intra-pathogen interactions were omitted.
+26273 unique identifiers in column xref_A did not conform to the PSI-MITAB format (multiple identifiers were present) and a fix was attempted.
+
+26273 unique identifiers in column xref_B did not conform to the PSI-MITAB format (multiple identifiers were present) and a fix was attempted.
+
+By removing/fixing protein identifiers that consisted of multiple entries, the following duplicates were introduced in the dataset:
+
+origin
+hpidb2-19.02.2018.mitab    298
+phi_data.csv                 8
+dtype: int64 
+
+WARNING: interaction dataset contains "intact" entries, which could not be remapped to UniProt AC (check all possible mappings at https://www.uniprot.org/help/api_idmapping .
+
+Creating mapping files derived from local mapping database /media/pieter/Seagate Red Pieter Moris/workdir/uniprot-GOA/idmapping.dat...
+
+Processed 100000000 lines
+Processed 200000000 lines
+Processed 300000000 lines
+Processed 400000000 lines
+Processed 500000000 lines
+kProcessed 600000000 lines
+Processed 700000000 lines
+Processed 800000000 lines
+Processed 900000000 lines
+Processed 1000000000 lines
+Processed 1100000000 lines
+Processed 1200000000 lines
+Processed 1300000000 lines
+Processed 1400000000 lines
+Processed 1500000000 lines
+Processed 1600000000 lines
+Skipped the following lines due to non-conforming format: []
+No ddbj/embl/genbank: identifiers found in dataset.
+
+No ensembl: identifiers found in dataset.
+
+Created mapping file between UniProt ACs and ensemblgenomes: in: /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/interim/10292-local/mapping/ensemblgenomes2uniprot.txt.
+
+Created mapping file between UniProt ACs and entrez gene/locuslink: in: /media/pieter/DATA/Wetenschap/Doctoraat/projects/host-pathogen-ppi-analysis/data/interim/10292-local/mapping/entrez gene-locuslink2uniprot.txt.
+
+No refseq: identifiers found in dataset.
+
+No dip: identifiers found in dataset.
+
+ensemblgenomes: 0 out of 0 identifiers were succesfully remapped to UniProt accession numbers.
+
+entrez gene/locuslink: 1093 out of 1109 identifiers were succesfully remapped to UniProt accession numbers.
+
+661 identifiers were remapped to multiple UniProt accession numbers (denoted by the prefix "MULT_MAP" in the dataset) for a total of 1931 interactions.
+
+Omitted 1931 PPIs due to the existance of multiple mappings.
+
+The act of remapping protein identifiers to UniProt AC, introduced the following duplicates:
+
+origin
+hpidb2-19.02.2018.mitab    25
+phi_data.csv               37
+dtype: int64 
+
+Number of unique interactions per raw dataset:
+origin
+BIOGRID-ALL-3.4.160.mitab         102
+hpidb2-19.02.2018.mitab          6776
+intact-virus-22.03.2018.mitab    2954
+phi_data.csv                     6740
+virhostnet-01.2018.mitab         3715
+Name: xref_partners_sorted, dtype: int64 
+
+Total dataset size:
+origin
+BIOGRID-ALL-3.4.160.mitab         119
+hpidb2-19.02.2018.mitab          8489
+intact-virus-22.03.2018.mitab    3288
+phi_data.csv                     8118
+virhostnet-01.2018.mitab         4328
+Name: xref_partners_sorted, dtype: int64 
+
+Total number of unique interactions out of 24342
+7436 
+
+Total number of unique interactions out of 24342, where publications are considered unique:
+11122 
+
+All duplicate interactions were removed, leaving 7436 out of 24342 PPIs.
+
+Omitted 56 non-UniProt AC interactions, leaving 7380 PPIs.
+
+Saved filtered and remapped PPI dataset to data/interim/10292-local/ppi_data/ppi-filter-remap.tsv
+
+Saved list of all UniProtACs to data/interim/10292-local/ppi_data/uniprot_identifiers.txt

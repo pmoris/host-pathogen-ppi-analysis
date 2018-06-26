@@ -1,0 +1,87 @@
+Parsing taxdump files...
+processing line 1000000
+processing line 2000000
+processing line 1000000
+Retrieving all child taxa of 10292
+Saved output to data/interim/10292/taxonid/10292-child-taxids.txt 
+
+Read PPI data set BIOGRID-ALL-3.4.160.mitab from data/raw/ppi_data/BIOGRID-ALL-3.4.160.mitab
+Read PPI data set hpidb2-19.02.2018.mitab from data/raw/ppi_data/hpidb2-19.02.2018.mitab
+Read PPI data set intact-virus-22.03.2018.mitab from data/raw/ppi_data/intact-virus-22.03.2018.mitab
+Read PPI data set virhostnet-01.2018.mitab from data/raw/ppi_data/virhostnet-01.2018.mitab
+Read PPI data set phi_data.csv from data/raw/ppi_data/phi_data.csv
+
+Saved host taxon IDs to data/interim/10292/taxonid/interacting-taxids.txt
+
+Size of dataframe (30332, 19)
+origin
+BIOGRID-ALL-3.4.160.mitab        1427
+hpidb2-19.02.2018.mitab          9129
+intact-virus-22.03.2018.mitab    4529
+phi_data.csv                     8118
+virhostnet-01.2018.mitab         7129
+dtype: int64
+
+The following taxon IDs were found associated with 10292:
+9823 Sus scrofa 15
+8364 Xenopus tropicalis 2
+10684 Bacillus phage PBS2 1
+34839 Chinchilla lanigera 2
+83333 Escherichia coli K-12 4
+10090 Mus musculus 157
+648242 Adeno-associated virus 2 Srivastava/1982 12
+60711 Chlorocebus sabaeus 2
+9606 Homo sapiens 25784
+9940 Ovis aries 2
+6239 Caenorhabditis elegans 4
+11926 Human T-cell lymphotrophic virus type 1 (strain ATK) 3
+9534 Chlorocebus aethiops 5
+559292 Saccharomyces cerevisiae S288C 1
+10116 Rattus norvegicus 127
+83334 Escherichia coli O157:H7 1
+375286 Janthinobacterium sp. Marseille 9
+9541 Macaca fascicularis 4
+9796 Equus caballus 15
+7998 Ictalurus punctatus 2
+9598 Pan troglodytes 2
+9031 Gallus gallus 36
+7955 Danio rerio 2
+748671 Lactobacillus crispatus ST1 6
+9601 Pongo abelii 8
+258594 Rhodopseudomonas palustris CGA009 1
+3702 Arabidopsis thaliana 3
+9913 Bos taurus 62
+10036 Mesocricetus auratus 1
+
+Dataset BIOGRID-ALL-3.4.160.mitab contains pathogens in protein A? True
+Dataset BIOGRID-ALL-3.4.160.mitab contains pathogens in protein B? True
+
+Dataset hpidb2-19.02.2018.mitab contains pathogens in protein A? False
+Dataset hpidb2-19.02.2018.mitab contains pathogens in protein B? True
+
+Dataset intact-virus-22.03.2018.mitab contains pathogens in protein A? True
+Dataset intact-virus-22.03.2018.mitab contains pathogens in protein B? True
+
+Dataset virhostnet-01.2018.mitab contains pathogens in protein A? True
+Dataset virhostnet-01.2018.mitab contains pathogens in protein B? True
+
+Dataset phi_data.csv contains pathogens in protein A? False
+Dataset phi_data.csv contains pathogens in protein B? True
+
+ Count of intra-pathogen interactions within species
+ origin
+BIOGRID-ALL-3.4.160.mitab          17
+intact-virus-22.03.2018.mitab    1241
+virhostnet-01.2018.mitab         2801
+dtype: int64
+
+Count of intra-host interactions
+ Series([], dtype: int64)
+
+Count of intra-pathogen interactions across species per dataset
+intra-species != intra-path origin
+intact-virus-22.03.2018.mitab    476
+virhostnet-01.2018.mitab         624
+dtype: int64
+
+Saved merged PPI dataset to data/interim/10292/ppi_data/10292-ppi-merged.tsv
