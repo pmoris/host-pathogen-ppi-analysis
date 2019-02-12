@@ -163,7 +163,9 @@ def get_children(taxid, parent2child):
 def write_taxids(taxid_list, taxid2name_dict, out_file):
     with open(Path(out_file), 'w') as out:
         for i in taxid_list:
-            out.write(str(i) + '|' + taxid2name_dict[i] + '\n')
+            name = taxid2name_dict.get(i)
+            if name:
+                out.write(str(i) + '|' + name + '\n')
 
 
 def read_taxids(in_file):
