@@ -4,8 +4,7 @@ Module to create protein id mappings and apply them to a dataframe.
 """
 
 import time
-import urllib.request
-import urllib.parse
+import requests
 import numpy as np
 import pandas as pd
 
@@ -191,58 +190,50 @@ def _create_mapping_files(array,
                 for j in range(0, len(ids), query_chunk_size)
         ]:
 
-            # cast object array to string
-            ids_str = ' '.join(np.char.mod('%s', i))
+            # cast object-typed array to space separated string
+            ids_str = " ".join(np.char.mod("%s", i))
 
-            url = 'https://www.uniprot.org/uploadlists/'
+            url = "https://www.uniprot.org/uploadlists/"
 
-            params = {
-                'from': from_id,
-                'to': 'ACC',
-                'format': 'tab',
-                'query': ids_str
-            }
-
-            data = urllib.parse.urlencode(params)
-            data = data.encode('ascii')
-
-            request = urllib.request.Request(url, data)
+            params = {"from": from_id, "to": "ACC", "format": "tab", "query": ids_str}
 
             contact = "pieter.moris@uantwerpen.be"
-            request.add_header('User-Agent', 'Python %s' % contact)
+            headers = {"User-Agent": f"Python {contact}"}
 
             request_completed = False
             n_tries = 0
             while not request_completed:
                 if n_tries > 10:
                     print(
-                        'WARNING: Not all identifiers were remapped. Please try again later.'
+                        "WARNING: Not all entries were downloaded. Please try again later."
                     )
                     mapping = None
                     break
                 n_tries += 1
                 try:
-                    with urllib.request.urlopen(request) as response:
-                        mapping = response.read()
-                except urllib.error.HTTPError:
-                    print('Encountered HTTP error, trying again...')
-                    time.sleep(5)
-                    pass
-                except http.client.RemoteDisconnected:
+                    response = requests.get(url, params=params, headers=headers)
+                    mapping = response.text
+                    request_completed = True
+                except requests.exceptions.RequestException as error:
                     print(
-                        'Encountered RemoteDisconnected error, trying again...'
+                        f"Encountered connection error, retrying (attempt {n_tries})."
                     )
+                    print(error)
                     time.sleep(5)
                     pass
-                request_completed = True
-            time.sleep(5)
+                except requests.exceptions.HTTPError as err:
+                    print(
+                        f"HTTP error encountered, check network connection and service, retrying (attempt {n_tries})."
+                    )
+                    print(err)
+                    pass
 
             mapping_list.append(mapping)
-
             progress_counter += query_chunk_size
-            print('Queried first {} identifiers...'.format(progress_counter))
+            print("Queried first {} identifiers...".format(progress_counter))
+            time.sleep(5)
 
-        savepath.write_bytes(b''.join(mapping_list))
+        savepath.write_text("".join(mapping_list))
 
         print(
             'Created mapping file between UniProt ACs and {} in: {}.\n'.format(
