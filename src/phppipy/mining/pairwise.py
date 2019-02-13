@@ -605,8 +605,8 @@ def _propagate_pairs(pairs, go_dict):
             if 'GO' in term:
                 prefix = term[:2]
                 go_object = go_dict.get(term[2:])
-                if None:
-                    new_pair.append(term)
+                if not go_object:
+                    new_pair.append({term})
                 else:
                     child_terms = [
                         prefix + i for i in go_object.recursive_children
