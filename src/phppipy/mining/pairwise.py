@@ -187,13 +187,14 @@ def find_pairwise(interaction_dataframe,
     # this returns a series where each element/row is a list containing
     # pairwise tuples that are sorted, i.e. (GO:0016197, GO:0055036) and
     # (GO:0055036, GO:0016197) willl not co-occurr in a list
+    # i.e. cartesian product
     interaction_dataframe['annotation_pairs'] = interaction_dataframe[columns].apply(
-        lambda x: set([i for i in itertools.product(x[column_A], x[column_B])]),
+        lambda x: [i for i in itertools.product(x[column_A], x[column_B])],
         axis=1)
-    # results in sets of tuple pairs
-    #   0       {(h@GO:0017137, p@GO:0019012), (h@GO:0005515, ...
-    #   1       {(h@GO:0008380, p@GO:0071897), (h@GO:0051219, ...
-    #   2       {(h@GO:0007525, p@GO:0071897), (h@GO:0061053, ...
+    # results in ~sets~ lists of tuple pairs
+    #   OLD: 0       {(h@GO:0017137, p@GO:0019012), (h@GO:0005515, ...
+    #   NEW: 1       [(h@GO:0008380, p@GO:0071897), (h@GO:0051219, ...
+    #        2       [(h@GO:0007525, p@GO:0071897), (h@GO:0061053, ...
 
     # NOTE: if the annotations are labelled as host/pathogen, the "i"s don't
     #       really need to be sorted explicitly. Instead, order is given by
