@@ -128,7 +128,8 @@ def find_pairwise(interaction_dataframe,
                   column_A,
                   column_B,
                   propagate=False,
-                  go_dict=None):
+                  go_dict=None,
+                  memory_optimized=False):
     """Retrieve pairwise associations between the annotation sets of two
     interacting proteins.
 
@@ -163,6 +164,12 @@ def find_pairwise(interaction_dataframe,
     go_dict : dict, optional
         A dictionary containing the GO hierarchy. Constructed via the
         obo_tools.importOBO() function in the goscripts package.
+    memory_optimized : bool, optional
+        Whether or not to use a slower, more memory efficient calculation
+        method. This method propagates GO terms as they are encountered,
+        rather than pre-computing them for all pairs. This reduces memory
+        usage, but is slower because the calculation is repeated for
+        annotation-term-pairs that occur multiple times.
 
     Returns
     -------
@@ -201,7 +208,7 @@ def find_pairwise(interaction_dataframe,
     #       the order in which the two lists are provided.
     # interaction_dataframe['annotation_pairs'] = interaction_dataframe[columns].apply(lambda x: set([tuple(sorted(i)) for i in itertools.product(x[column_A], x[column_B])]), axis=1)
 
-    # next, these lists are joined and duplicates are removed
+    # next, these lists are joined and duplicate pairs are removed
     pairs = set().union(*interaction_dataframe['annotation_pairs'])
 
     # this would create too many non-existing combinations
@@ -233,12 +240,11 @@ def find_pairwise(interaction_dataframe,
         'depth': {}
     }
 
-    counter = 0
-
     import time
     start = time.time()
 
     if not propagate:
+        counter = 0
 
         for pair in pairs:
 
@@ -284,49 +290,10 @@ def find_pairwise(interaction_dataframe,
 
     # if propagate option was selected, loop through pair-propagated_set dict
     else:
-        pairs_dict = _propagate_pairs(pairs, go_dict)
-
-        for pair, propagated_pair in pairs_dict.items():
-
-            counter += 1
-            if counter % 10000 == 0:
-                print('Processed {} lines out of {}'.format(
-                    counter, len(pairs)))
-
-            pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count = count_presences_propagated(
-                propagated_pair, interaction_dataframe, column_A, column_B,
-                merged_annotations)
-
-            results_dict['pmi'][pair] = _calc_pmi(pair_count, label_one_count,
-                                                  label_two_count, total_count)
-            results_dict['chi2'][pair] = _calc_chi2(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['G'][pair] = _calc_G(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['fisher'][pair] = _calc_fisher(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['min_count'][pair] = min([
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count
-            ])
-            results_dict['counts'][pair] = {
-                'pair_count': pair_count,
-                'label_one_count_exclusive': label_one_count_exclusive,
-                'label_two_count_exclusive': label_two_count_exclusive,
-                'label_one_count': label_one_count,
-                'label_two_count': label_two_count,
-                'absent_count': absent_count,
-                'total_count': total_count
-            }
-            results_dict['depth'][pair] = {
-                'protein_A':
-                go_dict[pair[0][2:]].depth if 'GO' in pair[0] else None,
-                'protein_B':
-                go_dict[pair[1][2:]].depth if 'GO' in pair[1] else None
-            }
+        if memory_optimized:
+            memory_optimized_assoc(pairs, go_dict, results_dict, interaction_dataframe, column_A, column_B, merged_annotations)
+        else:
+            fast_assoc(pairs, go_dict, results_dict, interaction_dataframe, column_A, column_B, merged_annotations)
 
     # Convert results dictionaries to a dataframe
     df_list = [
@@ -339,6 +306,84 @@ def find_pairwise(interaction_dataframe,
     print('Pairwise calculations took {}'.format(end - start))
 
     return results
+
+
+def memory_optimized_assoc(pairs, go_dict, results_dict, interaction_dataframe, column_A, column_B, merged_annotations):
+    counter = 0
+
+    # loop through all found annotation pairs
+    for pair in pairs:
+        # propagate annotation term to include child terms
+        propagated_pair = _propagate_pair(pair, go_dict)
+
+        counter += 1
+        if counter % 10000 == 0:
+            print('Processed {} lines out of {}'.format(
+                counter, len(pairs)))
+
+        # convert lists of annotations to sets in order to speed up comparisons
+        # propagated_pair = list(set(i) for i in propagated_pair)
+
+        pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count = count_presences_propagated(
+            propagated_pair, interaction_dataframe, column_A, column_B,
+            merged_annotations)
+
+        _calc_assoc_measures(pair, results_dict, pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count, go_dict)
+
+
+def fast_assoc(pairs, go_dict, results_dict, interaction_dataframe, column_A, column_B, merged_annotations):
+
+    pairs_dict = _propagate_pairs(pairs, go_dict)
+
+    # build iterator for propagated_func()
+
+    counter = 0
+
+    for pair, propagated_pair in pairs_dict.items():
+
+        counter += 1
+        if counter % 10000 == 0:
+            print('Processed {} lines out of {}'.format(
+                counter, len(pairs)))
+
+        pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count = count_presences_propagated(
+            propagated_pair, interaction_dataframe, column_A, column_B,
+            merged_annotations)
+
+        _calc_assoc_measures(pair, results_dict, pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count, go_dict)
+
+
+def _calc_assoc_measures(pair, results_dict, pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count, go_dict):
+    results_dict['pmi'][pair] = _calc_pmi(pair_count, label_one_count,
+                                                label_two_count, total_count)
+    results_dict['chi2'][pair] = _calc_chi2(
+        pair_count, label_one_count_exclusive,
+        label_two_count_exclusive, absent_count)
+    results_dict['G'][pair] = _calc_G(
+        pair_count, label_one_count_exclusive,
+        label_two_count_exclusive, absent_count)
+    results_dict['fisher'][pair] = _calc_fisher(
+        pair_count, label_one_count_exclusive,
+        label_two_count_exclusive, absent_count)
+    results_dict['min_count'][pair] = min([
+        pair_count, label_one_count_exclusive,
+        label_two_count_exclusive, absent_count
+    ])
+    results_dict['counts'][pair] = {
+        'pair_count': pair_count,
+        'label_one_count_exclusive': label_one_count_exclusive,
+        'label_two_count_exclusive': label_two_count_exclusive,
+        'label_one_count': label_one_count,
+        'label_two_count': label_two_count,
+        'absent_count': absent_count,
+        'total_count': total_count
+    }
+    results_dict['depth'][pair] = {
+        'protein_A':
+        go_dict[pair[0][2:]].depth if 'GO' in pair[0] else None,
+        'protein_B':
+        go_dict[pair[1][2:]].depth if 'GO' in pair[1] else None
+    }
 
 
 def count_presences(pair, interaction_dataframe, pairs_column,
@@ -421,7 +466,7 @@ def count_presences_propagated(pair_prop, interaction_dataframe, column_A,
     Parameters
     ----------
     pair_prop : tuple
-        A tuple containing two sets of annotation terms, where each set
+        A tuple containing two lists of annotation terms, where each list
         represents an annotation term and all of its descendents.
         These are the values of the dictionary created by
         _propagate_pairs().
@@ -457,29 +502,34 @@ def count_presences_propagated(pair_prop, interaction_dataframe, column_A,
         The presence/absence counts of the propagated annotation pair.
     """
 
+    # propagate_pair(s) returns tuple(s) with lists of terms, which need
+    # to be converted back into sets in order to calculate presence/absence
+    set_A = set(pair_prop[0])
+    set_B = set(pair_prop[1])
+
     # count all ppis where any pair occurs
     pair_count = np.sum(
         merged_annotations.map(
-            lambda x: not x.isdisjoint(pair_prop[0]) and not x.isdisjoint(pair_prop[1])
+            lambda x: not x.isdisjoint(set_A) and not x.isdisjoint(set_B)
         ))
 
     # count ppis where only 1 label/annotation set occurs: P(X | Y') or N10
     label_one_count_exclusive = np.sum(interaction_dataframe[column_A].map(
-        lambda x: not x.isdisjoint(pair_prop[0])
+        lambda x: not x.isdisjoint(set_A)
     ) & interaction_dataframe[column_B].map(
-        lambda x: x.isdisjoint(pair_prop[1])))
+        lambda x: x.isdisjoint(set_B)))
     label_two_count_exclusive = np.sum(interaction_dataframe[column_A].map(
-        lambda x: x.isdisjoint(pair_prop[0])
+        lambda x: x.isdisjoint(set_A)
     ) & interaction_dataframe[column_B].map(
-        lambda x: not x.isdisjoint(pair_prop[1])))
+        lambda x: not x.isdisjoint(set_B)))
 
     # count ppis where 1 label/annotation set occurs,
     # regardless of other label in set pair:
     # P(X) or N1+
     label_one_count = np.sum(
-        merged_annotations.apply(lambda x: not x.isdisjoint(pair_prop[0])))
+        merged_annotations.apply(lambda x: not x.isdisjoint(set_A)))
     label_two_count = np.sum(
-        merged_annotations.apply(lambda x: not x.isdisjoint(pair_prop[1])))
+        merged_annotations.apply(lambda x: not x.isdisjoint(set_B)))
     # option to not discern between location of label (i.e. host or pathogen)
     # in case there would be identical labels in host and pathogen proteins
     # label_one_count = np.sum(interaction_dataframe[column_A].map(
@@ -489,8 +539,8 @@ def count_presences_propagated(pair_prop, interaction_dataframe, column_A,
 
     # count ppis lacking either term: P(X',Y') or N00
     absent_count = np.sum(
-        merged_annotations.map(lambda x: x.isdisjoint(pair_prop[0])) &
-        merged_annotations.map(lambda x: x.isdisjoint(pair_prop[1])))
+        merged_annotations.map(lambda x: x.isdisjoint(set_A)) &
+        merged_annotations.map(lambda x: x.isdisjoint(set_B)))
     # option to not discern between location of label (i.e. host or pathogen)
     # absent_count = np.sum(interaction_dataframe[column_A].map(
     #     lambda x: x.isdisjoint(pair_prop[0])) & interaction_dataframe[column_B]
@@ -576,11 +626,11 @@ def multiple_testing_correction(results_dataframe,
 def _propagate_pairs(pairs, go_dict):
     """Propagates pairs of annotations.
 
-    For each pair in an array of annotation pairs, the GO annotations will
-    be replaced by a set of their (recursive) child terms (including itself).
+    Foreach pair in an array of annotation pairs, the GO annotations will
+    be replaced by a list of their (recursive) child terms (including itself).
 
     Other types of annotations are left untouched, but converted to a 1-member
-    set.
+    list.
 
     Parameters
     ----------
@@ -595,30 +645,77 @@ def _propagate_pairs(pairs, go_dict):
     -------
     propagated_pairs : dict
         A dictionary of sorted tuples of annotation sets, one for the host and
-        one for the pathogen. Each element in the tuple consists of a set of
+        one for the pathogen. Each element in the tuple consists of a list of
         terms, e.g. the GO term itself and all of its descendants.
     """
 
+    # create empty dictionary to store the two sets of propagated annotations
     propagated_pairs = {}
+
+    # loop through list with tuples of annotation pairs
     for pair in list(pairs):
-        new_pair = []
-        for term in pair:
-            if 'GO' in term:
-                prefix = term[:2]
-                go_object = go_dict.get(term[2:])
-                if not go_object:
-                    new_pair.append({term})
-                else:
-                    child_terms = [
-                        prefix + i for i in go_object.recursive_children
-                    ]
-                    propagation_set = set(child_terms) | set([term])
-                    new_pair.append(propagation_set)
-            else:
-                new_pair.append({term})
-        propagated_pairs[pair] = tuple(new_pair)
+        propagated_pair = _propagate_pair(pair, go_dict)
+
+        # convert the length-2 list of annotation lists (1 for each parent annotation) to a tuple and store in dictionary
+        # e.g. ('h@GO:0060384', 'p@GO:0016787') -> ({'h@GO:0098546', 'h@GO:0030553', 'h@GO:0035438', 'h@GO:0030552', 'h@GO:0061507'}, {'h@GO:0098546', 'h@GO:0030553', 'h@GO:0035438', 'h@GO:0030552', 'h@GO:0061507'})
+        propagated_pairs[pair] = tuple(propagated_pair)
 
     return propagated_pairs
+
+
+def _propagate_pair(pair, go_dict):
+    """Propagates a pair of annotations.
+
+    For a given pair of annotation terms, the GO annotations will
+    be replaced by a list of their (recursive) child terms (including itself).
+
+    Other types of annotations are left untouched, but converted to a 1-member
+    list.
+
+    Parameters
+    ----------
+    pair : tuple
+        A sorted tuples of annotation terms, one for the host and one for
+        the pathogen, e.g. ('h@GO:0030133', 'p@IPR009304')
+    go_dict : dict
+        A dictionary containing the GO hierarchy. Constructed via the
+        obo_tools.importOBO() function in the goscripts package.
+
+    Returns
+    -------
+    tuple
+        A sorted tuple of annotation term lists, one for the host and
+        one for the pathogen. Each element in the tuple consists of a list of
+        terms, e.g. the GO term itself and all of its descendants.
+    """
+
+    # create empty list to store the propagated (child) annotations for the two parent annotations in the pair (in same order as original pair)
+    propagated_pair = []
+    # for both annotations in the pair, propagate through GO hierarchy
+    for term in pair:
+        # only for GO terms, not IPR
+        if 'GO' in term:
+            prefix = term[:2]
+            go_object = go_dict.get(term[2:])
+            # append original annotation if it can't be found in GO dict
+            if not go_object:
+                propagated_pair.append([term])
+            else:
+                # store all child terms of parent term in a list
+                child_terms = [
+                    prefix + i for i in go_object.recursive_children
+                ]
+                # add parent term
+                child_terms.append(term)
+                # remove duplicates, convert to list and sort
+                propagation_list = list(set(child_terms))
+                # add propagated annotations to storage list
+                propagated_pair.append(propagation_list)
+        else:
+            # store original term if it's not a GO term
+            propagated_pair.append([term])
+
+    return tuple(propagated_pair)
 
 
 """Parallellization attempts
