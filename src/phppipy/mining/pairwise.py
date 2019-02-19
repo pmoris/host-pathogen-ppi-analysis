@@ -201,7 +201,7 @@ def find_pairwise(interaction_dataframe,
     #       the order in which the two lists are provided.
     # interaction_dataframe['annotation_pairs'] = interaction_dataframe[columns].apply(lambda x: set([tuple(sorted(i)) for i in itertools.product(x[column_A], x[column_B])]), axis=1)
 
-    # next, these lists are joined and duplicates are removed
+    # next, these lists are joined and duplicate pairs are removed
     pairs = set().union(*interaction_dataframe['annotation_pairs'])
 
     # this would create too many non-existing combinations
@@ -233,12 +233,11 @@ def find_pairwise(interaction_dataframe,
         'depth': {}
     }
 
-    counter = 0
-
     import time
     start = time.time()
 
     if not propagate:
+        counter = 0
 
         for pair in pairs:
 
@@ -251,42 +250,14 @@ def find_pairwise(interaction_dataframe,
                 pair, interaction_dataframe, 'annotation_pairs',
                 merged_annotations)
 
-            results_dict['pmi'][pair] = _calc_pmi(pair_count, label_one_count,
-                                                  label_two_count, total_count)
-            results_dict['chi2'][pair] = _calc_chi2(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['G'][pair] = _calc_G(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['fisher'][pair] = _calc_fisher(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['min_count'][pair] = min([
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count
-            ])
-            results_dict['counts'][pair] = {
-                'pair_count': pair_count,
-                'label_one_count_exclusive': label_one_count_exclusive,
-                'label_two_count_exclusive': label_two_count_exclusive,
-                'label_one_count': label_one_count,
-                'label_two_count': label_two_count,
-                'absent_count': absent_count,
-                'total_count': total_count
-            }
-            results_dict['depth'][pair] = {
-                'protein_A':
-                go_dict[pair[0][2:]].depth if 'GO' in pair[0] else None,
-                'protein_B':
-                go_dict[pair[1][2:]].depth if 'GO' in pair[1] else None
-            }
+            _calc_assoc_measures(pair, results_dict, pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count, go_dict)
 
     # if propagate option was selected, loop through pair-propagated_set dict
     else:
-        pairs_dict = _propagate_pairs(pairs, go_dict)
+        counter = 0
 
-        for pair, propagated_pair in pairs_dict.items():
+        # loop through propagated annotation sets
+        for pair, propagated_pair in _propagate_pairs(pairs, go_dict):
 
             counter += 1
             if counter % 10000 == 0:
@@ -297,36 +268,7 @@ def find_pairwise(interaction_dataframe,
                 propagated_pair, interaction_dataframe, column_A, column_B,
                 merged_annotations)
 
-            results_dict['pmi'][pair] = _calc_pmi(pair_count, label_one_count,
-                                                  label_two_count, total_count)
-            results_dict['chi2'][pair] = _calc_chi2(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['G'][pair] = _calc_G(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['fisher'][pair] = _calc_fisher(
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count)
-            results_dict['min_count'][pair] = min([
-                pair_count, label_one_count_exclusive,
-                label_two_count_exclusive, absent_count
-            ])
-            results_dict['counts'][pair] = {
-                'pair_count': pair_count,
-                'label_one_count_exclusive': label_one_count_exclusive,
-                'label_two_count_exclusive': label_two_count_exclusive,
-                'label_one_count': label_one_count,
-                'label_two_count': label_two_count,
-                'absent_count': absent_count,
-                'total_count': total_count
-            }
-            results_dict['depth'][pair] = {
-                'protein_A':
-                go_dict[pair[0][2:]].depth if 'GO' in pair[0] else None,
-                'protein_B':
-                go_dict[pair[1][2:]].depth if 'GO' in pair[1] else None
-            }
+            _calc_assoc_measures(pair, results_dict, pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count, go_dict)
 
     # Convert results dictionaries to a dataframe
     df_list = [
@@ -339,6 +281,39 @@ def find_pairwise(interaction_dataframe,
     print('Pairwise calculations took {}'.format(end - start))
 
     return results
+
+
+def _calc_assoc_measures(pair, results_dict, pair_count, label_one_count_exclusive, label_two_count_exclusive, label_one_count, label_two_count, absent_count, total_count, go_dict):
+    results_dict['pmi'][pair] = _calc_pmi(pair_count, label_one_count,
+                                                label_two_count, total_count)
+    results_dict['chi2'][pair] = _calc_chi2(
+        pair_count, label_one_count_exclusive,
+        label_two_count_exclusive, absent_count)
+    results_dict['G'][pair] = _calc_G(
+        pair_count, label_one_count_exclusive,
+        label_two_count_exclusive, absent_count)
+    results_dict['fisher'][pair] = _calc_fisher(
+        pair_count, label_one_count_exclusive,
+        label_two_count_exclusive, absent_count)
+    results_dict['min_count'][pair] = min([
+        pair_count, label_one_count_exclusive,
+        label_two_count_exclusive, absent_count
+    ])
+    results_dict['counts'][pair] = {
+        'pair_count': pair_count,
+        'label_one_count_exclusive': label_one_count_exclusive,
+        'label_two_count_exclusive': label_two_count_exclusive,
+        'label_one_count': label_one_count,
+        'label_two_count': label_two_count,
+        'absent_count': absent_count,
+        'total_count': total_count
+    }
+    results_dict['depth'][pair] = {
+        'protein_A':
+        go_dict[pair[0][2:]].depth if 'GO' in pair[0] else None,
+        'protein_B':
+        go_dict[pair[1][2:]].depth if 'GO' in pair[1] else None
+    }
 
 
 def count_presences(pair, interaction_dataframe, pairs_column,
@@ -457,29 +432,33 @@ def count_presences_propagated(pair_prop, interaction_dataframe, column_A,
         The presence/absence counts of the propagated annotation pair.
     """
 
+    # propagate_pair(s) returns tuple(s) with sets of terms
+    set_A = pair_prop[0]
+    set_B = pair_prop[1]
+
     # count all ppis where any pair occurs
     pair_count = np.sum(
         merged_annotations.map(
-            lambda x: not x.isdisjoint(pair_prop[0]) and not x.isdisjoint(pair_prop[1])
+            lambda x: not x.isdisjoint(set_A) and not x.isdisjoint(set_B)
         ))
 
     # count ppis where only 1 label/annotation set occurs: P(X | Y') or N10
     label_one_count_exclusive = np.sum(interaction_dataframe[column_A].map(
-        lambda x: not x.isdisjoint(pair_prop[0])
+        lambda x: not x.isdisjoint(set_A)
     ) & interaction_dataframe[column_B].map(
-        lambda x: x.isdisjoint(pair_prop[1])))
+        lambda x: x.isdisjoint(set_B)))
     label_two_count_exclusive = np.sum(interaction_dataframe[column_A].map(
-        lambda x: x.isdisjoint(pair_prop[0])
+        lambda x: x.isdisjoint(set_A)
     ) & interaction_dataframe[column_B].map(
-        lambda x: not x.isdisjoint(pair_prop[1])))
+        lambda x: not x.isdisjoint(set_B)))
 
     # count ppis where 1 label/annotation set occurs,
     # regardless of other label in set pair:
     # P(X) or N1+
     label_one_count = np.sum(
-        merged_annotations.apply(lambda x: not x.isdisjoint(pair_prop[0])))
+        merged_annotations.apply(lambda x: not x.isdisjoint(set_A)))
     label_two_count = np.sum(
-        merged_annotations.apply(lambda x: not x.isdisjoint(pair_prop[1])))
+        merged_annotations.apply(lambda x: not x.isdisjoint(set_B)))
     # option to not discern between location of label (i.e. host or pathogen)
     # in case there would be identical labels in host and pathogen proteins
     # label_one_count = np.sum(interaction_dataframe[column_A].map(
@@ -489,8 +468,8 @@ def count_presences_propagated(pair_prop, interaction_dataframe, column_A,
 
     # count ppis lacking either term: P(X',Y') or N00
     absent_count = np.sum(
-        merged_annotations.map(lambda x: x.isdisjoint(pair_prop[0])) &
-        merged_annotations.map(lambda x: x.isdisjoint(pair_prop[1])))
+        merged_annotations.map(lambda x: x.isdisjoint(set_A)) &
+        merged_annotations.map(lambda x: x.isdisjoint(set_B)))
     # option to not discern between location of label (i.e. host or pathogen)
     # absent_count = np.sum(interaction_dataframe[column_A].map(
     #     lambda x: x.isdisjoint(pair_prop[0])) & interaction_dataframe[column_B]
@@ -574,7 +553,7 @@ def multiple_testing_correction(results_dataframe,
 
 
 def _propagate_pairs(pairs, go_dict):
-    """Propagates pairs of annotations.
+    """Propagates pairs of annotations - generator.
 
     For each pair in an array of annotation pairs, the GO annotations will
     be replaced by a set of their (recursive) child terms (including itself).
@@ -586,6 +565,41 @@ def _propagate_pairs(pairs, go_dict):
     ----------
     pairs : array
         An array of sorted tuples of annotations, one for the host and one for
+        the pathogen, e.g. ('h@GO:0030133', 'p@IPR009304').
+    go_dict : dict
+        A dictionary containing the GO hierarchy. Constructed via the
+        obo_tools.importOBO() function in the goscripts package.
+
+    Returns (yields)
+    -------
+    pair : tuple
+        A sorted size 2 tuple of annotations, one for the host and one for the
+        pathogen, e.g. e.g. ('h@GO:0030133', 'p@IPR009304').
+    propagated_pair : tuple
+        A sorted size 2 tuple of annotation term sets, one for the host and
+        one for the pathogen. Each element in the tuple consists of a set of
+        terms, e.g. the GO term itself and all of its descendants.
+    """
+
+    # loop through list with tuples of annotation pairs
+    for pair in pairs:
+        propagated_pair = _propagate_pair(pair, go_dict)
+        yield pair, propagated_pair
+
+
+def _propagate_pair(pair, go_dict):
+    """Propagates a pair of annotations.
+
+    For a given pair of annotation terms, the GO annotations will
+    be replaced by a set of their (recursive) child terms (including itself).
+
+    Other types of annotations are left untouched, but converted to a 1-member
+    set.
+
+    Parameters
+    ----------
+    pair : tuple
+        A sorted tuples of annotation terms, one for the host and one for
         the pathogen, e.g. ('h@GO:0030133', 'p@IPR009304')
     go_dict : dict
         A dictionary containing the GO hierarchy. Constructed via the
@@ -593,32 +607,45 @@ def _propagate_pairs(pairs, go_dict):
 
     Returns
     -------
-    propagated_pairs : dict
-        A dictionary of sorted tuples of annotation sets, one for the host and
+    tuple
+        A sorted tuple of annotation term sets, one for the host and
         one for the pathogen. Each element in the tuple consists of a set of
         terms, e.g. the GO term itself and all of its descendants.
     """
 
-    propagated_pairs = {}
-    for pair in list(pairs):
-        new_pair = []
-        for term in pair:
-            if 'GO' in term:
-                prefix = term[:2]
-                go_object = go_dict.get(term[2:])
-                if not go_object:
-                    new_pair.append({term})
-                else:
-                    child_terms = [
-                        prefix + i for i in go_object.recursive_children
-                    ]
-                    propagation_set = set(child_terms) | set([term])
-                    new_pair.append(propagation_set)
+    # create empty list to store the propagated (child) annotations for the
+    # two parent annotations in the pair (in same order as original pair)
+    propagated_pair = []
+    # for both annotations in the pair, propagate through GO hierarchy
+    for term in pair:
+        # only for GO terms, not IPR
+        if 'GO' in term:
+            prefix = term[:2]
+            go_object = go_dict.get(term[2:])
+            # append original annotation if it can't be found in GO dict
+            if not go_object:
+                propagated_pair.append([term])
             else:
-                new_pair.append({term})
-        propagated_pairs[pair] = tuple(new_pair)
+                # store all child terms of parent term in a list
+                child_terms = [
+                    prefix + i for i in go_object.recursive_children
+                ]
+                # add parent term itself and remove duplicates
+                propagation_set = set(child_terms) | set([term])
+                # add propagated annotations to storage list
+                propagated_pair.append(propagation_set)
+        else:
+            # store original term if it's not a GO term
+            propagated_pair.append({term})
 
-    return propagated_pairs
+    # convert the length-2 list of annotation lists (1 for each parent
+    # annotation) to a tuple
+    # # e.g. ('h@GO:0060384', 'p@GO:0016787') ->
+    # ({'h@GO:0098546', 'h@GO:0030553', 'h@GO:0035438', 'h@GO:0030552',
+    # 'h@GO:0061507'},
+    # {'h@GO:0098546', 'h@GO:0030553', 'h@GO:0035438',# 'h@GO:0030552',
+    # 'h@GO:0061507'})
+    return tuple(propagated_pair)
 
 
 """Parallellization attempts
