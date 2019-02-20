@@ -1,11 +1,11 @@
-# ignore large raw data files
-data/raw/go_data/*
-data/raw/ppi_data/*
-data/raw/taxdump/*
+wip-notes-todo/
 
-todo.md
-meeting-pointers.txt
-test
-pattern_mining_tool/
+# external goscripts package
+src/goscripts
+
+# external fim
 src/phppipy/mining-old
 src/phppipy/MiningPattern2.0b
+
+# exclude data from source control by default
+data/

@@ -1,2 +1,0 @@
-yourlist:M2017111683C3DD8CE55183C76102DC5D3A26728BF7779E6	isomap:M2017111683C3DD8CE55183C76102DC5D3A26728BF7779E6	Entry	Entry name	Status	Protein names	Gene names	Organism	Length
-YPL248C		P04386	GAL4_YEAST	reviewed	Regulatory protein GAL4	GAL4 YPL248C	Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast)	881
