@@ -8,4 +8,7 @@ src/phppipy/mining-old
 src/phppipy/MiningPattern2.0b
 
 # exclude data from source control by default
-data/
+# data/
+
+.idea
+.vscode
